@@ -264,81 +264,70 @@ main {
   font-size: 14px;
   margin-bottom: 4px;
 }   
-body {
-  margin: 0;
-  font-family: Arial;
+.admin-layout {
   display: flex;
+  flex: 1;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 200px;
-  background: #2c3e50;
-  color: white;
-  height: 100vh;
-  padding: 20px;
+.admin-sidebar {
+  width: 240px;
+  background: #f9f9f9;
+  border-right: 1px solid #ebebeb;
+  padding: 20px 0;
 }
 
-.sidebar h2 {
-  text-align: center;
+.admin-nav {
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+.admin-link {
   background: none;
   border: none;
-  color: white;
+  padding: 15px 25px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
+  color: dimgray;
+  transition: 0.3s;
+}
+
+.admin-link:hover, .admin-link.active {
+  background: #fff;
+  color: black;
+  border-left: 4px solid black;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 40px;
+  background: #fff;
+}
+
+/* Table styling for Management Modules */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.admin-table th, .admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ebebeb;
   text-align: left;
 }
 
-.sidebar button:hover {
-  background: #34495e;
+.admin-table th {
+  background: #f4f4f4;
+  font-size: 14px;
 }
 
-/* Content */
-.content {
-  flex: 1;
-  padding: 20px;
-  background: #ecf0f1;
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
 }
-
-.card {
-  background: white;
-  padding: 15px;
-  margin: 10px;
-  border-radius: 8px;
-  display: inline-block;
-  width: 150px;
-  text-align: center;
-}
-
-input, button {
-  padding: 10px;
-  margin: 5px;
-}
-
-.hidden {
-  display: none;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background: white;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-}
-
-.order {
-  background: white;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-}
+.status-shipped { background: #e1f5fe; color: #03a9f4; }
+.status-pending { background: #fff3e0; color: #ff9800; }
