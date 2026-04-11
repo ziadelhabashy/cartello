@@ -264,3 +264,81 @@ main {
   font-size: 14px;
   margin-bottom: 4px;
 }   
+body {
+  margin: 0;
+  font-family: Arial;
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: #2c3e50;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  text-align: center;
+}
+
+.sidebar button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar button:hover {
+  background: #34495e;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #ecf0f1;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  display: inline-block;
+  width: 150px;
+  text-align: center;
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: white;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.order {
+  background: white;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
