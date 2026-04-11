@@ -215,4 +215,8 @@ function showPage(page) {
     };
 
     contentArea.innerHTML = adminViews[tabName] || `<h1>Module Coming Soon</h1>`;
-} 
+    
+} function goToShop() {
+  window.location.href = "shop.html";
+}
+
