@@ -161,9 +161,11 @@ function showPage(page) {
             </div>`,
         
         products: `
-            <h1>📦 Product Management</h1>
-            <button class="search-button" style="margin-bottom:15px">+ Add New Product</button>
-            <table class="admin-table">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h1>📦 Product Management</h1>
+        <button class="search-button">+ Add New Product</button>
+    </div>
+    <table class="admin-table">
                 <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr>
                 <tr><td>#1</td><td>Premium Watch</td><td>$199</td><td>12</td><td><button>Edit</button></td></tr>
                 <tr><td>#2</td><td>Leather Bag</td><td>$85</td><td>5</td><td><button>Edit</button></td></tr>
