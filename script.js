@@ -134,14 +134,6 @@ function resetToDefaultButton(productId) {
         container.querySelector('.qty-selector').style.display = 'none';
     }
 }
-
-function showPage(page) {
-    document.getElementById("dashboard").classList.add("hidden");
-    document.getElementById("products").classList.add("hidden");
-    document.getElementById("orders").classList.add("hidden");
-  
-    document.getElementById(page).classList.remove("hidden");
-  }
   
   function loadTab(tabName) {
     const contentArea = document.getElementById('admin-panel-content');
