@@ -9,25 +9,29 @@ const products = [
     id: 1, 
     name: "Premium Watch", 
     price: 199.00, 
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" 
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" ,
+    category:"Accessories"
   },
   { 
     id: 2, 
     name: "Leather Bag", 
     price: 85.00, 
-    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" 
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" ,
+    category:"Accessories"
   },
   { 
     id: 3, 
     name: "Wireless Headphones", 
     price: 150.00, 
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80" 
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80" ,
+    category:"Electronics"
   },
   { 
     id: 4, 
     name: "Smart Speaker", 
     price: 120.00, 
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" 
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
+    category:"Electronics" 
   }
 ];
 
@@ -64,26 +68,45 @@ function renderProducts(productsToDisplay) {
   grid.innerHTML = htmlContent;
 }
 
+// Global variable to track the currently selected category
+let currentCategory = 'All';
+
 /**
- * SEARCH FUNCTION:
- * Filters products based on the text typed in the search bar.
+ * Changes the active category when a button is clicked, then re-runs the filter.
+ */
+function setCategory(categoryName) {
+    currentCategory = categoryName;
+    
+    // Optional: Re-run the filter function immediately so the screen updates
+    filterProducts();
+}
+
+/**
+ * SEARCH & FILTER FUNCTION:
+ * Filters the array based on text AND the selected category.
  */
 function filterProducts() {
-  const input = document.getElementById('product-search').value.toLowerCase();
-
-  const filtered = products.filter(product =>
-    product.name.toLowerCase().includes(input)
-  );
-
-  renderProducts(filtered);
-
-  const message = document.getElementById('no-results');
-
-  if (filtered.length === 0) {
-    message.style.display = "block";
-  } else {
-    message.style.display = "none";
-  }
+    const input = document.getElementById('product-search').value.toLowerCase();
+    
+    const filtered = products.filter(product => {
+        // 1. Does the name match the search bar?
+        const matchesSearch = product.name.toLowerCase().includes(input);
+        
+        // 2. Does the category match the button we clicked?
+        const matchesCategory = (currentCategory === 'All') || (product.category === currentCategory);
+        
+        // ONLY keep the product if it matches BOTH conditions!
+        return matchesSearch && matchesCategory;
+    });
+    
+    renderProducts(filtered);
+    
+    const message = document.getElementById('no-results');
+    if (filtered.length === 0) {
+        message.style.display = "block";
+    } else {
+        message.style.display = "none";
+    }
 }
 
 /**
