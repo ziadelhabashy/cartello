@@ -1,5 +1,5 @@
 // 1. Simple object to store product quantities: { productId: quantity }
-let cartData = {};
+let cartData =JSON.parse(localStorage.getItem("cart")) ||  {};
 
 /**
  * SEARCH FUNCTION:
@@ -57,6 +57,7 @@ function initQuantity(productId, btn) {
     
     // Set starting quantity to 1 in our data
     cartData[productId] = 1;
+    localStorage.setItem("cart", JSON.stringify(cartData));
     
     // Update the numbers on the screen
     updateGlobalUI(productId);
@@ -73,11 +74,13 @@ function changeQty(productId, delta) {
 
     // Add delta (1 or -1) to the current quantity
     cartData[productId] = cartData[productId] + delta;
+    localStorage.setItem("cart", JSON.stringify(cartData));
 
     // If quantity hits 0, remove it and go back to "Add to Cart" button
     if (cartData[productId] < 1) {
         delete cartData[productId];
         resetToDefaultButton(productId);
+        localStorage.setItem("cart", JSON.stringify(cartData));
     } else {
         updateGlobalUI(productId);
     }
@@ -217,8 +220,130 @@ function showPage(page) {
     };
 
     contentArea.innerHTML = adminViews[tabName] || `<h1>Module Coming Soon</h1>`;
-    
+
 } function goToShop() {
   window.location.href = "shop.html";
 }
 
+window.onload = function () {
+    updateCartBadge();
+
+    let cartContainer = document.getElementById("cart-items");
+
+    if (cartContainer) {
+        renderCart();
+    }
+};
+
+function renderCart() {
+    let cartContainer = document.getElementById("cart-items");
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+    // لو الكارت فاضي
+    if (Object.keys(cart).length === 0) {
+    cartContainer.innerHTML = `
+        <div class="empty-cart">
+            <h2>Your cart is empty</h2>
+            <p>Add items to get started</p>
+            <button id="go-shopping" onclick="goToShop()">
+                Go Shopping
+            </button>
+            <img class="empcart" 
+            src="https://thumbs.dreamstime.com/b/realistic-empty-supermarket-shopping-cart-vector-illustration-isolated-white-background-realistic-empty-supermarket-shopping-118192710.jpg" 
+            alt="empty cart">
+        </div>
+    `;
+    return;
+}
+
+    // امسح رسالة "empty cart"
+    cartContainer.innerHTML = "";
+
+    // المنتجات (مؤقتًا)
+    let products = {
+    1: { 
+        name: "Premium Watch", 
+        price: 199,
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
+    },
+    2: { 
+        name: "Leather Bag", 
+        price: 85,
+        image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa"
+    },
+    3: { 
+        name: "Wireless Headphones", 
+        price: 150,
+        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+    },
+    4: { 
+        name: "Smart Speaker", 
+        price: 120,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+    }
+};
+    let total = 0;
+
+    for (let id in cart) {
+        let item = products[id];
+        let qty = cart[id];
+
+        let itemTotal = item.price * qty;
+        total += itemTotal;
+
+     cartContainer.innerHTML += `
+    <div class="cart-card">
+        <img src="${item.image}" class="cart-img">
+
+        <div class="cart-info">
+            <h3>${item.name}</h3>
+            <p>Price: $${item.price}</p>
+
+            <div class="cart-controls">
+                <button onclick="changeCartQty(${id}, -1)">-</button>
+                <span>${qty}</span>
+                <button onclick="changeCartQty(${id}, 1)">+</button>
+            </div>
+
+            <p>Total: $${itemTotal}</p>
+
+            <button class="remove-btn" onclick="removeItem(${id})">
+                Remove
+            </button>
+        </div>
+    </div>
+    `;
+    }
+
+    // عرض الإجمالي
+    cartContainer.innerHTML += `
+        <h2>Total: $${total}</h2>
+    `;
+}
+function changeCartQty(id, delta) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+    if (!cart[id]) return;
+
+    cart[id] += delta;
+
+    if (cart[id] < 1) {
+        delete cart[id];
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    renderCart();
+    updateCartBadge();
+}
+function removeItem(id) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+    delete cart[id];
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    renderCart();
+    updateCartBadge();
+}
