@@ -1,41 +1,91 @@
 // 1. Simple object to store product quantities: { productId: quantity }
 let cartData =JSON.parse(localStorage.getItem("cart")) ||  {};
 
+
+
+// 1. Your Product Database (You can add more items here later)
+const products = [
+  { 
+    id: 1, 
+    name: "Premium Watch", 
+    price: 199.00, 
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" 
+  },
+  { 
+    id: 2, 
+    name: "Leather Bag", 
+    price: 85.00, 
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80" 
+  },
+  { 
+    id: 3, 
+    name: "Wireless Headphones", 
+    price: 150.00, 
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80" 
+  },
+  { 
+    id: 4, 
+    name: "Smart Speaker", 
+    price: 120.00, 
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" 
+  }
+];
+
+// 2. The Render Function
+function renderProducts(productsToDisplay) {
+  // Grab the empty grid container from shop.html
+  const grid = document.querySelector('.products-grid');
+  
+  // Create an empty text variable to hold our HTML
+  let htmlContent = '';
+
+  // Loop through whatever array is passed into the function
+  productsToDisplay.forEach(product => {
+    // Build the HTML for this specific product and add it to our variable
+    // Notice how we use ${product.name} to insert the data dynamically!
+    htmlContent += `
+      <div class="product-card" id="qty-container-${product.id}">
+        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+        <div class="product-info">
+          <h3 class="product-title">${product.name}</h3>
+          <p class="product-price">$${product.price.toFixed(2)}</p>
+          <button class="add-to-cart-btn" onclick="initQuantity(${product.id}, this)">Add to Cart</button>
+          <div class="qty-selector" style="display: none;">
+            <button class="qty-btn" onclick="changeQty(${product.id}, -1)">-</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(${product.id}, 1)">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  // Inject all the generated HTML into the grid at once
+  grid.innerHTML = htmlContent;
+}
+
+// 3. Call the function when the page loads so the products appear
+renderProducts(products);
 /**
  * SEARCH FUNCTION:
  * Filters products based on the text typed in the search bar.
  */
 function filterProducts() {
-    // Get the text from the search input and make it lowercase
-    let input = document.getElementById('product-search').value.toLowerCase();
-    
-    // Get all product cards and the "No Results" message div
-    let cards = document.querySelectorAll('.product-card');
-    let message = document.getElementById('no-results');
-    
-    // Track if we found at least one match
-    let foundAny = false;
+  const input = document.getElementById('product-search').value.toLowerCase();
 
-    // Loop through every card one by one
-    for (let i = 0; i < cards.length; i++) {
-        // Get the title of the current product
-        let title = cards[i].querySelector('.product-title').textContent.toLowerCase();
-        
-        // Check if the search text is inside the title
-        if (title.indexOf(input) > -1) {
-            cards[i].style.display = ""; // Show it
-            foundAny = true;            // Mark that we found something
-        } else {
-            cards[i].style.display = "none"; // Hide it
-        }
-    }
+  const filtered = products.filter(product =>
+    product.name.toLowerCase().includes(input)
+  );
 
-    // If the loop finished and nothing was found, show the "No Results" message
-    if (foundAny == true) {
-        message.style.display = "none";
-    } else {
-        message.style.display = "block";
-    }
+  renderProducts(filtered);
+
+  const message = document.getElementById('no-results');
+
+  if (filtered.length === 0) {
+    message.style.display = "block";
+  } else {
+    message.style.display = "none";
+  }
 }
 
 /**
@@ -220,13 +270,18 @@ function resetToDefaultButton(productId) {
 window.onload = function () {
     updateCartBadge();
 
+   
     let cartContainer = document.getElementById("cart-items");
-
     if (cartContainer) {
         renderCart();
     }
-};
 
+    // Youssef Ahmed's Shop Logic
+    let gridContainer = document.querySelector('.products-grid');
+    if (gridContainer) {
+        renderProducts(products); // Loads the products on shop.html
+    }
+};
 function renderCart() {
     let cartContainer = document.getElementById("cart-items");
 
