@@ -339,3 +339,83 @@ function removeItem(id) {
     renderCart();
     updateCartBadge();
 }
+
+
+const showForm = id => {
+    document.querySelectorAll('.auth-box').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+};
+
+const switchTab = id => {
+    document.querySelectorAll('.nav-btn, .tab-pane').forEach(el => el.classList.remove('active'));
+    if (event) event.target.classList.add('active');
+    document.getElementById(id).classList.add('active');
+};
+
+
+const mockLogin = () => {
+    document.getElementById('auth-area').style.display = 'none';
+    document.getElementById('dashboard-area').style.display = 'block';
+};
+
+function updateProfile() {
+    const nameInput = document.getElementById('edit-full-name');
+    const emailInput = document.getElementById('edit-email'); 
+    
+    const newName = nameInput.value.trim();
+    const newEmail = emailInput.value.trim();
+
+    if (newName !== "" && newEmail !== "") {
+        document.getElementById('sidebar-name').textContent = newName;
+        document.getElementById('sidebar-email').textContent = newEmail;
+        document.getElementById('sidebar-avatar').textContent = newName.substring(0, 2).toUpperCase();
+
+        alert("Profile updated successfully!");
+    } else {
+        alert("Please fill in both Name and Email.");
+    }
+}
+function joinNow() {
+    const val = id => document.getElementById(id).value.trim();
+    const [name, email, pass, confirm] = [val('reg-name'), val('reg-email'), val('reg-pass'), val('reg-confirm')];
+
+    if (!name || !email || !pass) return alert("Fill all fields!");
+    if (pass.length < 6) return alert("Password too short (6+ chars).");
+    if (pass !== confirm) return alert("Passwords don't match!");
+
+    document.getElementById('sidebar-name').textContent = name;
+    document.getElementById('sidebar-avatar').textContent = name.slice(0, 2).toUpperCase();
+    document.getElementById('sidebar-email').textContent = email;
+    mockLogin();
+    alert("Account created successfully!");
+}
+
+
+function addNewAddressPrompt() {
+    const title = prompt("Title:"), detail = prompt("Details:");
+    if (title && detail) {
+        if (document.getElementById('empty-addr-msg')) document.getElementById('empty-addr-msg').style.display = 'none';
+        const item = document.createElement('div');
+        item.className = 'address-item active';
+        item.innerHTML = `<strong>${title}</strong><p>${detail}</p><a href="#" onclick="this.parentElement.remove()">Remove</a>`;
+        document.getElementById('address-list').appendChild(item);
+    }
+}
+
+function changePasswordAction() {
+    const inputs = document.querySelectorAll('#tab-security input');
+    if (inputs[1].value.length < 6) return alert("Min 6 characters.");
+    alert("Updated!");
+    inputs.forEach(i => i.value = "");
+}
+
+function cancelUI(btn) {
+    if (confirm("Cancel this order?")) {
+        const card = btn.closest('.order-card');
+        const status = card.querySelector('.status-chip');
+        card.style.opacity = '0.5';
+        status.textContent = 'Cancelled';
+        status.style = 'background:#ffebee; color:#c62828;';
+        btn.remove();
+    }
+}
