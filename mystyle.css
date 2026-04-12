@@ -398,6 +398,7 @@ main {
    font-weight: 700;
    text-decoration: none;
    color: black;
+  letter-spacing: 3px;
  }
 
  .navbar {
@@ -496,6 +497,7 @@ main {
    font-size: 48px;
    font-weight: 800;
    margin-bottom: 16px;
+   letter-spacing: 5px;
  }
 
  .hero-section p {
@@ -509,36 +511,48 @@ main {
    justify-content: center;
    gap: 16px;
  }
+
  .btn-primary {
-  background-color: black;
-  color: #fff;
-  text-decoration: none;
-  padding: 14px 32px;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
+   background-color: black;
+   color: #fff;
+   text-decoration: none;
+   padding: 14px 32px;
+   border-radius: 12px;
+   font-size: 15px;
+   font-weight: 700;
  }
+
  .btn-primary:hover {
-  background-color: #333;
-}
-.features-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
-  width: min(1120px, 92%);
-  margin: 48px auto;
-}
-.feature-box {
-  background: #fff;
-  border: 1px solid #ebebeb;
-  border-radius: 14px;
-  padding: 28px 24px;
-  text-align: center;
-}
-.feature-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
-}
+   background-color: #333;
+ }
+
+ .features-section {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+   gap: 24px;
+   width: min(1120px, 92%);
+   margin: 48px auto;
+ }
+
+ .feature-box {
+   background: #fff;
+   border: 1px solid #ebebeb;
+   border-radius: 14px;
+   padding: 28px 24px;
+   text-align: center;
+ }
+
+ .feature-icon {
+   font-size: 28px;
+   margin-bottom: 12px;
+ }
+
+ .section-title {
+   font-size: 28px;
+   font-weight: 700;
+   margin-bottom: 30px;
+ }
+ 
 
 <<<<<<< HEAD
 .cart-card {
@@ -627,8 +641,7 @@ main {
    font-size: 15px;
    color: grey;
  }
-
- /* Grid Container */
+ 
  .products-section {
    width: min(1120px, 92%);
    margin: 40px auto;
@@ -643,17 +656,11 @@ main {
    width: 100%;
  }
 
- /* Individual Product Card */
  .product-card {
    border: 1px solid #ebebeb;
    border-radius: 12px;
    overflow: hidden;
    transition: transform 0.3s ease, box-shadow 0.3s ease;
- }
-
- .product-card:hover {
-   transform: translateY(-5px);
-   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
  }
 
  .product-image {
@@ -755,6 +762,7 @@ main {
    font-size: 20px;
    font-weight: 700;
    margin-bottom: 6px;
+   letter-spacing: 5px;
  }
 
  .page-footer p {
