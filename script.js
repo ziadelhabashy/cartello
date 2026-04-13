@@ -287,27 +287,68 @@ function resetToDefaultButton(productId) {
 } function goToShop() {
   window.location.href = "shop.html";
 }
+function renderCheckout() {
+    const itemsContainer = document.getElementById("checkout-items");
+    const totalContainer = document.getElementById("checkout-total");
+
+    if (!itemsContainer || !totalContainer) return;
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+    if (Object.keys(cart).length === 0) {
+        itemsContainer.innerHTML = "<p>Your cart is empty</p>";
+        totalContainer.innerHTML = "";
+        return;
+    }
+
+    let total = 0;
+    let html = "";
+
+    for (let id in cart) {
+        const item = products.find(p => p.id == id);
+        if (!item) continue;
+
+        const qty = cart[id];
+        const itemTotal = item.price * qty;
+        total += itemTotal;
+
+        html += `
+            <div class="checkout-item">
+                <span>${item.name} (x${qty})</span>
+                <span>$${itemTotal.toFixed(2)}</span>
+            </div>
+        `;
+    }
+
+    itemsContainer.innerHTML = html;
+    totalContainer.innerHTML = `<h3>Total: $${total.toFixed(2)}</h3>`;
+}
 
 window.onload = function () {
     updateCartBadge();
 
-   
     let cartContainer = document.getElementById("cart-items");
     if (cartContainer) {
         renderCart();
     }
 
-    // Youssef Ahmed's Shop Logic
     let gridContainer = document.querySelector('.products-grid');
-    if (gridContainer) {
-        renderProducts(products); // Loads the products on shop.html
+    if (gridContainer && document.getElementById("product-search")) {
+        renderProducts(products);
+    }
+
+    let checkoutContainer = document.getElementById("checkout-items");
+    if (checkoutContainer && typeof renderCheckout === "function") {
+        renderCheckout();
     }
 };
 function renderCart() {
     let cartContainer = document.getElementById("cart-items");
     let cart = JSON.parse(localStorage.getItem("cart")) || {};
 
-    // If the cart is empty
+    if (!cartContainer) return;
+
+    // لو الكارت فاضي
     if (Object.keys(cart).length === 0) {
         cartContainer.innerHTML = `
             <div class="empty-cart">
@@ -324,45 +365,65 @@ function renderCart() {
         return;
     }
 
-    // Clear the container
     cartContainer.innerHTML = "";
     let total = 0;
 
     for (let id in cart) {
-        // THE FIX: We use '.find()' to grab the correct item from YOUR global array at the top!
         let item = products.find(p => p.id == id);
         let qty = cart[id];
 
-        // Safety check just in case
         if (!item) continue;
 
         let itemTotal = item.price * qty;
         total += itemTotal;
 
         cartContainer.innerHTML += `
-        <div class="cart-card">
-            <img src="${item.image}" class="cart-img">
-            <div class="cart-info">
-                <h3>${item.name}</h3>
-                <p>Price: $${item.price.toFixed(2)}</p>
-                <div class="cart-controls">
-                    <button onclick="changeCartQty(${id}, -1)">-</button>
-                    <span>${qty}</span>
-                    <button onclick="changeCartQty(${id}, 1)">+</button>
+            <div class="cart-card">
+                <img src="${item.image}" class="cart-img" alt="${item.name}">
+                <div class="cart-info">
+                    <h3>${item.name}</h3>
+                    <p>Price: $${item.price.toFixed(2)}</p>
+                    <div class="cart-controls">
+                        <button onclick="changeCartQty(${id}, -1)">-</button>
+                        <span>${qty}</span>
+                        <button onclick="changeCartQty(${id}, 1)">+</button>
+                    </div>
+                    <p>Total: $${itemTotal.toFixed(2)}</p>
+                    <button class="remove-btn" onclick="removeItem(${id})">
+                        Remove
+                    </button>
                 </div>
-                <p>Total: $${itemTotal.toFixed(2)}</p>
-                <button class="remove-btn" onclick="removeItem(${id})">
-                    Remove
-                </button>
             </div>
-        </div>
         `;
     }
 
-    // Display the Total
-    cartContainer.innerHTML += `
-        <h2>Total: $${total.toFixed(2)}</h2>
-    `;
+    // summary + checkout button
+    if (total === 0) {
+        cartContainer.innerHTML += `
+            <div class="cart-summary">
+                <h2>Total: $0.00</h2>
+            </div>
+        `;
+    } else {
+        cartContainer.innerHTML += `
+            <div class="cart-summary">
+                <h2>Total: $${total.toFixed(2)}</h2>
+                <button class="checkout-btn" onclick="goToCheckout()">
+                    Continue to Checkout →
+                </button>
+            </div>
+        `;
+    }
+}
+function goToCheckout() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || {};
+
+    if (Object.keys(cart).length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    window.location.href = "checkout.html";
 }
 
 function changeCartQty(id, delta) {
