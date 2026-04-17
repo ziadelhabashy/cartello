@@ -31,7 +31,7 @@ const products = [
     id: 4,
     name: "Smart Speaker",
     price: 120.0,
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80",
+    image: "https://images.unsplash.com/photo-1586078875290-c22eb791ad5d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ,
     category: "Electronics"
   }
 ];
@@ -43,6 +43,11 @@ const products = [
 window.onload = function () {
   updateCartBadge();
   initMobileMenu();
+
+  // ---> NEW: Render featured products on the Homepage
+  if (document.getElementById("featured-products-grid")) {
+    renderFeaturedProducts();
+  }
 
   if (document.getElementById("cart-items")) {
     renderCart();
@@ -102,6 +107,37 @@ function renderProducts(productsToDisplay) {
   });
   grid.innerHTML = htmlContent;
 }
+
+function renderFeaturedProducts() {
+  const grid = document.getElementById("featured-products-grid");
+  if (!grid) return;
+
+  let htmlContent = "";
+  // Grab only the first 4 products from the array
+  const featured = products.slice(0, 4);
+
+  featured.forEach(product => {
+    // This HTML matches Wael's cart setup perfectly
+    htmlContent += `
+      <div class="product-card" id="qty-container-${product.id}">
+        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+        <div class="product-info">
+          <h3 class="product-title">${product.name}</h3>
+          <p class="product-price">$${product.price.toFixed(2)}</p>
+          <button class="add-to-cart-btn" onclick="initQuantity(${product.id}, this)">Add to Cart</button>
+          <div class="qty-selector" style="display: none;">
+            <button class="qty-btn" onclick="changeQty(${product.id}, -1)">-</button>
+            <span class="qty-number">1</span>
+            <button class="qty-btn" onclick="changeQty(${product.id}, 1)">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  grid.innerHTML = htmlContent;
+}
+
 
 function renderCart() {
   const cartContainer = document.getElementById("cart-items");
