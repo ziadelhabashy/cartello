@@ -867,11 +867,9 @@ function loadTab(tabName, btn) {
     `,
     shipping: `
       <h1>🚚 Shipping Settings</h1>
-      <div style="max-width:400px; margin-top:20px">
-        <label>Default Shipping Fee (EGP):</label><br>
-        <input type="number" class="search-input" value="10.00" style="width:100%; margin:10px 0;">
-        <button class="search-button">Save Configuration</button>
-      </div>
+  <div style="max-width:400px; margin-top:20px">
+    <p>Shipping fees are managed automatically based on the selected governorate at checkout.</p>
+  </div>
     `,
     policy: `
       <h1>📜 Policy Pages</h1>
