@@ -943,7 +943,7 @@ function loadTab(tabName) {
       <h1>👥 User Management</h1>
       <table class="admin-table">
         <tr><th>User</th><th>Email</th><th>Role</th><th>Action</th></tr>
-        <tr><td>Ziad</td><td>ziad@cartello.com</td><td>Admin</td><td><button>Edit</button></td></tr>
+        <tr><td>Admin</td><td>admin@cartello.com</td><td>Admin</td><td><button>Edit</button></td></tr>
       </table>
     `,
     reports: `
