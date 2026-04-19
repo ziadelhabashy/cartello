@@ -8,7 +8,8 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: min(1120px, 92%);
+  width: 92%;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
