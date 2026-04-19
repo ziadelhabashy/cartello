@@ -341,23 +341,30 @@ function renderCart() {
 function renderCheckout() {
   const itemsContainer = document.getElementById("checkout-items");
   const totalContainer = document.getElementById("checkout-total");
+  const shippingContainer = document.getElementById("checkout-shipping");
+
   if (!itemsContainer || !totalContainer) return;
+
   const cart = getCart();
 
   if (Object.keys(cart).length === 0) {
     itemsContainer.innerHTML = "<p>Your cart is empty</p>";
+    if (shippingContainer) shippingContainer.innerHTML = "";
     totalContainer.innerHTML = "";
     return;
   }
 
-  let total = 0;
+  let subtotal = 0;
   let html = "";
+
   for (let id in cart) {
     const item = products.find(p => p.id == id);
     if (!item) continue;
+
     const qty = cart[id];
     const itemTotal = item.price * qty;
-    total += itemTotal;
+    subtotal += itemTotal;
+
     html += `
       <div class="checkout-item">
         <span>${item.name} (x${qty})</span>
@@ -367,7 +374,15 @@ function renderCheckout() {
   }
 
   itemsContainer.innerHTML = html;
-  totalContainer.innerHTML = `<h3>Total: $${total.toFixed(2)}</h3>`;
+
+  const shipping = getShippingPrice();
+  const finalTotal = subtotal + shipping;
+
+  if (shippingContainer) {
+    shippingContainer.innerHTML = `<h3>Shipping: $${shipping.toFixed(2)}</h3>`;
+  }
+
+  totalContainer.innerHTML = `<h3>Total: $${finalTotal.toFixed(2)}</h3>`;
 }
 
 // ==========================================================================
@@ -522,39 +537,111 @@ function placeOrder(event) {
   const name = document.getElementById("customer-name").value.trim();
   const email = document.getElementById("customer-email").value.trim();
   const phone = document.getElementById("customer-phone").value.trim();
+  const governorate = document.getElementById("customer-governorate").value;
   const address = document.getElementById("customer-address").value.trim();
   const paymentMethod = document.getElementById("payment-method").value;
 
   const cart = getCart();
+
   if (Object.keys(cart).length === 0) {
     alert("Your cart is empty.");
     return;
   }
+
   if (name.length < 3) {
     alert("Please enter a valid full name.");
     return;
   }
+
   if (!isValidEmail(email)) {
     alert("Please enter a valid email address.");
     return;
   }
+
   if (!isValidPhone(phone)) {
     alert("Please enter a valid phone number.");
     return;
   }
+
+  if (governorate === "") {
+    alert("Please select your governorate.");
+    return;
+  }
+
   if (address.length < 8) {
     alert("Please enter a complete address.");
     return;
   }
+
   if (paymentMethod === "") {
     alert("Please select a payment method.");
     return;
   }
 
-  alert("Order placed successfully!");
-  localStorage.removeItem("cart");
-  cartData = {};
-  window.location.href = "cart.html";
+  const shipping = getShippingPrice();
+
+  showOrderModal();
+}
+
+ const shippingRates = {
+  Cairo: 50,
+  Giza: 50,
+  Alexandria: 70,
+  Dakahlia: 80,
+  Sharqia: 80,
+  Monufia: 75,
+  Qalyubia: 60,
+  Beheira: 85,
+  "Kafr El Sheikh": 85,
+  Gharbia: 80,
+  "Port Said": 90,
+  Suez: 90,
+  Ismailia: 85,
+  Damietta: 85,
+  Fayoum: 75,
+  "Beni Suef": 80,
+  Minya: 90,
+  Assiut: 100,
+  Sohag: 110,
+  Qena: 120,
+  Luxor: 130,
+  Aswan: 140,
+  "Red Sea": 120,
+  "New Valley": 150,
+  Matrouh: 120,
+  "North Sinai": 130,
+  "South Sinai": 140
+};
+
+function getShippingPrice() {
+  const govSelect = document.getElementById("customer-governorate");
+  if (!govSelect || !govSelect.value) return 0;
+  return shippingRates[govSelect.value] || 0;
+}
+
+function updateShipping() {
+  const shippingContainer = document.getElementById("checkout-shipping");
+  const totalContainer = document.getElementById("checkout-total");
+  const cart = getCart();
+
+  if (!shippingContainer || !totalContainer) return;
+
+  let subtotal = 0;
+
+  for (let id in cart) {
+    const item = products.find(p => p.id == id);
+    if (!item) continue;
+    subtotal += item.price * cart[id];
+  }
+
+  const shipping = getShippingPrice();
+  const finalTotal = subtotal + shipping;
+
+  shippingContainer.innerHTML = shipping > 0
+    ? `<h3>Shipping: $${shipping.toFixed(2)}</h3>`
+    : `<h3>Shipping: $0.00</h3>`;
+
+  totalContainer.innerHTML = `<h3>Total: $${finalTotal.toFixed(2)}</h3>`;
 }
 
 function cancelUI(btn) {
@@ -566,6 +653,18 @@ function cancelUI(btn) {
     status.style = "background:#ffebee; color:#c62828;";
     btn.remove();
   }
+}
+function showOrderModal() {
+  const modal = document.getElementById("order-success-modal");
+  if (modal) {
+    modal.classList.add("show");
+  }
+}
+
+function closeOrderModal() {
+  localStorage.removeItem("cart");
+  cartData = {};
+  window.location.href = "cart.html";
 }
 
 // ==========================================================================
