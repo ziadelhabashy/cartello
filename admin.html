@@ -34,14 +34,15 @@
   <div class="admin-layout">
   <aside class="admin-sidebar">
     <nav class="admin-nav">
-        <button class="admin-link active" onclick="loadTab('dashboard')">📊 Dashboard</button>
-        <button class="admin-link" onclick="loadTab('products')">📦 Products</button>
-        <button class="admin-link" onclick="loadTab('categories')">📁 Categories</button>
-        <button class="admin-link" onclick="loadTab('orders')">🛒 Orders</button>
-        <button class="admin-link" onclick="loadTab('users')">👥 Users</button>
-        <button class="admin-link" onclick="loadTab('reports')">📈 Reports</button>
-        <button class="admin-link" onclick="loadTab('shipping')">🚚 Shipping</button>
-        <button class="admin-link" onclick="loadTab('policy')">📜 Policies</button>
+        <button class="admin-link active" onclick="loadTab('dashboard', this)">📊 Dashboard</button>
+        <button class="admin-link" onclick="loadTab('products', this)">📦 Products</button>
+        <button class="admin-link" onclick="loadTab('categories', this)">📁 Categories</button>
+        <button class="admin-link" onclick="loadTab('orders', this)">🛒 Orders</button>
+        <button class="admin-link" onclick="loadTab('users', this)">👥 Users</button>
+        <button class="admin-link" onclick="loadTab('reports', this)">📈 Reports</button>
+        <button class="admin-link" onclick="loadTab('shipping', this)">🚚 Shipping</button>
+        <button class="admin-link" onclick="loadTab('policy', this)">📜 Policies</button>
+        <button class="admin-link" onclick="adminLogout()">🚪 Logout</button>
     </nav>
 </aside>
 

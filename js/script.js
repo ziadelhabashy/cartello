@@ -185,20 +185,17 @@ const products = [
 // ==========================================================================
 
 window.onload = function () {
-  updateCartBadge();
+   updateCartBadge();
   initMobileMenu();
 
-  if (document.getElementById("checkout-items")) {
-    const currentUser = localStorage.getItem("currentUser");
+  if (document.getElementById("admin-panel-content")) {
+    const isAdmin = localStorage.getItem("adminSession");
 
-    if (!currentUser) {
-      alert("You must login first.");
-      localStorage.setItem("redirectAfterLogin", "checkout.html");
+    if (isAdmin !== "true") {
+      alert("You must login as admin first.");
       window.location.href = "login.html";
       return;
     }
-
-    renderCheckout();
   }
 
   if (document.getElementById("featured-products-grid")) {
@@ -211,6 +208,10 @@ window.onload = function () {
 
   if (document.querySelector(".products-grid") && document.getElementById("product-search")) {
     renderProducts(products);
+  }
+
+  if (document.getElementById("checkout-items")) {
+    renderCheckout();
   }
 };
 
@@ -903,22 +904,30 @@ function adminLogin() {
 
   const ADMIN_EMAIL = "admin@cartello.com";
   const ADMIN_PASS = "admin123";
+
   if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+    localStorage.setItem("adminSession", "true");
     window.location.href = "admin.html";
   } else {
     alert("Invalid admin credentials. Please try again.");
   }
 }
+function adminLogout() {
+  localStorage.removeItem("adminSession");
+  window.location.href = "login.html";
+}
 
-function loadTab(tabName) {
+
+function loadTab(tabName, btn) {
   const contentArea = document.getElementById("admin-panel-content");
   if (!contentArea) return;
 
-  document.querySelectorAll(".admin-link").forEach(btn => {
-    btn.classList.remove("active");
+  document.querySelectorAll(".admin-link").forEach(link => {
+    link.classList.remove("active");
   });
-  if (typeof event !== "undefined" && event.currentTarget) {
-    event.currentTarget.classList.add("active");
+
+  if (btn) {
+    btn.classList.add("active");
   }
 
   const adminViews = {
