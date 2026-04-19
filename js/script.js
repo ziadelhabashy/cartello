@@ -11,30 +11,102 @@ const itemsPerPage = 8;
 let currentList = []; // This will track our active list (searched/filtered products)
 
 const products = [
-  { id: 1, name: "Premium Watch", price: 199.0, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 2, name: "Leather Bag", price: 85.0, image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 3, name: "Wireless Headphones", price: 150.0, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 4, name: "Smart Speaker", price: 120.0, image: "https://images.unsplash.com/photo-1586078875290-c22eb791ad5d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" , category: "Electronics" },
-  { id: 5, name: "Running Shoes", price: 110.0, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 6, name: "Wireless Mouse", price: 45.0, image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 7, name: "Mechanical Keyboard", price: 135.0, image: "https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 8, name: "Polarized Sunglasses", price: 65.0, image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 9, name: "Classic Canvas Backpack", price: 55.0, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 10, name: "Fitness Tracker Band", price: 90.0, image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 11, name: "Minimalist Wallet", price: 35.0, image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 12, name: "Noise-Canceling Earbuds", price: 180.0, image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 13, name: "Modern Desk Lamp", price: 40.0, image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 14, name: "Insulated Coffee Thermos", price: 28.0, image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=400&q=80", category: "Accessories" },
-  { id: 15, name: "Portable Power Bank", price: 50.0, image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=400&q=80", category: "Electronics" },
-  { id: 16, name: "Hydrating Face Cleanser", price: 24.0, image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=400&q=80", category: "Skin Care" },
-  { id: 17, name: "Vitamin C Serum", price: 35.0, image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", category: "Skin Care" },
-  { id: 18, name: "Daily SPF 50 Sunscreen", price: 28.0, image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=400&q=80", category: "Skin Care" },
-  { id: 19, name: "Purifying Clay Mask", price: 22.0, image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=400&q=80", category: "Skin Care" },
-  { id: 20, name: "Night Repair Cream", price: 45.0, image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=400&q=80", category: "Skin Care" },
-  { id: 21, name: "Extra Virgin Olive Oil", price: 18.0, image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=400&q=80", category: "Grocery" },
-  { id: 22, name: "Artisan Coffee Beans", price: 20.0, image: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=400&q=80", category: "Grocery" },
-  { id: 23, name: "Whole Wheat Pasta", price: 5.0, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80", category: "Grocery" },
-  { id: 24, name: "Fresh Green Apples", price: 8.0, image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80", category: "Grocery" }
+  { 
+    id: 1, name: "Premium Watch", price: 199.0, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "A luxury timepiece featuring a genuine leather strap and scratch-resistant sapphire crystal.", stock: 12, rating: 4.8, reviews: 124 
+  },
+  { 
+    id: 2, name: "Leather Bag", price: 85.0, image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Handcrafted full-grain leather messenger bag, perfect for everyday carry or a 15-inch laptop.", stock: 0, rating: 4.2, reviews: 89 
+  },
+  { 
+    id: 3, name: "Wireless Headphones", price: 150.0, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "Over-ear headphones with active noise cancellation and up to 30 hours of battery life.", stock: 25, rating: 4.6, reviews: 210 
+  },
+  { 
+    id: 4, name: "Smart Speaker", price: 120.0, image: "https://images.unsplash.com/photo-1586078875290-c22eb791ad5d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", category: "Electronics",
+    description: "Voice-controlled smart speaker with rich bass, clear highs, and seamless smart home integration.", stock: 8, rating: 4.3, reviews: 56 
+  },
+  { 
+    id: 5, name: "Running Shoes", price: 110.0, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Lightweight and breathable running shoes designed for maximum comfort and road traction.", stock: 40, rating: 4.5, reviews: 312 
+  },
+  { 
+    id: 6, name: "Wireless Mouse", price: 45.0, image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "Ergonomic wireless mouse with customizable buttons and high-precision tracking.", stock: 50, rating: 4.7, reviews: 420 
+  },
+  { 
+    id: 7, name: "Mechanical Keyboard", price: 135.0, image: "https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "Tenkeyless mechanical keyboard with tactile switches and customizable RGB backlighting.", stock: 15, rating: 4.9, reviews: 158 
+  },
+  { 
+    id: 8, name: "Polarized Sunglasses", price: 65.0, image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Classic polarized sunglasses offering 100% UV protection and glare reduction.", stock: 30, rating: 4.4, reviews: 75 
+  },
+  { 
+    id: 9, name: "Classic Canvas Backpack", price: 55.0, image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Durable water-resistant canvas backpack with a padded laptop compartment.", stock: 20, rating: 4.6, reviews: 102 
+  },
+  { 
+    id: 10, name: "Fitness Tracker Band", price: 90.0, image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "Slim fitness tracker that monitors heart rate, steps, and sleep patterns 24/7.", stock: 60, rating: 4.1, reviews: 340 
+  },
+  { 
+    id: 11, name: "Minimalist Wallet", price: 35.0, image: "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Ultra-slim RFID-blocking wallet designed to hold up to 8 cards and folded cash.", stock: 2, rating: 4.5, reviews: 88 
+  },
+  { 
+    id: 12, name: "Noise-Canceling Earbuds", price: 180.0, image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "True wireless earbuds featuring advanced noise cancellation and a wireless charging case.", stock: 18, rating: 4.8, reviews: 295 
+  },
+  { 
+    id: 13, name: "Modern Desk Lamp", price: 40.0, image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "Adjustable LED desk lamp with multiple color temperatures and brightness levels.", stock: 22, rating: 4.3, reviews: 45 
+  },
+  { 
+    id: 14, name: "Insulated Coffee Thermos", price: 28.0, image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=400&q=80", category: "Accessories",
+    description: "Double-wall vacuum insulated thermos keeps your drinks hot for 12 hours or cold for 24.", stock: 45, rating: 4.7, reviews: 132 
+  },
+  { 
+    id: 15, name: "Portable Power Bank", price: 50.0, image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=400&q=80", category: "Electronics",
+    description: "High-capacity 20,000mAh power bank with fast-charging USB-C output.", stock: 35, rating: 4.6, reviews: 218 
+  },
+  { 
+    id: 16, name: "Hydrating Face Cleanser", price: 24.0, image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=400&q=80", category: "Skin Care",
+    description: "Gentle daily cleanser formulated with hyaluronic acid to retain skin moisture.", stock: 55, rating: 4.5, reviews: 92 
+  },
+  { 
+    id: 17, name: "Vitamin C Serum", price: 35.0, image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", category: "Skin Care",
+    description: "Brightening antioxidant serum that helps visibly reduce dark spots and even out skin tone.", stock: 40, rating: 4.8, reviews: 145 
+  },
+  { 
+    id: 18, name: "Daily SPF 50 Sunscreen", price: 28.0, image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=400&q=80", category: "Skin Care",
+    description: "Broad-spectrum, lightweight sunscreen that absorbs quickly without a white cast.", stock: 0, rating: 4.7, reviews: 201 
+  },
+  { 
+    id: 19, name: "Purifying Clay Mask", price: 22.0, image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=400&q=80", category: "Skin Care",
+    description: "Deep-cleaning bentonite clay mask to unclog pores and reduce excess oil.", stock: 25, rating: 4.4, reviews: 68 
+  },
+  { 
+    id: 20, name: "Night Repair Cream", price: 45.0, image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=400&q=80", category: "Skin Care",
+    description: "Rich overnight moisturizing cream infused with peptides to restore skin elasticity.", stock: 30, rating: 4.6, reviews: 112 
+  },
+  { 
+    id: 21, name: "Extra Virgin Olive Oil", price: 18.0, image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=400&q=80", category: "Grocery",
+    description: "Cold-pressed, unrefined organic olive oil perfect for dressings and light sautéing.", stock: 100, rating: 4.9, reviews: 320 
+  },
+  { 
+    id: 22, name: "Artisan Coffee Beans", price: 20.0, image: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=400&q=80", category: "Grocery",
+    description: "Medium-dark roast whole coffee beans with notes of dark chocolate and caramel.", stock: 80, rating: 4.8, reviews: 250 
+  },
+  { 
+    id: 23, name: "Whole Wheat Pasta", price: 5.0, image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80", category: "Grocery",
+    description: "100% whole grain organic penne pasta, high in fiber and protein.", stock: 150, rating: 4.5, reviews: 85 
+  },
+  { 
+    id: 24, name: "Fresh Green Apples", price: 8.0, image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80", category: "Grocery",
+    description: "Crisp and tart Granny Smith apples, packed fresh daily. Price per kilogram.", stock: 65, rating: 4.6, reviews: 110 
+  }
 ];
 
 // ==========================================================================
@@ -100,13 +172,23 @@ function renderProducts(productsToDisplay) {
 
   let htmlContent = "";
   productsToDisplay.forEach(product => {
+    
+    let buttonHtml = "";
+    if (product.stock > 0) {
+        buttonHtml = `<button class="add-to-cart-btn" onclick="initQuantity(${product.id}, this)">Add to Cart</button>`;
+    } else {
+        buttonHtml = `<button class="add-to-cart-btn out-of-stock-btn" disabled>Out of Stock</button>`;
+    }
+
     htmlContent += `
       <div class="product-card" id="qty-container-${product.id}">
         <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
         <div class="product-info">
           <h3 class="product-title">${product.name}</h3>
           <p class="product-price">EGP ${product.price.toFixed(2)}</p>
-          <button class="add-to-cart-btn" onclick="initQuantity(${product.id}, this)">Add to Cart</button>
+          
+          ${buttonHtml}
+
           <div class="qty-selector" style="display: none;">
             <button class="qty-btn" onclick="changeQty(${product.id}, -1)">-</button>
             <span class="qty-number">1</span>
@@ -115,11 +197,13 @@ function renderProducts(productsToDisplay) {
         </div>
       </div>
     `;
-  });
+});
   grid.innerHTML = htmlContent;
-  Object.keys(getCart()).forEach(id => syncProductCardState(id));
+  
+  if (typeof getCart === 'function' && typeof syncProductCardState === 'function') {
+      Object.keys(getCart()).forEach(id => syncProductCardState(id));
+  }
 }
-
 function updatePage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -314,6 +398,14 @@ function getCart() {
 }
 
 function initQuantity(productId, btn) {
+  // --- NEW ZERO STOCK CHECK ---
+  const product = products.find(p => p.id === productId);
+  if (product && product.stock <= 0) {
+      alert("Sorry, this item is currently out of stock.");
+      return; // Stop them from starting a cart
+  }
+  // ----------------------------
+
   const container = btn.parentElement;
   btn.style.display = "none";
 
@@ -330,6 +422,16 @@ function initQuantity(productId, btn) {
 function changeQty(productId, delta) {
   if (!cartData[productId]) return;
 
+  // --- NEW STOCK CHECK LOGIC ---
+  if (delta > 0) { // Only check if they are clicking the "+" button
+    const product = products.find(p => p.id === productId);
+    if (product && cartData[productId] >= product.stock) {
+      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      return; // This stops the function from adding more
+    }
+  }
+  // -----------------------------
+
   cartData[productId] += delta;
   if (cartData[productId] < 1) {
     delete cartData[productId];
@@ -344,6 +446,16 @@ function changeQty(productId, delta) {
 function changeCartQty(id, delta) {
   const cart = getCart();
   if (!cart[id]) return;
+
+  // --- NEW STOCK CHECK LOGIC ---
+  if (delta > 0) {
+    const product = products.find(p => p.id == id); // == instead of === because 'id' from the cart loop is a string
+    if (product && cart[id] >= product.stock) {
+      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      return; 
+    }
+  }
+  // -----------------------------
 
   cart[id] += delta;
   if (cart[id] < 1) {

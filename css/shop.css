@@ -121,3 +121,8 @@
   flex-grow: 1;
   text-align: center;
 }
+
+.out-of-stock-btn { background-color: #ccc; 
+  cursor: not-allowed;
+   color: #666; 
+  }
