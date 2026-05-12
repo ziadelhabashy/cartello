@@ -456,7 +456,7 @@ function renderCart() {
       <h2>Total: EGP ${total.toFixed(2)}</h2>
       <button class="checkout-btn" onclick="goToCheckout()">
         Continue to Checkout →
-      </button>
+      </button> 
     </div>
   `;
 }
@@ -697,7 +697,7 @@ function placeOrder(event) {
   const governorate = document.getElementById("customer-governorate").value;
   const address = document.getElementById("customer-address").value.trim();
   const paymentMethod = document.getElementById("payment-method").value;
-
+  
   const cart = getCart();
 
   if (Object.keys(cart).length === 0) {
