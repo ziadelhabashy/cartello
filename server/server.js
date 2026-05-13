@@ -1,17 +1,18 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const Product = require('./models/Product');
 const User = require('./models/User');
-const Order = require('./models/Order');  
+const Order = require('./models/Order');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // CONNECT TO MONGODB
-mongoose.connect('mongodb://cartello_user:Cartello2026@ac-uqrle1h-shard-00-00.cfs7gfg.mongodb.net:27017,ac-uqrle1h-shard-00-01.cfs7gfg.mongodb.net:27017,ac-uqrle1h-shard-00-02.cfs7gfg.mongodb.net:27017/cartello?ssl=true&replicaSet=atlas-6axdi1-shard-0&authSource=admin&appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB!"))
   .catch(err => console.log("Error:", err));
 
