@@ -11,8 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // CONNECT TO MONGODB
-mongoose.connect('mongodb://cartello_user:Cartello2026!@ac-uqrle1h-shard-00-00.cfs7gfg.mongodb.net:27017,ac-uqrle1h-shard-00-01.cfs7gfg.mongodb.net:27017,ac-uqrle1h-shard-00-02.cfs7gfg.mongodb.net:27017/cartello?ssl=true&replicaSet=atlas-6axdi1-shard-0&authSource=admin&appName=Cluster0')
-  .then(() => console.log("Connected to MongoDB!"))
+mongoose.connect('mongodb://cartello_user:Cartello2026@cluster0.cfs7gfg.mongodb.net/cartello?appName=Cluster0')  .then(() => console.log("Connected to MongoDB!"))
   .catch(err => console.log("Error:", err));
 
 // GET all products
