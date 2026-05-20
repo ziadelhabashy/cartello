@@ -31,7 +31,7 @@ window.onload = async function () {
   }
 
   try {
-    const response = await fetch('http://localhost:5000/api/products');
+    const response = await fetch('https://cartello-jx78.onrender.com/api/products');
     const data = await response.json();
     products = data;
 
@@ -543,7 +543,7 @@ if (currentUser) {
   if (phoneField && !phoneField.value) phoneField.value = currentUser.phone || "";
 
   if (addressField && !addressField.value && currentUser.id) {
-    fetch(`http://localhost:5000/api/addresses/${currentUser.id}`)
+    fetch(`https://cartello-jx78.onrender.com/api/addresses/${currentUser.id}`)
       .then(res => res.json())
       .then(addresses => {
         if (addresses.length > 0) {
@@ -647,7 +647,7 @@ async function placeOrder(event) {
   if (!paymentMethod) { alert("Please select a payment method."); return; }
 
   try {
-    const response = await fetch('http://localhost:5000/api/orders', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -727,7 +727,7 @@ async function loadUserOrders(userId) {
   if (!ordersTab) return;
 
   try {
-    const response = await fetch(`http://localhost:5000/api/orders/user/${userId}`);
+    const response = await fetch(`https://cartello-jx78.onrender.com/api/orders/user/${userId}`);
     const orders = await response.json();
 
     if (orders.length === 0) {
@@ -766,7 +766,7 @@ async function cancelOrder(orderId) {
   if (!confirm("Are you sure you want to cancel this order?")) return;
 
   try {
-    const response = await fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
+    const response = await fetch(`https://cartello-jx78.onrender.com/api/admin/orders/${orderId}/status`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'Cancelled' })
@@ -828,7 +828,7 @@ async function validateLogin() {
   if (!email || !password) { alert("Please enter both email and password."); return; }
 
   try {
-    const response = await fetch('http://localhost:5000/api/login', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -876,7 +876,7 @@ async function joinNow() {
   if (pass !== confirm) { alert("Passwords do not match."); return; }
 
   try {
-    const response = await fetch('http://localhost:5000/api/signup', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, phone, password: pass })
@@ -901,7 +901,7 @@ async function updateProfile() {
   if (!currentUser) { alert("Not logged in."); return; }
 
   try {
-    const response = await fetch('http://localhost:5000/api/update-profile', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/update-profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: currentUser.id, name: newName, email: newEmail, phone: newPhone })
@@ -939,7 +939,7 @@ async function changePasswordAction() {
   }
 
   try {
-    const response = await fetch('http://localhost:5000/api/change-password', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/change-password', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -970,7 +970,7 @@ async function addNewAddressPrompt() {
   if (!currentUser) { alert("Not logged in."); return; }
 
   try {
-    const response = await fetch('http://localhost:5000/api/add-address', {
+    const response = await fetch('https://cartello-jx78.onrender.com/api/add-address', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: currentUser.id, title, detail })
@@ -985,7 +985,7 @@ async function loadUserAddresses(userId) {
   if (!addressList) return;
 
   try {
-    const response = await fetch(`http://localhost:5000/api/addresses/${userId}`);
+    const response = await fetch(`https://cartello-jx78.onrender.com/api/addresses/${userId}`);
     const addresses = await response.json();
 
     if (addresses.length === 0) {
@@ -1014,7 +1014,7 @@ async function removeAddress(addressId) {
   if (!currentUser) return;
 
   try {
-    await fetch('http://localhost:5000/api/remove-address', {
+    await fetch('https://cartello-jx78.onrender.com/api/remove-address', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: currentUser.id, addressId })
@@ -1071,9 +1071,9 @@ async function loadAdminDashboard() {
 
   try {
     const [ordersRes, usersRes, productsRes] = await Promise.all([
-      fetch('http://localhost:5000/api/admin/orders'),
-      fetch('http://localhost:5000/api/admin/users'),
-      fetch('http://localhost:5000/api/admin/products')
+      fetch('https://cartello-jx78.onrender.com/api/admin/orders'),
+      fetch('https://cartello-jx78.onrender.com/api/admin/users'),
+      fetch('https://cartello-jx78.onrender.com/api/admin/products')
     ]);
     const orders = await ordersRes.json();
     const users = await usersRes.json();
@@ -1108,7 +1108,7 @@ async function loadAdminProducts() {
   contentArea.innerHTML = "<h1>📦 Products</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch('http://localhost:5000/api/admin/products');
+    const res = await fetch('https://cartello-jx78.onrender.com/api/admin/products');
     const products = await res.json();
 
     let rows = products.map(p => `
@@ -1159,7 +1159,7 @@ async function loadAdminOrders() {
   contentArea.innerHTML = "<h1>🛒 Orders</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch('http://localhost:5000/api/admin/orders');
+    const res = await fetch('https://cartello-jx78.onrender.com/api/admin/orders');
     const orders = await res.json();
 
     let rows = orders.map(o => `
@@ -1197,7 +1197,7 @@ async function loadAdminUsers() {
   contentArea.innerHTML = "<h1>👥 Users</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch('http://localhost:5000/api/admin/users');
+    const res = await fetch('https://cartello-jx78.onrender.com/api/admin/users');
     const users = await res.json();
 
     let rows = users.map(u => `
@@ -1224,7 +1224,7 @@ async function loadAdminUsers() {
 async function deleteProduct(productId) {
   if (!confirm("Are you sure you want to delete this product?")) return;
   try {
-    await fetch(`http://localhost:5000/api/admin/products/${productId}`, { method: 'DELETE' });
+    await fetch(`https://cartello-jx78.onrender.com/api/admin/products/${productId}`, { method: 'DELETE' });
     loadAdminProducts();
   } catch (error) { alert("Could not delete product."); }
 }
@@ -1243,7 +1243,7 @@ async function addNewProduct() {
   }
 
   try {
-    const res = await fetch('http://localhost:5000/api/admin/products', {
+    const res = await fetch('https://cartello-jx78.onrender.com/api/admin/products', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, price, stock, category, image, rating, description })
@@ -1259,7 +1259,7 @@ async function addNewProduct() {
 
 async function updateOrderStatus(orderId, status) {
   try {
-    await fetch(`http://localhost:5000/api/admin/orders/${orderId}/status`, {
+    await fetch(`https://cartello-jx78.onrender.com/api/admin/orders/${orderId}/status`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status })
