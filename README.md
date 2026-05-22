@@ -1,35 +1,135 @@
-# cartello
+# Cartello — E-Commerce Web Application
 
-Project Overview:
+## Project Overview
 
-Cartello is a frontend e-commerce web application designed to provide a simple and modern online shopping experience. Users can browse products, add items to the cart, and complete a checkout process.
+Cartello is a full-stack e-commerce web application providing a modern online shopping experience. Users can browse products, manage their cart, place orders, and track their order history through a personal dashboard.
 
-Features:
-Browse products on Shop page
-Search and filter products
-Add / remove items from cart
-Update product quantity
-View cart total dynamically
-Checkout with Cash on Delivery (COD)
-User authentication pages (Login / Register)
-Admin dashboard UI
-Responsive design (mobile friendly with burger menu)
+---
 
-Technologies Used:
-HTML
-CSS 
-Java script
+## Features
 
-Notes:
-This project is frontend only (no backend)
-Cart data is stored using localStorage
+### Customer Features
+- Browse products on Home and Shop pages
+- Search and filter products by category
+- Product modal with details, rating, and stock info
+- Add / remove items from cart with quantity control
+- Cart persists across pages using localStorage
+- Checkout with form validation and Cash on Delivery (COD)
+- Automatic shipping cost calculation based on governorate
+- User registration and login connected to database
+- Personal dashboard with profile, orders, addresses, and security tabs
+- Edit name, email, and phone number
+- Save and remove delivery addresses
+- View order history with status tracking
+- Cancel pending orders
+- Change password
 
-Future Improvements:
-Connect to real backend
-Add online payment integration
-Improve security and authentication
+### Admin Features
+- Protected admin dashboard (login required)
+- View real-time stats — total sales, orders, users, products
+- Add and delete products with image upload
+- Manage and update order statuses
+- View all registered users
 
-How to Run the Project
-1.Download or clone the repository
-2.Open index.html in your browser
-3.Start browsing the website
+### Technical Features
+- Responsive design with mobile burger menu
+- Products and users stored in MongoDB Atlas
+- REST API built with Node.js and Express
+- Deployed backend on Render
+- Frontend hosted on GitHub Pages
+
+---
+
+## Technologies Used
+
+**Frontend:**
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- Multer (image upload)
+- CORS
+- dotenv
+
+---
+
+## Project Structure
+
+```
+cartello/
+├── css/                  # Stylesheets
+├── js/
+│   └── script.js         # Main frontend logic
+├── server/
+│   ├── models/
+│   │   ├── Product.js
+│   │   ├── User.js
+│   │   └── Order.js
+│   └── server.js         # Express API server
+├── index.html
+├── shop.html
+├── cart.html
+├── checkout.html
+├── login.html
+├── admin.html
+└── package.json
+```
+
+---
+
+## How to Run Locally
+
+**1. Clone the repository:**
+```bash
+git clone https://github.com/cartelloeg/cartello.git
+cd cartello
+```
+
+**2. Install dependencies:**
+```bash
+npm install
+```
+
+**3. Create a `.env` file inside the `server/` folder:**
+```
+MONGO_URI=your_mongodb_connection_string
+```
+
+**4. Start the server:**
+```bash
+node server/server.js
+```
+
+**5. Open the website:**
+Open `index.html` with Live Server or any browser.
+
+---
+
+## Admin Access
+
+Go to `login.html` → click **Admin login**
+- Email: `admin@cartello.com`
+- Password: `admin123`
+
+---
+
+## Team
+
+| Name | Role |
+| Ziad | Team Lead —  setup, DB schemas, API routes |
+| Youssef Ahmed |  — Auth system, password management |
+| Youssef Wael |  — Orders, stock management |
+| Rahaf | Frontend — Address system, checkout, user dashboard |
+| Malak | Frontend — Admin panel, cart, product management |
+
+---
+
+## Live Demo
+
+- **Website:** https://cartelloeg.github.io/cartello
+- **API:** https://cartello-jx78.onrender.com
