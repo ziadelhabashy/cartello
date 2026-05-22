@@ -88,26 +88,28 @@ MongoDB Atlas Database
 
 ## 📁 Project Structure
 
-
 cartello/
-├── css/ # Stylesheets
+├── css/
+│   └── stylesheets
+│
 ├── js/
-│ └── script.js # Main frontend logic
+│   └── script.js              # Main frontend logic
+│
 ├── server/
-│ ├── models/
-│ │ ├── Product.js
-│ │ ├── User.js
-│ │ └── Order.js
-│ └── server.js # Express API server
+│   ├── models/
+│   │   ├── Product.js
+│   │   ├── User.js
+│   │   └── Order.js
+│   └── server.js             # Express API server
+│
 ├── index.html
 ├── shop.html
 ├── cart.html
 ├── checkout.html
 ├── login.html
 ├── admin.html
+│
 └── package.json
-
-
 ---
 
 ## ▶️ How to Run Locally
