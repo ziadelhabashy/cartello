@@ -113,7 +113,7 @@ cartello/
 ## ▶️ How to Run Locally
 
 ### 1. Clone repository
-git clone https://github.com/cartelloeg/cartello.git
+git clone https://github.com/ziadelhabashy/cartello.git
 
 ### 2. Install dependencies
 npm install
