@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Cartello is a full-stack e-commerce web application providing a modern online shopping experience. Users can browse products, manage their cart, place orders, and track their order history through a personal dashboard.
+Cartello is a full-stack e-commerce web application that provides a modern online shopping experience. Users can browse products, manage their cart, place orders, and track their order history through a personal dashboard.
 
 ---
 
@@ -97,8 +97,7 @@ npm install
 
 **3. Create a `.env` file inside the `server/` folder:**
 ```
-MONGO_URI=your_mongodb_connection_string
-```
+MONGODB_URI=your_connection_string```
 
 **4. Start the server:**
 ```bash
@@ -121,6 +120,7 @@ Go to `login.html` → click **Admin login**
 ## Team
 
 | Name | Role |
+|------|------|
 | Ziad | Team Lead —  setup, DB schemas, API routes |
 | Youssef Ahmed |  — Auth system, password management |
 | Youssef Wael |  — Orders, stock management |
@@ -131,5 +131,4 @@ Go to `login.html` → click **Admin login**
 
 ## Live Demo
 
-- **Website:** https://cartelloeg.github.io/cartello
-- **API:** https://cartello-jx78.onrender.com
+- **Live Demo:** https://cartello-jx78.onrender.com
