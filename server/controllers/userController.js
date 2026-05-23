@@ -172,7 +172,9 @@ exports.getAddresses = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
-  // DELETE /api/admin/users/:id
+};  // ← close getAddresses here
+
+// DELETE /api/admin/users/:id
 exports.adminDeleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -181,5 +183,4 @@ exports.adminDeleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
-};
 };
