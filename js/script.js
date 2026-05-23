@@ -1205,19 +1205,20 @@ async function loadAdminUsers() {
     const res = await fetch('https://cartello-jx78.onrender.com/api/admin/users');
     const users = await res.json();
 
-    let rows = users.map(u => `
-      <tr>
-        <td>${u.name}</td>
-        <td>${u.email}</td>
-        <td>${u.phone || '-'}</td>
-        <td>${new Date(u.createdAt).toLocaleDateString('en-EG')}</td>
-      </tr>
-    `).join("");
+   let rows = users.map(u => `
+  <tr>
+    <td>${u.name}</td>
+    <td>${u.email}</td>
+    <td>${u.phone || '-'}</td>
+    <td>${new Date(u.createdAt).toLocaleDateString('en-EG')}</td>
+    <td><button onclick="deleteUser('${u._id}')" style="color:red; background:none; border:none; cursor:pointer">🗑 Delete</button></td>
+  </tr>
+`).join("");
 
     contentArea.innerHTML = `
       <h1>👥 User Management</h1>
       <table class="admin-table" style="margin-top:20px; width:100%; border-collapse:collapse">
-        <tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr>
+<tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Action</th></tr>
         ${rows}
       </table>
     `;
@@ -1261,7 +1262,15 @@ async function addNewProduct() {
     alert("Could not connect to server.");
   }
 }
-
+async function deleteUser(userId) {
+  if (!confirm("Are you sure you want to delete this user?")) return;
+  try {
+    await fetch(`https://cartello-jx78.onrender.com/api/admin/users/${userId}`, { method: 'DELETE' });
+    loadAdminUsers();
+  } catch (error) {
+    alert("Could not delete user.");
+  }
+}
 async function updateOrderStatus(orderId, status) {
   try {
     await fetch(`https://cartello-jx78.onrender.com/api/admin/orders/${orderId}/status`, {
