@@ -22,7 +22,7 @@ mongoose
   .catch(err => console.log('MongoDB connection error:', err));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
-app.use('/api/products', productRoutes);
+app.use('/api', productRoutes);
 app.use('/api',          userRoutes);
 app.use('/api',          orderRoutes);
 
