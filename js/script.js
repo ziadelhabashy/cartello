@@ -1142,7 +1142,7 @@ async function loadAdminProducts() {
   <option value="Accessories">Accessories</option>
   <option value="Grocery">Grocery</option>
   <option value="Skin Care">Skin Care</option>
-</select>          <input id="new-product-image" class="search-input" placeholder="Image URL">
+</select>         <input id="new-product-image" class="search-input" type="file" accept="image/*">
           <input id="new-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
         </div>
         <textarea id="new-product-description" class="search-input" placeholder="Description" style="width:100%; margin-top:12px; height:80px;"></textarea>
@@ -1235,12 +1235,12 @@ async function deleteProduct(productId) {
   } catch (error) { alert("Could not delete product."); }
 }
 async function addNewProduct() {
-  const name = document.getElementById("new-product-name").value.trim();
-  const price = parseFloat(document.getElementById("new-product-price").value);
-  const stock = parseInt(document.getElementById("new-product-stock").value);
-  const category = document.getElementById("new-product-category").value.trim();
-  const image = document.getElementById("new-product-image").value.trim();
-  const rating = parseFloat(document.getElementById("new-product-rating").value) || 0;
+  const name        = document.getElementById("new-product-name").value.trim();
+  const price       = parseFloat(document.getElementById("new-product-price").value);
+  const stock       = parseInt(document.getElementById("new-product-stock").value);
+  const category    = document.getElementById("new-product-category").value.trim();
+  const imageFile   = document.getElementById("new-product-image").files[0];
+  const rating      = parseFloat(document.getElementById("new-product-rating").value) || 0;
   const description = document.getElementById("new-product-description").value.trim();
 
   if (!name || !price || !stock || !category) {
@@ -1248,11 +1248,19 @@ async function addNewProduct() {
     return;
   }
 
+  const formData = new FormData();
+  formData.append('name',        name);
+  formData.append('price',       price);
+  formData.append('stock',       stock);
+  formData.append('category',    category);
+  formData.append('rating',      rating);
+  formData.append('description', description);
+  if (imageFile) formData.append('image', imageFile);
+
   try {
     const res = await fetch('https://cartello-jx78.onrender.com/api/admin/products', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, price, stock, category, image, rating, description })
+      body: formData  // No Content-Type header — browser sets it automatically for FormData
     });
     const data = await res.json();
     if (!res.ok) { alert(data.message); return; }
@@ -1262,6 +1270,7 @@ async function addNewProduct() {
     alert("Could not connect to server.");
   }
 }
+
 async function deleteUser(userId) {
   if (!confirm("Are you sure you want to delete this user?")) return;
   try {

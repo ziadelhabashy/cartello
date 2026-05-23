@@ -23,7 +23,8 @@ exports.adminGetAllProducts = async (req, res) => {
 // POST /api/admin/products
 exports.adminAddProduct = async (req, res) => {
   try {
-    const { name, price, stock, category, image, rating, description } = req.body;
+    const { name, price, stock, category, rating, description } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : req.body.image || '';
 
     if (!name || !price || stock === undefined || !category) {
       return res.status(400).json({ message: 'Name, price, stock, and category are required.' });
