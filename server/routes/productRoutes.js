@@ -3,12 +3,12 @@ const router            = express.Router();
 const productController = require('../controllers/productController');
 
 // Public
-router.get('/',    productController.getAllProducts);
+router.get('/products', productController.getAllProducts);
 
 // Admin
-router.get   ('/admin',     productController.adminGetAllProducts);
-router.post  ('/admin',     productController.adminAddProduct);
-router.put   ('/admin/:id', productController.adminUpdateProduct);
-router.delete('/admin/:id', productController.adminDeleteProduct);
+router.get   ('/admin/products',     productController.adminGetAllProducts);
+router.post  ('/admin/products',     productController.adminAddProduct);
+router.put   ('/admin/products/:id', productController.adminUpdateProduct);
+router.delete('/admin/products/:id', productController.adminDeleteProduct);
 
 module.exports = router;
