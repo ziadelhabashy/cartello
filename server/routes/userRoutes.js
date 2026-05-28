@@ -13,7 +13,9 @@ router.get ('/addresses/:userId', userController.getAddresses);
 router.post('/add-address',       userController.addAddress);
 router.post('/remove-address',    userController.removeAddress);
 
+
 // Admin
 router.get('/admin/users', userController.adminGetAllUsers);
+router.delete('/admin/users/:id', userController.adminDeleteUser);
 
 module.exports = router;
