@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 // POST /api/signup
@@ -8,6 +9,7 @@ exports.signup = async (req, res) => {
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required.' });
     }
+
     if (password.length < 6) {
       return res.status(400).json({ message: 'Password must be at least 6 characters.' });
     }
@@ -17,12 +19,25 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'Email already registered.' });
     }
 
-    const newUser = new User({ name, email, phone, password });
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newUser = new User({
+      name,
+      email,
+      phone,
+      password: hashedPassword
+    });
+
     await newUser.save();
 
     res.status(201).json({
       message: 'Account created successfully!',
-      user: { id: newUser._id, name: newUser.name, email: newUser.email, phone: newUser.phone }
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -43,20 +58,30 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'No account found with this email.' });
     }
 
-    if (user.password !== password) {
+    const passwordMatches = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatches) {
       return res.status(400).json({ message: 'Incorrect password.' });
     }
 
     res.json({
       message: 'Login successful!',
-      user: { id: user._id, name: user.name, email: user.email, phone: user.phone }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
+
+// POST /api/admin/login
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
+
   if (email === 'admin@cartello.com' && password === 'admin123') {
     res.json({ message: 'Admin login successful!', isAdmin: true });
   } else {
@@ -72,18 +97,23 @@ exports.changePassword = async (req, res) => {
     if (!email || !currentPassword || !newPassword) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
+
     if (newPassword.length < 6) {
       return res.status(400).json({ message: 'New password must be at least 6 characters.' });
     }
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
-    if (user.password !== currentPassword) {
+    const passwordMatches = await bcrypt.compare(currentPassword, user.password);
+
+    if (!passwordMatches) {
       return res.status(400).json({ message: 'Current password is incorrect.' });
     }
 
-    user.password = newPassword;
+    user.password = await bcrypt.hash(newPassword, 12);
     await user.save();
 
     res.json({ message: 'Password updated successfully!' });
@@ -106,11 +136,19 @@ exports.updateProfile = async (req, res) => {
       { name, email, phone },
       { new: true }
     );
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
     res.json({
       message: 'Profile updated!',
-      user: { id: user._id, name: user.name, email: user.email, phone: user.phone }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -141,7 +179,10 @@ exports.addAddress = async (req, res) => {
       { $push: { addresses: { title, detail } } },
       { new: true }
     );
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
     res.json({ message: 'Address added!', addresses: user.addresses });
   } catch (error) {
@@ -163,7 +204,10 @@ exports.removeAddress = async (req, res) => {
       { $pull: { addresses: { _id: addressId } } },
       { new: true }
     );
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
     res.json({ message: 'Address removed!', addresses: user.addresses });
   } catch (error) {
@@ -175,18 +219,26 @@ exports.removeAddress = async (req, res) => {
 exports.getAddresses = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
     res.json(user.addresses);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
-};  // ← close getAddresses here
+};
 
 // DELETE /api/admin/users/:id
 exports.adminDeleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
     res.json({ message: 'User deleted!' });
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
