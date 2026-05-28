@@ -56,7 +56,7 @@ exports.placeOrder = async (req, res) => {
 
     res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -66,7 +66,7 @@ exports.getUserOrders = async (req, res) => {
     const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -76,7 +76,7 @@ exports.adminGetAllOrders = async (req, res) => {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -107,6 +107,6 @@ exports.adminUpdateOrderStatus = async (req, res) => {
 
     res.json({ message: 'Order status updated!' });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };

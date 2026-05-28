@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -121,7 +121,7 @@ exports.changePassword = async (req, res) => {
 
     res.json({ message: 'Password updated successfully!' });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -154,7 +154,7 @@ exports.updateProfile = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -164,7 +164,7 @@ exports.adminGetAllUsers = async (req, res) => {
     const users = await User.find().select('-password');
     res.json(users);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -189,7 +189,7 @@ exports.addAddress = async (req, res) => {
 
     res.json({ message: 'Address added!', addresses: user.addresses });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -214,7 +214,7 @@ exports.removeAddress = async (req, res) => {
 
     res.json({ message: 'Address removed!', addresses: user.addresses });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -229,7 +229,7 @@ exports.getAddresses = async (req, res) => {
 
     res.json(user.addresses);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -244,6 +244,6 @@ exports.adminDeleteUser = async (req, res) => {
 
     res.json({ message: 'User deleted!' });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };

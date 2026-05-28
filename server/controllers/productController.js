@@ -6,7 +6,7 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -16,7 +16,7 @@ exports.adminGetAllProducts = async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -34,7 +34,7 @@ exports.adminAddProduct = async (req, res) => {
     await newProduct.save();
     res.status(201).json({ message: 'Product added!', product: newProduct });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -52,7 +52,7 @@ exports.adminUpdateProduct = async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found.' });
     res.json({ message: 'Product updated!', product });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -63,6 +63,6 @@ exports.adminDeleteProduct = async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found.' });
     res.json({ message: 'Product deleted!' });
   } catch (error) {
-    res.status(500).json({ message: 'Server Error', error: error.message });
+res.status(500).json({ message: 'Server Error' });
   }
 };
