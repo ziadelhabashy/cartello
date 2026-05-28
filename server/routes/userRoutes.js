@@ -15,6 +15,7 @@ router.post('/remove-address',    userController.removeAddress);
 
 
 // Admin
+router.post('/admin/login', userController.adminLogin);
 router.get('/admin/users', userController.adminGetAllUsers);
 router.delete('/admin/users/:id', userController.adminDeleteUser);
 

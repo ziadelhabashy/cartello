@@ -1032,18 +1032,23 @@ async function removeAddress(addressId) {
 // 8. ADMIN PANEL
 // ==========================================================================
 
-function adminLogin() {
+async function adminLogin() {
   const email = document.getElementById("admin-email").value.trim();
-  const pass = document.getElementById("admin-pass").value;
+  const pass  = document.getElementById("admin-pass").value;
 
-  const ADMIN_EMAIL = "admin@cartello.com";
-  const ADMIN_PASS = "admin123";
+  try {
+    const res  = await fetch('https://cartello-jx78.onrender.com/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert(data.message); return; }
 
-  if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
     localStorage.setItem("adminSession", "true");
     window.location.href = "admin.html";
-  } else {
-    alert("Invalid admin credentials. Please try again.");
+  } catch (error) {
+    alert("Could not connect to server.");
   }
 }
 

@@ -55,6 +55,14 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 };
+exports.adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+  if (email === 'admin@cartello.com' && password === 'admin123') {
+    res.json({ message: 'Admin login successful!', isAdmin: true });
+  } else {
+    res.status(401).json({ message: 'Invalid admin credentials.' });
+  }
+};
 
 // POST /api/change-password
 exports.changePassword = async (req, res) => {
