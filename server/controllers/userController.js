@@ -82,7 +82,10 @@ exports.login = async (req, res) => {
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
-  if (email === 'admin@cartello.com' && password === 'admin123') {
+  if (
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
     res.json({ message: 'Admin login successful!', isAdmin: true });
   } else {
     res.status(401).json({ message: 'Invalid admin credentials.' });
