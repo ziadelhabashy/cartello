@@ -19,7 +19,12 @@ window.onload = async function () {
   updateNavForUser();
   
   if (document.getElementById("admin-panel-content")) {
-  loadTab("dashboard", document.querySelector(".admin-link"));
+  const adminSession = localStorage.getItem("adminSession");
+  if (!adminSession) {
+    window.location.href = "login.html";
+  } else {
+    loadTab("dashboard", document.querySelector(".admin-link"));
+  }
 }
 
   // Auto-login if user session exists

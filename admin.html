@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
+<script>
+  if (!localStorage.getItem("adminSession")) {
+    window.location.href = "login.html";
+  }
+</script>
  <header class="website-header">
     <div class="container nav">
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
