@@ -24,4 +24,9 @@
   color: #aaa;
   font-size: 14px;
   margin-bottom: 4px;
+  .page-footer a,
+.page-footer a[href^="tel"] {
+  color: #aaa;
+  text-decoration: none;
+}
 }
