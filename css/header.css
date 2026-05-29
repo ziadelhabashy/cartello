@@ -57,14 +57,19 @@
   color: black;
   border: 1px solid #d8d8d8;
   border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 17px;
+  padding: 8 10px;
+  font-size: 0;
   font-weight: 700;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
 }
+
+  .cart-link::before {
+    content: "Cart";
+    font-size: 14px;
+  }
 
 .cart-badge {
   background-color: #ff3b30;
@@ -124,6 +129,7 @@
     justify-content: space-between;
     gap: 12px;
   }
+  
 
   .menu-toggle {
     display: block;
@@ -132,6 +138,12 @@
 
   .logo {
     order: 2;
+      position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 2px;
   }
 
   .header-tools {
