@@ -9,6 +9,35 @@ const SHIPPING_RATES = {
   'New Valley': 150, Matrouh: 120, 'North Sinai': 130, 'South Sinai': 140
 };
 
+async function sendOrderEmail(order) {
+  if (!process.env.WEB3FORMS_ACCESS_KEY) return;
+
+  const orderItems = order.items
+    .map(item => `${item.name} x${item.quantity} - EGP ${item.price}`)
+    .join('\n');
+
+  await fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      access_key: process.env.WEB3FORMS_ACCESS_KEY,
+      subject: `New Cartello Order - ${order._id}`,
+      from_name: 'Cartello Store',
+      name: order.customer.name,
+      email: order.customer.email,
+      phone: order.customer.phone,
+      governorate: order.customer.governorate,
+      address: order.customer.address,
+      paymentMethod: order.paymentMethod,
+      subtotal: `EGP ${order.subtotal}`,
+      shipping: `EGP ${order.shipping}`,
+      total: `EGP ${order.total}`,
+      items: orderItems
+    })
+  });
+}
 // POST /api/orders
 exports.placeOrder = async (req, res) => {
   try {
@@ -54,7 +83,13 @@ exports.placeOrder = async (req, res) => {
     });
     await newOrder.save();
 
-    res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
+try {
+  await sendOrderEmail(newOrder);
+} catch (emailError) {
+  console.error('Order email failed:', emailError.message);
+}
+
+res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
   } catch (error) {
 res.status(500).json({ message: 'Server Error' });
   }
