@@ -59,27 +59,39 @@
     border: none;
     border-radius: 50%;
     font-size: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     background: transparent;
+    position: relative;
+    text-decoration: none;
   }
 
-  .cart-link::before {
+  .cart-link::before {  
     content: "🛒";
     font-size: 22px;
     line-height: 1;
   }
 
   .cart-badge {
+    position: absolute;
     top: 2px;
     right: 0;
     min-width: 16px;
     height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: #ff3b30;
+    color: #fff;
+    border: 2px solid #fff;
     font-size: 10px;
-    border-width: 1px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
   }
-  
+
 .search-form {
   display: flex;
   gap: 8px;
