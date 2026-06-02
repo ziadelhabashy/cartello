@@ -134,6 +134,11 @@ exports.updateProfile = async (req, res) => {
       return res.status(400).json({ message: 'ID, name, and email are required.' });
     }
 
+    const existingUser = await User.findOne({ email, _id: { $ne: id } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'This email is already used by another account.' });
+    }
+
     const user = await User.findByIdAndUpdate(
       id,
       { name, email, phone },
