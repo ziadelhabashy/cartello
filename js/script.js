@@ -1,7 +1,7 @@
 // ==========================================================================
 // 1. GLOBAL VARIABLES & MOCK DATABASE
 // ==========================================================================
-const API = '${API}';
+const API = 'https://cartello.me';
 let cartData = JSON.parse(localStorage.getItem("cart")) || {};
 
 let currentCategory = "All";
