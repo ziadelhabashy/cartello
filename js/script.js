@@ -12,17 +12,22 @@ let products = [];
 
 const translations = {
   en: {
+    // Nav
     home: "Home",
     shop: "Shop",
     cart: "Cart",
     login: "Login",
+    logout: "Logout",
     profile: "Profile",
+    // Search
     search: "Search",
     searchProducts: "Search products",
+    // Hero (index)
     heroLabel: "New Arrivals 2026",
-    heroTitle: "SAVE MORE\nWITH CARTELLO",
+    heroTitle: "SAVE MORE WITH CARTELLO",
     heroText: "Browse our collection and discover products that match your style",
     shopNow: "Shop Now",
+    // Features (index)
     featuredProducts: "Featured Products",
     freeShipping: "Free Shipping",
     freeShippingText: "On all orders over 3000 EGP",
@@ -32,20 +37,62 @@ const translations = {
     securePaymentText: "100% safe",
     support: "24/7 Support",
     supportText: "Always here to help",
+    // Shop page
+    shopLabel: "Shop",
+    browseProducts: "Browse Products",
+    filterAll: "All",
+    filterElectronics: "Electronics",
+    filterAccessories: "Accessories",
+    filterGrocery: "Grocery",
+    filterSkinCare: "Skin Care",
+    // Product cards (JS-rendered)
+    addToCart: "Add to Cart",
+    outOfStock: "Out of Stock",
+    // Checkout page
+    checkoutTitle: "Checkout",
+    checkoutSubtitle: "Enter your details to place your order.",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Your full name",
+    email: "Email",
+    emailPlaceholder: "Email Address",
+    phone: "Phone",
+    password: "Password",
+    address: "Address",
+    governorate: "Governorate",
+    paymentMethod: "Payment Method",
+    selectPayment: "Select payment method",
+    cod: "Cash on Delivery",
+    placeOrder: "Place Order",
+    orderSummary: "Order Summary",
+    orderSuccess: "Order Placed Successfully",
+    orderSuccessText: "Your order has been confirmed and will be processed soon.",
+    // Login page
+    welcomeTitle: "Welcome to Cartello",
+    loginSubtitle: "Log in to your account",
+    forgotPassword: "Forgot password?",
+    signIn: "Sign In",
+    newUser: "New?",
+    createAccount: "Create account",
+    adminLogin: "Admin login",
     langButton: "عربي"
   },
   ar: {
+    // Nav
     home: "الرئيسية",
     shop: "المتجر",
     cart: "السلة",
     login: "تسجيل الدخول",
+    logout: "تسجيل الخروج",
     profile: "الحساب",
+    // Search
     search: "بحث",
     searchProducts: "ابحث عن المنتجات",
+    // Hero (index)
     heroLabel: "وصل حديثا 2026",
-    heroTitle: "وفر أكثر\nمع كارتيلو",
+    heroTitle: "وفر أكثر مع كارتيلو",
     heroText: "تصفح مجموعتنا واكتشف منتجات تناسب أسلوبك",
     shopNow: "تسوق الآن",
+    // Features (index)
     featuredProducts: "منتجات مميزة",
     freeShipping: "شحن مجاني",
     freeShippingText: "على كل الطلبات فوق 3000 جنيه",
@@ -55,6 +102,43 @@ const translations = {
     securePaymentText: "آمن 100%",
     support: "دعم 24/7",
     supportText: "دائما هنا للمساعدة",
+    // Shop page
+    shopLabel: "المتجر",
+    browseProducts: "تصفح المنتجات",
+    filterAll: "الكل",
+    filterElectronics: "إلكترونيات",
+    filterAccessories: "إكسسوارات",
+    filterGrocery: "بقالة",
+    filterSkinCare: "العناية بالبشرة",
+    // Product cards (JS-rendered)
+    addToCart: "أضف للسلة",
+    outOfStock: "نفد المخزون",
+    // Checkout page
+    checkoutTitle: "الدفع",
+    checkoutSubtitle: "أدخل بياناتك لإتمام الطلب.",
+    fullName: "الاسم الكامل",
+    fullNamePlaceholder: "اسمك الكامل",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "بريدك الإلكتروني",
+    phone: "الهاتف",
+    password: "كلمة المرور",
+    address: "العنوان",
+    governorate: "المحافظة",
+    paymentMethod: "طريقة الدفع",
+    selectPayment: "اختر طريقة الدفع",
+    cod: "الدفع عند الاستلام",
+    placeOrder: "إتمام الطلب",
+    orderSummary: "ملخص الطلب",
+    orderSuccess: "تم تقديم الطلب بنجاح",
+    orderSuccessText: "تم تأكيد طلبك وسيتم معالجته قريباً.",
+    // Login page
+    welcomeTitle: "مرحباً بك في كارتيلو",
+    loginSubtitle: "سجّل الدخول لحسابك",
+    forgotPassword: "نسيت كلمة المرور؟",
+    signIn: "تسجيل الدخول",
+    newUser: "جديد؟",
+    createAccount: "إنشاء حساب",
+    adminLogin: "دخول المسؤول",
     langButton: "English"
   }
 };
@@ -89,6 +173,12 @@ function toggleLanguage() {
   const nextLang = getLanguage() === "ar" ? "en" : "ar";
   localStorage.setItem("language", nextLang);
   applyLanguage();
+}
+
+// Helper: get translated string for use inside JS-rendered HTML
+function t(key) {
+  const dict = translations[getLanguage()];
+  return (dict && dict[key]) ? dict[key] : key;
 }
 // ==========================================================================
 // 2. INITIALIZATION & GLOBAL UTILITIES
@@ -182,9 +272,9 @@ function renderProducts(productsToDisplay) {
     
     let buttonHtml = "";
     if (product.stock > 0) {
-        buttonHtml = `<button class="add-to-cart-btn" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
+        buttonHtml = `<button class="add-to-cart-btn" onclick="initQuantity('${product._id}', this)">${t('addToCart')}</button>`;
     } else {
-        buttonHtml = `<button class="add-to-cart-btn out-of-stock-btn" disabled>Out of Stock</button>`;
+        buttonHtml = `<button class="add-to-cart-btn out-of-stock-btn" disabled>${t('outOfStock')}</button>`;
     }
 
     htmlContent += `
@@ -214,6 +304,7 @@ function renderProducts(productsToDisplay) {
     `;
 });
   grid.innerHTML = htmlContent;
+  applyLanguage();
   
   if (typeof getCart === 'function' && typeof syncProductCardState === 'function') {
       Object.keys(getCart()).forEach(id => syncProductCardState(id));
@@ -377,9 +468,9 @@ function renderFeaturedProducts() {
     
     let buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
     if (product.stock > 0) {
-  buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
+  buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">${t('addToCart')}</button>`;
 } else {
-  buttonHtml = `<button class="add-to-cart-btn" style="background-color: #e0e0e0; color: #888; cursor: not-allowed; border: none;" disabled>Out of Stock</button>`;
+  buttonHtml = `<button class="add-to-cart-btn" style="background-color: #e0e0e0; color: #888; cursor: not-allowed; border: none;" disabled>${t('outOfStock')}</button>`;
 }
 
     htmlContent += `

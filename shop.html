@@ -21,10 +21,10 @@
 <a href="index.html"  class="logo">CARTELLO</a>
 
 <nav class="navbar" id="navbar">
-     <a href="index.html">Home</a>
-     <a href="shop.html" class="active">Shop</a>
-     <a href="cart.html">Cart</a>
-     <a href="login.html">Login</a>   
+     <a href="index.html" data-i18n="home">Home</a>
+     <a href="shop.html" class="active" data-i18n="shop">Shop</a>
+     <a href="cart.html" data-i18n="cart">Cart</a>
+     <a href="login.html" data-i18n="login">Login</a>   
 </nav>
 <div class="header-tools">
 <form class="search-form" onsubmit="event.preventDefault();">
@@ -32,10 +32,11 @@
         class="search-input" 
         type="search" 
         id="product-search" 
-        placeholder="Search products" 
+        placeholder="Search products"
+        data-i18n-placeholder="searchProducts"
         oninput="filterProducts()"
     >
-    <button class="search-button" type="submit">Search</button>
+    <button class="search-button" type="submit" data-i18n="search">Search</button>
 </form>
 <a class="cart-link" href="cart.html">🛒 Cart
     <span class="cart-badge" id="cart-badge">0</span>
@@ -47,8 +48,8 @@
 <main>
     <section class="shop-hero">
       <div class="shop-hero-content">
-        <p class="shop-label">Shop</p>
-        <h1>Browse Products</h1>
+        <p class="shop-label" data-i18n="shopLabel">Shop</p>
+        <h1 data-i18n="browseProducts">Browse Products</h1>
       </div>
     </section>
 
@@ -58,12 +59,11 @@
       </div>
 
       <div class="shop-filters" style="text-align: center; margin-bottom: 20px;">
-        <button class="search-button" onclick="setCategory('All')">All</button>
-        <button class="search-button" onclick="setCategory('Electronics')">Electronics</button>
-        <button class="search-button" onclick="setCategory('Accessories')">Accessories</button>
-        <button class="search-button" onclick="setCategory('Grocery')">Grocery</button>
-        <button class="search-button" onclick="setCategory('Skin Care')">Skin care</button>
-        
+        <button class="search-button" onclick="setCategory('All')" data-i18n="filterAll">All</button>
+        <button class="search-button" onclick="setCategory('Electronics')" data-i18n="filterElectronics">Electronics</button>
+        <button class="search-button" onclick="setCategory('Accessories')" data-i18n="filterAccessories">Accessories</button>
+        <button class="search-button" onclick="setCategory('Grocery')" data-i18n="filterGrocery">Grocery</button>
+        <button class="search-button" onclick="setCategory('Skin Care')" data-i18n="filterSkinCare">Skin care</button>
       </div>
      
 <div class="products-grid" id="product-container"></div>
