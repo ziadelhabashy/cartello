@@ -149,12 +149,13 @@ exports.forgotPassword = async (req, res) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        access_key: process.env.WEB3FORMS_ACCESS_KEY,
-        subject: 'Cartello Password Reset Code',
-        from_name: 'Cartello',
-        email: user.email,
-        message: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
-      })
+     access_key: process.env.WEB3FORMS_ACCESS_KEY,
+     subject: 'Cartello Password Reset Code',
+     from_name: 'Cartello',
+     to: user.email,           
+     email: user.email,
+     message: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
+})
     });
 
     res.json({ message: 'Reset code sent to your email.' });
@@ -163,7 +164,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res) => {
+xports.resetPassword = async (req, res) => {
   try {
     const { email, code, newPassword } = req.body;
 
