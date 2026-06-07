@@ -15,8 +15,6 @@
   <header class="website-header">
     <div class="container nav">
 
-      <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
-      
       <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
 
       <a href="index.html" class="logo">CARTELLO</a>
@@ -28,6 +26,7 @@
         <a href="login.html" data-i18n="login">Login</a>
       </nav>
       <div class="header-tools">
+        <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
         <a class="cart-link" href="cart.html">🛒 Cart
           <span class="cart-badge" id="cart-badge">0</span>
         </a>
@@ -39,27 +38,27 @@
     <section class="checkout-page">
       <div class="checkout-grid">
         <div class="checkout-form-box">
-          <h2 data-i18n="checkoutTitle">Checkout</h2>
-          <p class="checkout-subtitle" data-i18n="checkoutSubtitle">Enter your details to place your order.</p>
+          <h2>Checkout</h2>
+          <p class="checkout-subtitle">Enter your details to place your order.</p>
 
           <form id="checkout-form" onsubmit="placeOrder(event)">
             <div class="input-field"> 
-              <label data-i18n="fullName">Full Name</label>
-              <input type="text" id="customer-name" placeholder="Your full name" data-i18n-placeholder="fullNamePlaceholder" required>
+              <label>Full Name</label>
+              <input type="text" id="customer-name" placeholder="Your full name" required>
             </div>
 
             <div class="input-field">
-              <label data-i18n="email">Email</label>
+              <label>Email</label>
               <input type="email" id="customer-email" placeholder="you@example.com" required>
             </div>
 
             <div class="input-field">
-              <label data-i18n="phone">Phone</label>
+              <label>Phone</label>
               <input type="text" id="customer-phone" placeholder="+20 1xx xxx xxxx" required>
             </div>
 
             <div class="input-field">
-              <label data-i18n="governorate">Governorate</label>
+              <label>Governorate</label>
               <select id="customer-governorate" onchange="updateShipping()" required>
                 <option value="">Select governorate</option>
                 <option value="Cairo">Cairo</option>
@@ -93,24 +92,24 @@
             </div>
 
             <div class="input-field">
-              <label data-i18n="address">Address</label>
+              <label>Address</label>
               <input type="text" id="customer-address" placeholder="Street, City, Area" required>
             </div>
 
             <div class="input-field">
-              <label data-i18n="paymentMethod">Payment Method</label>
+              <label>Payment Method</label>
               <select id="payment-method" required>
-                <option value="" data-i18n="selectPayment">Select payment method</option>
-                <option value="Cash on Delivery" data-i18n="cod">Cash on Delivery</option>
+                <option value="">Select payment method</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
               </select>
             </div>
 
-            <button type="submit" class="checkout-btn" data-i18n="placeOrder">Place Order</button>
+            <button type="submit" class="checkout-btn">Place Order</button>
           </form>
         </div>
 
         <div class="checkout-summary-box">
-          <h2 data-i18n="orderSummary">Order Summary</h2>
+          <h2>Order Summary</h2>
           <div id="checkout-items"></div>
           <div id="checkout-shipping" class="checkout-shipping"></div>
           <div id="checkout-total" class="checkout-total"></div>
@@ -121,8 +120,8 @@
     <div id="order-success-modal" class="order-modal">
     <div class="order-modal-content">
     <div class="order-check">✓</div>
-    <h2 data-i18n="orderSuccess">Order Placed Successfully</h2>
-    <p data-i18n="orderSuccessText">Your order has been confirmed and will be processed soon.</p>
+    <h2>Order Placed Successfully</h2>
+    <p>Your order has been confirmed and will be processed soon.</p>
     <button class="order-modal-btn" onclick="closeOrderModal()">Back to Cart</button>
   </div>
 </div>

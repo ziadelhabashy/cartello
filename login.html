@@ -14,8 +14,6 @@
 <body>
  <header class="website-header">
     <div class="container nav">
-    <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
-    
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
 
 <a href="index.html" class="logo">CARTELLO</a>
@@ -26,6 +24,7 @@
      <a href="login.html" class="active" data-i18n="login">Login</a>   
 </nav>
 <div class="header-tools">
+<button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
 <a class="cart-link" href="cart.html">🛒 Cart
     <span class="cart-badge" id="cart-badge">0</span>
 </a>
@@ -36,33 +35,33 @@
     <section id="auth-area" class="auth-wrapper">
         <div class="glass-card">
             <div id="login-form" class="auth-box active">
-                <h2 data-i18n="welcomeTitle">Welcome to Cartello</h2>
-                <p class="subtitle" data-i18n="loginSubtitle">Log in to your account</p>
+                <h2>Welcome to Cartello</h2>
+                <p class="subtitle">Log in to your account</p>
                 <div class="input-field">
-                <label data-i18n="email">Email</label>
-                <input type="email" id="login-email" placeholder="Email Address" data-i18n-placeholder="emailPlaceholder">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="Email Address">
             </div>
                 <div class="input-field">
-                <label data-i18n="password">Password</label>
+                <label>Password</label>
                 <input type="password" id="login-pass" placeholder="••••••••">
             </div>
                 <div class="form-options">
-                <a href="#" onclick="showForm('forgot-view')" data-i18n="forgotPassword">Forgot password?</a>
+                <a href="#" onclick="showForm('forgot-view')">Forgot password?</a>
             </div><br>
-<button class="prime-btn" type="button" onclick="validateLogin()" data-i18n="signIn">Sign In</button>
+<button class="prime-btn" type="button" onclick="validateLogin()">Sign In</button>
                 
-<p class="footer-link"><span data-i18n="newUser">New?</span> <a href="#" onclick="showForm('register-view')" data-i18n="createAccount">Create account</a></p>
+<p class="footer-link">New? <a href="#" onclick="showForm('register-view')">Create account</a></p>
 <p class="footer-link" style="margin-top:10px; text-align:center;">
-    <a href="#" onclick="showForm('admin-login-view')" style="color:#888; font-size:13px;" data-i18n="adminLogin">Admin login</a>
+    <a href="#" onclick="showForm('admin-login-view')" style="color:#888; font-size:13px;">Admin login</a>
 </p>
 </div>
 
     <div id="register-view" class="auth-box">
-    <h2 data-i18n="createAccount">Create Account</h2>
+    <h2>Create Account</h2>
 
     <div class="input-field">
-        <label data-i18n="fullName">Full Name</label>
-        <input type="text" id="reg-name" placeholder="Full Name" data-i18n-placeholder="fullNamePlaceholder">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="Full Name">
     </div>
 
     <div class="input-field">

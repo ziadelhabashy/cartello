@@ -15,7 +15,6 @@
 <body>
  <header class="website-header">
     <div class="container nav">
-    <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
 
 <a href="index.html"  class="logo">CARTELLO</a>
@@ -38,6 +37,7 @@
     >
     <button class="search-button" type="submit" data-i18n="search">Search</button>
 </form>
+<button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
 <a class="cart-link" href="cart.html">🛒 Cart
     <span class="cart-badge" id="cart-badge">0</span>
 </a>
@@ -48,8 +48,8 @@
 <main>
     <section class="shop-hero">
       <div class="shop-hero-content">
-        <p class="shop-label" data-i18n="shopLabel">Shop</p>
-        <h1 data-i18n="browseProducts">Browse Products</h1>
+        <p class="shop-label">Shop</p>
+        <h1>Browse Products</h1>
       </div>
     </section>
 
@@ -59,11 +59,12 @@
       </div>
 
       <div class="shop-filters" style="text-align: center; margin-bottom: 20px;">
-        <button class="search-button" onclick="setCategory('All')" data-i18n="filterAll">All</button>
-        <button class="search-button" onclick="setCategory('Electronics')" data-i18n="filterElectronics">Electronics</button>
-        <button class="search-button" onclick="setCategory('Accessories')" data-i18n="filterAccessories">Accessories</button>
-        <button class="search-button" onclick="setCategory('Grocery')" data-i18n="filterGrocery">Grocery</button>
-        <button class="search-button" onclick="setCategory('Skin Care')" data-i18n="filterSkinCare">Skin care</button>
+        <button class="search-button" onclick="setCategory('All')">All</button>
+        <button class="search-button" onclick="setCategory('Electronics')">Electronics</button>
+        <button class="search-button" onclick="setCategory('Accessories')">Accessories</button>
+        <button class="search-button" onclick="setCategory('Grocery')">Grocery</button>
+        <button class="search-button" onclick="setCategory('Skin Care')">Skin care</button>
+        
       </div>
      
 <div class="products-grid" id="product-container"></div>
