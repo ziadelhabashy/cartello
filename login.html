@@ -84,23 +84,6 @@
         <input type="password" id="reg-confirm" placeholder="••••••••">
     </div>
 
-      <button type="button" class="prime-btn" onclick="joinNow()">Create Account</button>
-</div>
-            <div id="admin-login-view" class="auth-box">
-    <h2>Admin Login</h2>
-    <p class="subtitle">Restricted access — staff only</p>
-    <div class="input-field">
-        <label>Admin Email</label>
-        <input type="email" id="admin-email" placeholder="Email Address">
-    </div>
-    <div class="input-field">
-        <label>Password</label>
-        <input type="password" id="admin-pass" placeholder="••••••••">
-    </div>
-    <button class="prime-btn" onclick="adminLogin()">Access Dashboard</button>
-    <p class="footer-link" style="margin-top:12px;"><a href="#" onclick="showForm('login-form')">← Back to Login</a></p>
-
-    <!-- Success / Error Message -->
     <div id="signup-message" class="signup-message"></div>
 
     <button id="signup-btn" type="button" class="prime-btn" onclick="joinNow()">
@@ -112,7 +95,49 @@
         <a href="#" onclick="showForm('login-form')">Sign In</a>
     </p>
 </div>
-    </section>
+
+<div id="admin-login-view" class="auth-box">
+    <h2>Admin Login</h2>
+    <p class="subtitle">Restricted access — staff only</p>
+
+    <div class="input-field">
+        <label>Admin Email</label>
+        <input type="email" id="admin-email" placeholder="Email Address">
+    </div>
+
+    <div class="input-field">
+        <label>Password</label>
+        <input type="password" id="admin-pass" placeholder="••••••••">
+    </div>
+
+    <button class="prime-btn" onclick="adminLogin()">
+        Access Dashboard
+    </button>
+
+    <p class="footer-link" style="margin-top:12px;">
+        <a href="#" onclick="showForm('login-form')">← Back to Login</a>
+    </p>
+</div>
+
+<div id="forgot-view" class="auth-box">
+    <h2>Reset</h2>
+
+    <div class="input-field">
+        <label>Email</label>
+        <input type="email" placeholder="Email Address">
+    </div>
+
+    <button class="prime-btn" type="button" onclick="validateForgotPassword()">
+        Send Link
+    </button>
+
+    <p class="footer-link">
+        <a href="#" onclick="showForm('login-form')">Back</a>
+    </p>
+</div>
+
+</div>
+</section>
 
     <section id="dashboard-area" class="dashboard-wrapper" style="display: none;">
         <div class="dash-layout"> 
