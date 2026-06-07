@@ -1,14 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-});
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // POST /api/signup
 exports.signup = async (req, res) => {
@@ -154,11 +148,14 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    // TEMPORARY: skip email, return code directly so we can test
-    return res.json({ 
-      message: `Reset code sent. (TEMP - your code is: ${resetCode})` 
+    await resend.emails.send({
+      from: 'Cartello <onboarding@resend.dev>',
+      to: user.email,
+      subject: 'Cartello Password Reset Code',
+      text: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
     });
 
+    res.json({ message: 'Reset code sent to your email.' });
   } catch (error) {
     console.error('forgotPassword error:', error);
     res.status(500).json({ message: 'Server Error: ' + error.message });
