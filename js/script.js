@@ -1039,7 +1039,7 @@ async function validateForgotPassword() {
   }
 
   try {
-    const response = await fetch(${API}/api/forgot-password, {
+    const response = await fetch(`${API}/api/forgot-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email })
@@ -1055,7 +1055,7 @@ async function validateForgotPassword() {
       const newPassword = prompt("Enter your new password:");
       if (!newPassword) return;
 
-      const resetResponse = await fetch(${API}/api/reset-password, {
+      const resetResponse = await fetch(`${API}/api/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code, newPassword })
