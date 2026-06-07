@@ -936,7 +936,7 @@ async function joinNow() {
 
     setTimeout(() => {
       mockLogin();
-    }, 1500);
+    }, 100);
 
   } catch (error) {
     showMessage("Could not connect to server.", "error");
