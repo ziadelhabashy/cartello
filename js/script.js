@@ -588,7 +588,7 @@ function getCart() {
 function initQuantity(productId, btn) {
 const product = products.find(p => p._id.toString() === productId.toString());
   if (product && product.stock <= 0) {
-      alert("Sorry, this item is currently out of stock.");
+      showMessage("Sorry, this item is currently out of stock.");
       return; 
   }
 
@@ -609,7 +609,7 @@ if (!cartData[productId.toString()]) return;
   if (delta > 0) { 
 const product = products.find(p => p._id.toString() === productId.toString());  
   if (product && cartData[productId] >= product.stock) {
-      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      showMessage(`Sorry, we only have ${product.stock} of these in stock!`);
       return; 
     }
   }
@@ -634,7 +634,7 @@ function changeCartQty(id, delta) {
   if (delta > 0) {
 const product = products.find(p => p._id.toString() === id.toString());  
  if (product && cart[id] >= product.stock) {
-      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      showMessage(`Sorry, we only have ${product.stock} of these in stock!`);
       return; 
     }
   }
@@ -853,6 +853,17 @@ function getShippingPrice() {
   const govSelect = document.getElementById("customer-governorate");
   if (!govSelect || !govSelect.value) return 0;
   return shippingRates[govSelect.value] || 0;
+}
+
+function showMessage(message){
+    const box = document.getElementById("messageBox");
+
+    box.textContent = message;
+    box.classList.add("show");
+
+    setTimeout(()=>{
+        box.classList.remove("show");
+    },3000);
 }
 
 function updateShipping() {
