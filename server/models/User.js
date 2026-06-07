@@ -17,11 +17,11 @@ const userSchema = new mongoose.Schema({
     match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.']
   },
 
-  password: {
-    type: String,
-    required: [true, 'Password is required.'],
+ password: {
+  type: String,
+  required: [true, 'Password is required.'],
   minlength: [6, 'Password must be at least 6 characters.']
-  },
+},
 
   phone: {
     type: String,
@@ -48,7 +48,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('User', userSchema);
