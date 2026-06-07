@@ -875,34 +875,48 @@ async function joinNow() {
   const confirm = document.getElementById("reg-confirm").value;
 
   const msg = document.getElementById("signup-message");
+  const btn = document.getElementById("signup-btn");
 
   function showMessage(text, type) {
     msg.textContent = text;
     msg.className = `signup-message ${type}`;
   }
 
+  function resetButton() {
+    btn.disabled = false;
+    btn.textContent = "Create Account";
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Creating Account...";
+
   if (!name || !email || !phone || !pass || !confirm) {
     showMessage("Please fill in all fields.", "error");
+    resetButton();
     return;
   }
 
   if (!isValidEmail(email)) {
     showMessage("Please enter a valid email address.", "error");
+    resetButton();
     return;
   }
 
   if (!isValidPhone(phone)) {
     showMessage("Please enter a valid phone number.", "error");
+    resetButton();
     return;
   }
 
   if (pass.length < 6) {
     showMessage("Password must be at least 6 characters.", "error");
+    resetButton();
     return;
   }
 
   if (pass !== confirm) {
     showMessage("Passwords do not match.", "error");
+    resetButton();
     return;
   }
 
@@ -924,22 +938,26 @@ async function joinNow() {
 
     if (!response.ok) {
       showMessage(data.message || "Registration failed.", "error");
+      resetButton();
       return;
     }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
 
+    btn.textContent = "✓ Account Created";
+
     showMessage(
-      `Welcome ${name}! Account created successfully!`,
+      `Welcome ${name}! Account created successfully! Redirecting to shop...`,
       "success"
     );
 
     setTimeout(() => {
-      mockLogin();
-    }, 100);
+      window.location.href = "shop.html";
+    }, 1200);
 
   } catch (error) {
     showMessage("Could not connect to server.", "error");
+    resetButton();
   }
 }
 
