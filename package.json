@@ -14,7 +14,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js"  },
+    "start": "nodemon server/server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cartelloeg/cartello.git"
@@ -26,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/cartelloeg/cartello/issues"
   },
-  "homepage": "https://github.com/cartelloeg/cartello#readme"
+  "homepage": "https://github.com/cartelloeg/cartello#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
 }
