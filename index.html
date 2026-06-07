@@ -21,13 +21,14 @@
       <a href="index.html" class="logo">CARTELLO</a>
 
       <nav class="navbar" id="navbar">
-        <a href="index.html" class="active">Home</a>
-        <a href="shop.html">Shop</a>
-        <a href="cart.html">Cart</a>
-        <a href="login.html">Login</a>
+      <a href="index.html" class="active" data-i18n="home">Home</a>
+      <a href="shop.html" data-i18n="shop">Shop</a>
+      <a href="cart.html" data-i18n="cart">Cart</a>
+      <a href="login.html" data-i18n="login">Login</a>
       </nav>
 
       <div class="header-tools">
+        <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
         <a class="cart-link" href="cart.html">🛒 Cart
           <span class="cart-badge" id="cart-badge">0</span>
         </a>
@@ -37,11 +38,11 @@
   <main>
 
     <section class="hero-section">
-      <p class="hero-label">New Arrivals 2026</p>
-      <h1>SAVE MORE<br>WITH CARTELLO</h1>
-      <p>Browse our collection and discover products that match your style</p>
+      <p class="hero-label" data-i18n="heroLabel">New Arrivals 2026</p>
+      <h1 data-i18n="heroTitle">SAVE MORE WITH CARTELLO</h1>
+      <p data-i18n="heroText">Browse our collection and discover products that match your style</p>
       <div class="hero-btns">
-        <a class="btn-primary" href="shop.html">Shop Now</a>
+        <a class="btn-primary" href="shop.html" data-i18n="shopNow">Shop Now</a>
       </div>
     </section>
 

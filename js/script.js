@@ -8,12 +8,94 @@ let currentCategory = "All";
 let currentPage = 1;
 const itemsPerPage = 8;
 let currentList = [];
-let products = []; // Now starts empty
+let products = []; 
+
+const translations = {
+  en: {
+    home: "Home",
+    shop: "Shop",
+    cart: "Cart",
+    login: "Login",
+    profile: "Profile",
+    search: "Search",
+    searchProducts: "Search products",
+    heroLabel: "New Arrivals 2026",
+    heroTitle: "SAVE MORE\nWITH CARTELLO",
+    heroText: "Browse our collection and discover products that match your style",
+    shopNow: "Shop Now",
+    featuredProducts: "Featured Products",
+    freeShipping: "Free Shipping",
+    freeShippingText: "On all orders over 3000 EGP",
+    easyReturns: "Easy Returns",
+    easyReturnsText: "15-day return policy",
+    securePayment: "Secure Payment",
+    securePaymentText: "100% safe",
+    support: "24/7 Support",
+    supportText: "Always here to help",
+    langButton: "عربي"
+  },
+  ar: {
+    home: "الرئيسية",
+    shop: "المتجر",
+    cart: "السلة",
+    login: "تسجيل الدخول",
+    profile: "الحساب",
+    search: "بحث",
+    searchProducts: "ابحث عن المنتجات",
+    heroLabel: "وصل حديثا 2026",
+    heroTitle: "وفر أكثر\nمع كارتيلو",
+    heroText: "تصفح مجموعتنا واكتشف منتجات تناسب أسلوبك",
+    shopNow: "تسوق الآن",
+    featuredProducts: "منتجات مميزة",
+    freeShipping: "شحن مجاني",
+    freeShippingText: "على كل الطلبات فوق 3000 جنيه",
+    easyReturns: "إرجاع سهل",
+    easyReturnsText: "سياسة إرجاع خلال 15 يوم",
+    securePayment: "دفع آمن",
+    securePaymentText: "آمن 100%",
+    support: "دعم 24/7",
+    supportText: "دائما هنا للمساعدة",
+    langButton: "English"
+  }
+};
+
+function getLanguage() {
+  return localStorage.getItem("language") || "en";
+}
+
+function applyLanguage() {
+  const lang = getLanguage();
+  const dict = translations[lang];
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key]) el.textContent = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (dict[key]) el.placeholder = dict[key];
+  });
+
+  document.querySelectorAll(".lang-toggle").forEach(btn => {
+    btn.textContent = dict.langButton;
+  });
+}
+
+function toggleLanguage() {
+  const nextLang = getLanguage() === "ar" ? "en" : "ar";
+  localStorage.setItem("language", nextLang);
+  applyLanguage();
+}
 // ==========================================================================
 // 2. INITIALIZATION & GLOBAL UTILITIES
 // ==========================================================================
 
 window.onload = async function () {
+  applyLanguage();
   updateCartBadge();
   initMobileMenu();
   updateNavForUser();
