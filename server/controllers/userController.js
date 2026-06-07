@@ -1,5 +1,14 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+});
 
 // POST /api/signup
 exports.signup = async (req, res) => {
@@ -145,18 +154,12 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-     access_key: process.env.WEB3FORMS_ACCESS_KEY,
-     subject: 'Cartello Password Reset Code',
-     from_name: 'Cartello',
-     to: user.email,           
-     email: user.email,
-     message: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
-})
-    });
+  await transporter.sendMail({
+  from: `"Cartello" <${process.env.GMAIL_USER}>`,
+  to: user.email,
+  subject: 'Cartello Password Reset Code',
+  text: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
+});
 
     res.json({ message: 'Reset code sent to your email.' });
   } catch (error) {

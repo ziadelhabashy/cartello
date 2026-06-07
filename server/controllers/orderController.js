@@ -1,5 +1,14 @@
 const Order   = require('../models/Order');
 const Product = require('../models/Product');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+});
 
 const SHIPPING_RATES = {
   Cairo: 50, Giza: 50, Alexandria: 70, Dakahlia: 80, Sharqia: 80, Monufia: 75,
@@ -10,32 +19,17 @@ const SHIPPING_RATES = {
 };
 
 async function sendOrderEmail(order) {
-  if (!process.env.WEB3FORMS_ACCESS_KEY) return;
+  if (!process.env.GMAIL_USER) return;
 
   const orderItems = order.items
     .map(item => `${item.name} x${item.quantity} - EGP ${item.price}`)
     .join('\n');
 
-    await fetch('https://api.web3forms.com/submit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      access_key: process.env.WEB3FORMS_ACCESS_KEY,
-      subject: `New Cartello Order - ${order._id}`,
-      from_name: 'Cartello Store',
-      name: order.customer.name,
-      email: order.customer.email,
-      phone: order.customer.phone,
-      governorate: order.customer.governorate,
-      address: order.customer.address,
-      paymentMethod: order.paymentMethod,
-      subtotal: `EGP ${order.subtotal}`,
-      shipping: `EGP ${order.shipping}`,
-      total: `EGP ${order.total}`,
-      items: orderItems
-    })
+  await transporter.sendMail({
+    from: `"Cartello" <${process.env.GMAIL_USER}>`,
+    to: order.customer.email,              // ← goes to the CLIENT
+    subject: `Your Cartello Order #${order._id.toString().slice(-6).toUpperCase()}`,
+    text: `Hi ${order.customer.name},\n\nThank you for your order!\n\nItems:\n${orderItems}\n\nShipping: EGP ${order.shipping}\nTotal: EGP ${order.total}\n\nWe'll process it soon.\n\n— Cartello Team`
   });
 }
  
