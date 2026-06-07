@@ -953,7 +953,7 @@ async function joinNow() {
 
     setTimeout(() => {
       window.location.href = "shop.html";
-    }, 1200);
+    }, 2500);
 
   } catch (error) {
     showMessage("Could not connect to server.", "error");
