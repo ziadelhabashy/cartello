@@ -19,4 +19,7 @@ router.post('/admin/login', userController.adminLogin);
 router.get('/admin/users', userController.adminGetAllUsers);
 router.delete('/admin/users/:id', userController.adminDeleteUser);
 
+router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password', userController.resetPassword);
+
 module.exports = router;
