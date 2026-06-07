@@ -13,12 +13,184 @@ let currentCategory = "All";
 let currentPage = 1;
 const itemsPerPage = 8;
 let currentList = [];
-let products = []; // Now starts empty
+let products = []; 
+
+const translations = {
+  en: {
+    // Nav
+    home: "Home",
+    shop: "Shop",
+    cart: "Cart",
+    login: "Login",
+    logout: "Logout",
+    profile: "Profile",
+    // Search
+    search: "Search",
+    searchProducts: "Search products",
+    // Hero (index)
+    heroLabel: "New Arrivals 2026",
+    heroTitle: "SAVE MORE WITH CARTELLO",
+    heroText: "Browse our collection and discover products that match your style",
+    shopNow: "Shop Now",
+    // Features (index)
+    featuredProducts: "Featured Products",
+    freeShipping: "Free Shipping",
+    freeShippingText: "On all orders over 3000 EGP",
+    easyReturns: "Easy Returns",
+    easyReturnsText: "15-day return policy",
+    securePayment: "Secure Payment",
+    securePaymentText: "100% safe",
+    support: "24/7 Support",
+    supportText: "Always here to help",
+    // Shop page
+    shopLabel: "Shop",
+    browseProducts: "Browse Products",
+    filterAll: "All",
+    filterElectronics: "Electronics",
+    filterAccessories: "Accessories",
+    filterGrocery: "Grocery",
+    filterSkinCare: "Skin Care",
+    // Product cards (JS-rendered)
+    addToCart: "Add to Cart",
+    outOfStock: "Out of Stock",
+    // Checkout page
+    checkoutTitle: "Checkout",
+    checkoutSubtitle: "Enter your details to place your order.",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Your full name",
+    email: "Email",
+    emailPlaceholder: "Email Address",
+    phone: "Phone",
+    password: "Password",
+    address: "Address",
+    governorate: "Governorate",
+    paymentMethod: "Payment Method",
+    selectPayment: "Select payment method",
+    cod: "Cash on Delivery",
+    placeOrder: "Place Order",
+    orderSummary: "Order Summary",
+    orderSuccess: "Order Placed Successfully",
+    orderSuccessText: "Your order has been confirmed and will be processed soon.",
+    // Login page
+    welcomeTitle: "Welcome to Cartello",
+    loginSubtitle: "Log in to your account",
+    forgotPassword: "Forgot password?",
+    signIn: "Sign In",
+    newUser: "New?",
+    createAccount: "Create account",
+    adminLogin: "Admin login",
+    langButton: "عربي"
+  },
+  ar: {
+    // Nav
+    home: "الرئيسية",
+    shop: "المتجر",
+    cart: "السلة",
+    login: "تسجيل الدخول",
+    logout: "تسجيل الخروج",
+    profile: "الحساب",
+    // Search
+    search: "بحث",
+    searchProducts: "ابحث عن المنتجات",
+    // Hero (index)
+    heroLabel: "وصل حديثا 2026",
+    heroTitle: "وفر أكثر مع كارتيلو",
+    heroText: "تصفح مجموعتنا واكتشف منتجات تناسب أسلوبك",
+    shopNow: "تسوق الآن",
+    // Features (index)
+    featuredProducts: "منتجات مميزة",
+    freeShipping: "شحن مجاني",
+    freeShippingText: "على كل الطلبات فوق 3000 جنيه",
+    easyReturns: "إرجاع سهل",
+    easyReturnsText: "سياسة إرجاع خلال 15 يوم",
+    securePayment: "دفع آمن",
+    securePaymentText: "آمن 100%",
+    support: "دعم 24/7",
+    supportText: "دائما هنا للمساعدة",
+    // Shop page
+    shopLabel: "المتجر",
+    browseProducts: "تصفح المنتجات",
+    filterAll: "الكل",
+    filterElectronics: "إلكترونيات",
+    filterAccessories: "إكسسوارات",
+    filterGrocery: "بقالة",
+    filterSkinCare: "العناية بالبشرة",
+    // Product cards (JS-rendered)
+    addToCart: "أضف للسلة",
+    outOfStock: "نفد المخزون",
+    // Checkout page
+    checkoutTitle: "الدفع",
+    checkoutSubtitle: "أدخل بياناتك لإتمام الطلب.",
+    fullName: "الاسم الكامل",
+    fullNamePlaceholder: "اسمك الكامل",
+    email: "البريد الإلكتروني",
+    emailPlaceholder: "بريدك الإلكتروني",
+    phone: "الهاتف",
+    password: "كلمة المرور",
+    address: "العنوان",
+    governorate: "المحافظة",
+    paymentMethod: "طريقة الدفع",
+    selectPayment: "اختر طريقة الدفع",
+    cod: "الدفع عند الاستلام",
+    placeOrder: "إتمام الطلب",
+    orderSummary: "ملخص الطلب",
+    orderSuccess: "تم تقديم الطلب بنجاح",
+    orderSuccessText: "تم تأكيد طلبك وسيتم معالجته قريباً.",
+    // Login page
+    welcomeTitle: "مرحباً بك في كارتيلو",
+    loginSubtitle: "سجّل الدخول لحسابك",
+    forgotPassword: "نسيت كلمة المرور؟",
+    signIn: "تسجيل الدخول",
+    newUser: "جديد؟",
+    createAccount: "إنشاء حساب",
+    adminLogin: "دخول المسؤول",
+    langButton: "English"
+  }
+};
+
+function getLanguage() {
+  return localStorage.getItem("language") || "en";
+}
+
+function applyLanguage() {
+  const lang = getLanguage();
+  const dict = translations[lang];
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.dataset.i18n;
+    if (dict[key]) el.textContent = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.dataset.i18nPlaceholder;
+    if (dict[key]) el.placeholder = dict[key];
+  });
+
+  document.querySelectorAll(".lang-toggle").forEach(btn => {
+    btn.textContent = dict.langButton;
+  });
+}
+
+function toggleLanguage() {
+  const nextLang = getLanguage() === "ar" ? "en" : "ar";
+  localStorage.setItem("language", nextLang);
+  applyLanguage();
+}
+
+// Helper: get translated string for use inside JS-rendered HTML
+function t(key) {
+  const dict = translations[getLanguage()];
+  return (dict && dict[key]) ? dict[key] : key;
+}
 // ==========================================================================
 // 2. INITIALIZATION & GLOBAL UTILITIES
 // ==========================================================================
 
 window.onload = async function () {
+  applyLanguage();
   updateCartBadge();
   initMobileMenu();
   updateNavForUser();
@@ -105,9 +277,9 @@ function renderProducts(productsToDisplay) {
     
     let buttonHtml = "";
     if (product.stock > 0) {
-        buttonHtml = `<button class="add-to-cart-btn" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
+        buttonHtml = `<button class="add-to-cart-btn" onclick="initQuantity('${product._id}', this)">${t('addToCart')}</button>`;
     } else {
-        buttonHtml = `<button class="add-to-cart-btn out-of-stock-btn" disabled>Out of Stock</button>`;
+        buttonHtml = `<button class="add-to-cart-btn out-of-stock-btn" disabled>${t('outOfStock')}</button>`;
     }
 
     htmlContent += `
@@ -137,6 +309,7 @@ function renderProducts(productsToDisplay) {
     `;
 });
   grid.innerHTML = htmlContent;
+  applyLanguage();
   
   if (typeof getCart === 'function' && typeof syncProductCardState === 'function') {
       Object.keys(getCart()).forEach(id => syncProductCardState(id));
@@ -300,9 +473,9 @@ function renderFeaturedProducts() {
     
     let buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
     if (product.stock > 0) {
-  buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">Add to Cart</button>`;
+  buttonHtml = `<button class="add-to-cart-btn search-button" onclick="initQuantity('${product._id}', this)">${t('addToCart')}</button>`;
 } else {
-  buttonHtml = `<button class="add-to-cart-btn" style="background-color: #e0e0e0; color: #888; cursor: not-allowed; border: none;" disabled>Out of Stock</button>`;
+  buttonHtml = `<button class="add-to-cart-btn" style="background-color: #e0e0e0; color: #888; cursor: not-allowed; border: none;" disabled>${t('outOfStock')}</button>`;
 }
 
     htmlContent += `
@@ -420,7 +593,7 @@ function getCart() {
 function initQuantity(productId, btn) {
 const product = products.find(p => p._id.toString() === productId.toString());
   if (product && product.stock <= 0) {
-      alert("Sorry, this item is currently out of stock.");
+      showMessage("Sorry, this item is currently out of stock.");
       return; 
   }
 
@@ -441,7 +614,7 @@ if (!cartData[productId.toString()]) return;
   if (delta > 0) { 
 const product = products.find(p => p._id.toString() === productId.toString());  
   if (product && cartData[productId] >= product.stock) {
-      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      showMessage(`Sorry, we only have ${product.stock} of these in stock!`);
       return; 
     }
   }
@@ -466,7 +639,7 @@ function changeCartQty(id, delta) {
   if (delta > 0) {
 const product = products.find(p => p._id.toString() === id.toString());  
  if (product && cart[id] >= product.stock) {
-      alert(`Sorry, we only have ${product.stock} of these in stock!`);
+      showMessage(`Sorry, we only have ${product.stock} of these in stock!`);
       return; 
     }
   }
@@ -687,6 +860,17 @@ function getShippingPrice() {
   return shippingRates[govSelect.value] || 0;
 }
 
+function showMessage(message){
+    const box = document.getElementById("messageBox");
+
+    box.textContent = message;
+    box.classList.add("show");
+
+    setTimeout(()=>{
+        box.classList.remove("show");
+    },3000);
+}
+
 function updateShipping() {
   const shippingContainer = document.getElementById("checkout-shipping");
   const totalContainer = document.getElementById("checkout-total");
@@ -799,6 +983,7 @@ async function cancelOrder(orderId) {
 // 7. USER AUTHENTICATION & PROFILE
 // ==========================================================================
 
+
 function showForm(id) {
   document.querySelectorAll(".auth-box").forEach(box => {
     box.classList.remove("active");
@@ -856,25 +1041,57 @@ async function validateLogin() {
   } catch (error) { alert("Could not connect to server."); }
 }
 
-function validateForgotPassword() {
+async function validateForgotPassword() {
   const forgotInput = document.querySelector("#forgot-view input[type='email']");
   if (!forgotInput) return;
 
   const email = forgotInput.value.trim();
+
   if (!email) {
     alert("Please enter your email address.");
     return;
   }
+
   if (!isValidEmail(email)) {
     alert("Please enter a valid email address.");
     return;
   }
 
-  alert("Reset link sent successfully!");
-  forgotInput.value = "";
-  showForm("login-form");
-}
+  try {
+    const response = await fetch(`${API}/api/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
 
+    const data = await response.json();
+    alert(data.message);
+
+    if (response.ok) {
+      const code = prompt("Enter the reset code sent to your email:");
+      if (!code) return;
+
+      const newPassword = prompt("Enter your new password:");
+      if (!newPassword) return;
+
+      const resetResponse = await fetch(`${API}/api/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code, newPassword })
+      });
+
+      const resetData = await resetResponse.json();
+      alert(resetData.message);
+
+      if (resetResponse.ok) {
+        forgotInput.value = "";
+        showForm("login-form");
+      }
+    }
+  } catch (error) {
+    alert("Could not connect to server.");
+  }
+}
 async function joinNow() {
   const name = document.getElementById("reg-name").value.trim();
   const email = document.getElementById("reg-email").value.trim();

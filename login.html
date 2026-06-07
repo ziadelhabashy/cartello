@@ -14,17 +14,17 @@
 <body>
  <header class="website-header">
     <div class="container nav">
-
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
 
 <a href="index.html" class="logo">CARTELLO</a>
 <nav class="navbar" id="navbar">
-     <a href="index.html">Home</a>
-     <a href="shop.html">Shop</a>
-     <a href="cart.html">Cart</a>
-     <a href="login.html" class="active">Login</a>   
+     <a href="index.html" data-i18n="home">Home</a>
+     <a href="shop.html" data-i18n="shop">Shop</a>
+     <a href="cart.html" data-i18n="cart">Cart</a>
+     <a href="login.html" class="active" data-i18n="login">Login</a>   
 </nav>
 <div class="header-tools">
+<button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
 <a class="cart-link" href="cart.html">🛒 Cart
     <span class="cart-badge" id="cart-badge">0</span>
 </a>
@@ -214,7 +214,7 @@
         <p>Since 2026</p>
       </div>
       <div>
-        <p>Email: cartelloTeam@protonmail.com</p>
+        <p>Email: cartelloteam@gmail.com</p>
         <p>Phone: +20 111 81 00000</p>
       </div>
       </div>

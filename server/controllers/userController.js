@@ -2,6 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
 const User   = require('../models/User');
 
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 // POST /api/signup
 exports.signup = async (req, res) => {
   try {
@@ -129,6 +132,73 @@ exports.changePassword = async (req, res) => {
     res.json({ message: 'Password updated successfully!' });
   } catch (error) {
 res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({ message: 'If this email exists, a reset code has been sent.' });
+    }
+
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.resetPasswordCode = resetCode;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
+    await user.save();
+
+    await resend.emails.send({
+      from: 'Cartello <no-reply@cartello.me>',
+      to: user.email,
+      subject: 'Cartello Password Reset Code',
+      text: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
+    });
+
+    res.json({ message: 'Reset code sent to your email.' });
+  } catch (error) {
+    console.error('forgotPassword error:', error);
+    res.status(500).json({ message: 'Server Error: ' + error.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ message: 'Email, code, and new password are required.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+    }
+
+    const user = await User.findOne({
+      email,
+      resetPasswordCode: code,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired reset code.' });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 12);
+    user.resetPasswordCode = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ message: 'Password reset successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 

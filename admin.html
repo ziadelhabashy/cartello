@@ -17,15 +17,16 @@
   }
 </script>
  <header class="website-header">
+  <button class="lang-toggle" type="button" onclick="toggleLanguage()">عربي</button>
     <div class="container nav">
     <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">☰</button>
 
 <a href="index.html" class="logo">CARTELLO</a>
 
 <nav class="navbar" id="navbar">
-     <a href="index.html">Home</a>
-     <a href="shop.html">Shop</a>
-     <a href="#" onclick="adminLogout()">Logout</a>
+     <a href="index.html" data-i18n="home">Home</a>
+     <a href="shop.html" data-i18n="shop">Shop</a>
+     <a href="#" onclick="adminLogout()" data-i18n="logout">Logout</a>
 </nav>
 </div>
 </header>
@@ -55,7 +56,7 @@
         <p>Since 2026</p>
       </div>
       <div>
-        <p>Email: cartelloTeam@protonmail.com</p>
+        <p>Email: cartelloteam@gmail.com</p>
         <p>Phone: +20 111 81 00000</p>
       </div>
       </div>
