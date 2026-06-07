@@ -964,43 +964,6 @@ async function cancelOrder(orderId) {
 // 7. USER AUTHENTICATION & PROFILE
 // ==========================================================================
 
-async function sendPasswordResetEmail(email) {
-  try {
-    // Send reset link email to customer
-    await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        access_key: 'f22f5d8e-4470-439f-9b84-841973a321d7',
-        email: email,
-        subject: 'Password Reset Request - Cartello',
-        from_name: 'Cartello Support',
-        message: `You requested a password reset. Click the link below to reset your password:\n\nhttps://cartello.me/reset-password\n\nIf you didn't request this, please ignore this email.`
-      })
-    });
-
-    // Send notification to admin
-    await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        access_key: 'f22f5d8e-4470-439f-9b84-841973a321d7',
-        email: 'cartelloteam@gmail.com',
-        subject: `🔐 Password Reset Request from ${email}`,
-        from_name: 'Cartello System',
-        message: `A password reset request was initiated for:\n\nEmail: ${email}\n\nTime: ${new Date().toLocaleString()}\n\nIf this wasn't authorized, please monitor this account.`
-      })
-    });
-
-    console.log('Reset email sent successfully to customer and admin');
-  } catch (error) {
-    console.error('Reset email failed:', error);
-  }
-}
 
 function showForm(id) {
   document.querySelectorAll(".auth-box").forEach(box => {
@@ -1072,11 +1035,8 @@ function validateForgotPassword() {
     alert("Please enter a valid email address.");
     return;
   }
-
-  // Send the password reset email
-  sendPasswordResetEmail(email);
-
-  alert("Password reset link has been sent to your email!");
+alert("Reset link sent successfully!");
+ 
   forgotInput.value = "";
   showForm("login-form");
 }
