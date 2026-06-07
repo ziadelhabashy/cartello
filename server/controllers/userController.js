@@ -154,21 +154,13 @@ exports.forgotPassword = async (req, res) => {
     user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    try {
-      await transporter.sendMail({
-        from: `"Cartello" <${process.env.GMAIL_USER}>`,
-        to: user.email,
-        subject: 'Cartello Password Reset Code',
-        text: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
-      });
-    } catch (emailError) {
-      console.error('Email sending failed:', emailError.message);
-      return res.status(500).json({ message: 'Failed to send email: ' + emailError.message });
-    }
+    // TEMPORARY: skip email, return code directly so we can test
+    return res.json({ 
+      message: `Reset code sent. (TEMP - your code is: ${resetCode})` 
+    });
 
-    res.json({ message: 'Reset code sent to your email.' });
   } catch (error) {
-    console.error('forgotPassword error:', error.message);
+    console.error('forgotPassword error:', error);
     res.status(500).json({ message: 'Server Error: ' + error.message });
   }
 };
