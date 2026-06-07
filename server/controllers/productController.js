@@ -41,7 +41,7 @@ res.status(500).json({ message: 'Server Error' });
 // PUT /api/admin/products/:id
 exports.adminUpdateProduct = async (req, res) => {
   try {
-    const { name, price, stock, category, image, rating, description } = req.body;
+    const { name, price, stock, category, rating, description } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : req.body.image;
 
     const product = await Product.findByIdAndUpdate(
