@@ -848,23 +848,56 @@ async function validateLogin() {
   } catch (error) { alert("Could not connect to server."); }
 }
 
-function validateForgotPassword() {
+async function validateForgotPassword() {
   const forgotInput = document.querySelector("#forgot-view input[type='email']");
   if (!forgotInput) return;
 
   const email = forgotInput.value.trim();
+
   if (!email) {
     alert("Please enter your email address.");
     return;
   }
+
   if (!isValidEmail(email)) {
     alert("Please enter a valid email address.");
     return;
   }
 
-  alert("Reset link sent successfully!");
-  forgotInput.value = "";
-  showForm("login-form");
+  try {
+    const response = await fetch(`${API}/api/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+    alert(data.message);
+
+    if (response.ok) {
+      const code = prompt("Enter the reset code sent to your email:");
+      if (!code) return;
+
+      const newPassword = prompt("Enter your new password:");
+      if (!newPassword) return;
+
+      const resetResponse = await fetch(`${API}/api/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code, newPassword })
+      });
+
+      const resetData = await resetResponse.json();
+      alert(resetData.message);
+
+      if (resetResponse.ok) {
+        forgotInput.value = "";
+        showForm("login-form");
+      }
+    }
+  } catch (error) {
+    alert("Could not connect to server.");
+  }
 }
 
 async function joinNow() {
