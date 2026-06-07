@@ -149,7 +149,7 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     await resend.emails.send({
-      from: 'Cartello <onboarding@resend.dev>',
+      from: 'Cartello <no-reply@cartello.me>',
       to: user.email,
       subject: 'Cartello Password Reset Code',
       text: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`

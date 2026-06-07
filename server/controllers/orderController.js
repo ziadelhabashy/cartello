@@ -19,7 +19,7 @@ async function sendOrderEmail(order) {
     .join('\n');
 
   await resend.emails.send({
-    from: 'Cartello <onboarding@resend.dev>',
+    from: 'Cartello <no-reply@cartello.me>',
     to: order.customer.email,
     subject: `Your Cartello Order #${order._id.toString().slice(-6).toUpperCase()}`,
     text: `Hi ${order.customer.name},\n\nThank you for your order!\n\nItems:\n${orderItems}\n\nShipping: EGP ${order.shipping}\nTotal: EGP ${order.total}\n\nWe'll process it soon.\n\n— Cartello Team`
