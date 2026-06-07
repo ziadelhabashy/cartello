@@ -153,7 +153,7 @@ exports.forgotPassword = async (req, res) => {
         subject: 'Cartello Password Reset Code',
         from_name: 'Cartello',
         email: user.email,
-        message: Your password reset code is: ${resetCode}. This code expires in 15 minutes.
+        message: `Your password reset code is: ${resetCode}. This code expires in 15 minutes.`
       })
     });
 
@@ -195,6 +195,7 @@ exports.resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
+
 // POST /api/update-profile
 exports.updateProfile = async (req, res) => {
   try {
