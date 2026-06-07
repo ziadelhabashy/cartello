@@ -142,6 +142,33 @@ exports.adminUpdateOrderStatus = async (req, res) => {
 
     res.json({ message: 'Order status updated!' });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
+
+// POST /api/orders/:id/cancel  (user-facing, no admin token required)
+exports.userCancelOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found.' });
+
+    if (order.status !== 'Pending') {
+      return res.status(400).json({ message: 'Only pending orders can be cancelled.' });
+    }
+
+    // Restore stock
+    await Promise.all(
+      order.items.map(item =>
+        Product.findByIdAndUpdate(item.productId, { $inc: { stock: item.quantity } })
+      )
+    );
+
+    order.status = 'Cancelled';
+    await order.save();
+
+    res.json({ message: 'Order cancelled successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+

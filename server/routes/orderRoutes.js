@@ -11,4 +11,8 @@ router.get ('/orders/user/:userId', orderController.getUserOrders);
 router.get ('/admin/orders',isAdmin,          orderController.adminGetAllOrders);
 router.post('/admin/orders/:id/status',isAdmin, orderController.adminUpdateOrderStatus);
 
+// User cancel (no admin token needed)
+router.post('/orders/:id/cancel', orderController.userCancelOrder);
+
 module.exports = router;
+

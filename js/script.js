@@ -4,6 +4,11 @@
 const API = 'https://cartello.me';
 let cartData = JSON.parse(localStorage.getItem("cart")) || {};
 
+function adminHeaders() {
+  const token = localStorage.getItem('adminToken');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 let currentCategory = "All";
 let currentPage = 1;
 const itemsPerPage = 8;
@@ -771,16 +776,19 @@ async function cancelOrder(orderId) {
   if (!confirm("Are you sure you want to cancel this order?")) return;
 
   try {
-    const response = await fetch(`${API}/api/admin/orders/${orderId}/status`, {
+    const response = await fetch(`${API}/api/orders/${orderId}/cancel`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'Cancelled' })
+      headers: { 'Content-Type': 'application/json' }
     });
+
+    const data = await response.json();
 
     if (response.ok) {
       alert("Order cancelled successfully.");
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       loadUserOrders(currentUser.id);
+    } else {
+      alert(data.message || "Could not cancel order.");
     }
   } catch (error) {
     alert("Could not connect to server.");
@@ -1112,6 +1120,7 @@ async function adminLogin() {
     if (!res.ok) { alert(data.message); return; }
 
     localStorage.setItem("adminSession", "true");
+    localStorage.setItem("adminToken", data.token);
     window.location.href = "admin.html";
   } catch (error) {
     alert("Could not connect to server.");
@@ -1120,6 +1129,7 @@ async function adminLogin() {
 
 function adminLogout() {
   localStorage.removeItem("adminSession");
+  localStorage.removeItem("adminToken");
   window.location.href = "login.html";
 }
 
@@ -1147,9 +1157,9 @@ async function loadAdminDashboard() {
 
   try {
     const [ordersRes, usersRes, productsRes] = await Promise.all([
-      fetch(`${API}/api/admin/orders`),
-      fetch(`${API}/api/admin/users`),
-      fetch(`${API}/api/admin/products`)
+      fetch(`${API}/api/admin/orders`, { headers: adminHeaders() }),
+      fetch(`${API}/api/admin/users`, { headers: adminHeaders() }),
+      fetch(`${API}/api/admin/products`, { headers: adminHeaders() })
     ]);
     const orders = await ordersRes.json();
     const users = await usersRes.json();
@@ -1184,7 +1194,7 @@ async function loadAdminProducts() {
   contentArea.innerHTML = "<h1>📦 Products</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch(`${API}/api/admin/products`);
+    const res = await fetch(`${API}/api/admin/products`, { headers: adminHeaders() });
     const products = await res.json();
 
     let rows = products.map(p => `
@@ -1194,7 +1204,10 @@ async function loadAdminProducts() {
         <td>EGP ${p.price}</td>
         <td>${p.stock}</td>
         <td>${p.category}</td>
-        <td><button onclick="deleteProduct('${p._id}')" style="color:red; background:none; border:none; cursor:pointer">🗑 Delete</button></td>
+        <td>
+          <button onclick="editProduct('${p._id}')" style="color:#1a73e8; background:none; border:none; cursor:pointer; margin-right:8px">✏️ Edit</button>
+          <button onclick="deleteProduct('${p._id}')" style="color:red; background:none; border:none; cursor:pointer">🗑 Delete</button>
+        </td>
       </tr>
     `).join("");
 
@@ -1235,7 +1248,7 @@ async function loadAdminOrders() {
   contentArea.innerHTML = "<h1>🛒 Orders</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch(`${API}/api/admin/orders`);
+    const res = await fetch(`${API}/api/admin/orders`, { headers: adminHeaders() });
     const orders = await res.json();
 
     let rows = orders.map(o => `
@@ -1273,7 +1286,7 @@ async function loadAdminUsers() {
   contentArea.innerHTML = "<h1>👥 Users</h1><p>Loading...</p>";
 
   try {
-    const res = await fetch(`${API}/api/admin/users`);
+    const res = await fetch(`${API}/api/admin/users`, { headers: adminHeaders() });
     const users = await res.json();
 
    let rows = users.map(u => `
@@ -1301,7 +1314,10 @@ async function loadAdminUsers() {
 async function deleteProduct(productId) {
   if (!confirm("Are you sure you want to delete this product?")) return;
   try {
-    await fetch(`${API}/api/admin/products/${productId}`, { method: 'DELETE' });
+    await fetch(`${API}/api/admin/products/${productId}`, {
+      method: 'DELETE',
+      headers: adminHeaders()
+    });
     loadAdminProducts();
   } catch (error) { alert("Could not delete product."); }
 }
@@ -1331,6 +1347,7 @@ async function addNewProduct() {
   try {
     const res = await fetch(`${API}/api/admin/products`, {
       method: 'POST',
+      headers: adminHeaders(),
       body: formData  // No Content-Type header — browser sets it automatically for FormData
     });
     const data = await res.json();
@@ -1345,7 +1362,10 @@ async function addNewProduct() {
 async function deleteUser(userId) {
   if (!confirm("Are you sure you want to delete this user?")) return;
   try {
-    await fetch(`${API}/api/admin/users/${userId}`, { method: 'DELETE' });
+    await fetch(`${API}/api/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: adminHeaders()
+    });
     loadAdminUsers();
   } catch (error) {
     alert("Could not delete user.");
@@ -1355,10 +1375,42 @@ async function updateOrderStatus(orderId, status) {
   try {
     await fetch(`${API}/api/admin/orders/${orderId}/status`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...adminHeaders() },
       body: JSON.stringify({ status })
     });
   } catch (error) { alert("Could not update order status."); }
+}
+
+async function editProduct(productId) {
+  const name = prompt('Product Name:');
+  const price = prompt('Price (EGP):');
+  const stock = prompt('Stock:');
+  const category = prompt('Category (Electronics, Accessories, Grocery, Skin Care):');
+
+  if (!name || !price || !stock || !category) return;
+
+  try {
+    const res = await fetch(`${API}/api/admin/products/${productId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...adminHeaders()
+      },
+      body: JSON.stringify({ name, price: parseFloat(price), stock: parseInt(stock), category })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message);
+      return;
+    }
+
+    alert('Product updated successfully!');
+    loadAdminProducts();
+  } catch (error) {
+    alert('Could not connect to server.');
+  }
 }
 
 // ==========================================================================
