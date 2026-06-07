@@ -874,25 +874,73 @@ async function joinNow() {
   const pass = document.getElementById("reg-pass").value;
   const confirm = document.getElementById("reg-confirm").value;
 
-  if (!name || !email || !phone || !pass || !confirm) { alert("Please fill in all fields."); return; }
-  if (!isValidEmail(email)) { alert("Please enter a valid email address."); return; }
-  if (!isValidPhone(phone)) { alert("Please enter a valid phone number."); return; }
-  if (pass.length < 6) { alert("Password must be at least 6 characters."); return; }
-  if (pass !== confirm) { alert("Passwords do not match."); return; }
+  const msg = document.getElementById("signup-message");
+
+  function showMessage(text, type) {
+    msg.textContent = text;
+    msg.className = `signup-message ${type}`;
+  }
+
+  if (!name || !email || !phone || !pass || !confirm) {
+    showMessage("Please fill in all fields.", "error");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showMessage("Please enter a valid email address.", "error");
+    return;
+  }
+
+  if (!isValidPhone(phone)) {
+    showMessage("Please enter a valid phone number.", "error");
+    return;
+  }
+
+  if (pass.length < 6) {
+    showMessage("Password must be at least 6 characters.", "error");
+    return;
+  }
+
+  if (pass !== confirm) {
+    showMessage("Passwords do not match.", "error");
+    return;
+  }
 
   try {
     const response = await fetch(`${API}/api/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password: pass })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        password: pass
+      })
     });
+
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+
+    if (!response.ok) {
+      showMessage(data.message || "Registration failed.", "error");
+      return;
+    }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
-    alert("Welcome " + name + "! Account created successfully!");
-    mockLogin();
-  } catch (error) { alert("Could not connect to server."); }
+
+    showMessage(
+      `Welcome ${name}! Account created successfully!`,
+      "success"
+    );
+
+    setTimeout(() => {
+      mockLogin();
+    }, 1500);
+
+  } catch (error) {
+    showMessage("Could not connect to server.", "error");
+  }
 }
 
 async function updateProfile() {
