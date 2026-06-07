@@ -164,7 +164,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-xports.resetPassword = async (req, res) => {
+exports.resetPassword = async (req, res) => {
   try {
     const { email, code, newPassword } = req.body;
 
