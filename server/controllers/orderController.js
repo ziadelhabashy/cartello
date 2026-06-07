@@ -1,14 +1,7 @@
 const Order   = require('../models/Order');
 const Product = require('../models/Product');
-const nodemailer = require('nodemailer');
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-});
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const SHIPPING_RATES = {
   Cairo: 50, Giza: 50, Alexandria: 70, Dakahlia: 80, Sharqia: 80, Monufia: 75,
@@ -19,19 +12,19 @@ const SHIPPING_RATES = {
 };
 
 async function sendOrderEmail(order) {
-  if (!process.env.GMAIL_USER) return;
+  if (!process.env.RESEND_API_KEY) return;
 
   const orderItems = order.items
     .map(item => `${item.name} x${item.quantity} - EGP ${item.price}`)
     .join('\n');
 
-  await transporter.sendMail({
-    from: `"Cartello" <${process.env.GMAIL_USER}>`,
-    to: order.customer.email,              // ← goes to the CLIENT
+  await resend.emails.send({
+    from: 'Cartello <onboarding@resend.dev>',
+    to: order.customer.email,
     subject: `Your Cartello Order #${order._id.toString().slice(-6).toUpperCase()}`,
     text: `Hi ${order.customer.name},\n\nThank you for your order!\n\nItems:\n${orderItems}\n\nShipping: EGP ${order.shipping}\nTotal: EGP ${order.total}\n\nWe'll process it soon.\n\n— Cartello Team`
   });
-}
+} 
  
 
 // POST /api/orders
