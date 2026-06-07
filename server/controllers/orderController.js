@@ -16,28 +16,55 @@ async function sendOrderEmail(order) {
     .map(item => `${item.name} x${item.quantity} - EGP ${item.price}`)
     .join('\n');
 
-  await fetch('https://api.web3forms.com/submit', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      access_key: process.env.WEB3FORMS_ACCESS_KEY,
-      subject: `New Cartello Order - ${order._id}`,
-      from_name: 'Cartello Store',
-      name: order.customer.name,
-      email: order.customer.email,
-      phone: order.customer.phone,
-      governorate: order.customer.governorate,
-      address: order.customer.address,
-      paymentMethod: order.paymentMethod,
-      subtotal: `EGP ${order.subtotal}`,
-      shipping: `EGP ${order.shipping}`,
-      total: `EGP ${order.total}`,
-      items: orderItems
-    })
-  });
+  const orderDetailsBase = {
+    access_key: process.env.WEB3FORMS_ACCESS_KEY,
+    from_name: 'Cartello Store',
+    name: order.customer.name,
+    phone: order.customer.phone,
+    governorate: order.customer.governorate,
+    address: order.customer.address,
+    paymentMethod: order.paymentMethod,
+    subtotal: `EGP ${order.subtotal}`,
+    shipping: `EGP ${order.shipping}`,
+    total: `EGP ${order.total}`,
+    items: orderItems
+  };
+
+  try {
+    // Send order confirmation email to CUSTOMER
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...orderDetailsBase,
+        email: order.customer.email,
+        subject: `Order Confirmation - Order #${order._id.toString().slice(-6).toUpperCase()}`,
+        message: `Thank you for your order! Your order has been received and will be processed soon.`
+      })
+    });
+
+    // Send order notification email to ADMIN
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ...orderDetailsBase,
+        email: 'cartelloteam@gmail.com', // Admin email from your store
+        subject: `🔔 New Order Received - Order #${order._id.toString().slice(-6).toUpperCase()}`,
+        message: `A new order has been placed and requires your attention.`
+      })
+    });
+
+    console.log('Order emails sent successfully to customer and admin');
+  } catch (emailError) {
+    console.error('Order email failed:', emailError.message);
+  }
 }
+
 // POST /api/orders
 exports.placeOrder = async (req, res) => {
   try {
@@ -83,15 +110,13 @@ exports.placeOrder = async (req, res) => {
     });
     await newOrder.save();
 
-try {
-  await sendOrderEmail(newOrder);
-} catch (emailError) {
-  console.error('Order email failed:', emailError.message);
-}
+    // Send emails to both customer and admin
+    await sendOrderEmail(newOrder);
 
-res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
+    res.status(201).json({ message: 'Order placed successfully!', orderId: newOrder._id });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    console.error('Order placement error:', error);
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -101,7 +126,7 @@ exports.getUserOrders = async (req, res) => {
     const orders = await Order.find({ userId: req.params.userId }).sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -111,7 +136,7 @@ exports.adminGetAllOrders = async (req, res) => {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -142,6 +167,6 @@ exports.adminUpdateOrderStatus = async (req, res) => {
 
     res.json({ message: 'Order status updated!' });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
