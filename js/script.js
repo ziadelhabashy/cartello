@@ -1680,42 +1680,13 @@ async function addNewProduct() {
   }
 }
 
-async function deleteAllUsers() {
-  const confirmText = prompt('Type DELETE ALL USERS to confirm:');
-
-  if (confirmText !== 'DELETE ALL USERS') {
-    showMessage("Delete all users cancelled.");
-    return;
-  }
-
+async function deleteUser(userId) {
+  if (!confirm("Are you sure you want to delete this user?")) return;
   try {
-    const response = await fetch(`${API}/api/admin/users`, {
+    await fetch(`${API}/api/admin/users/${userId}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...adminHeaders()
-      },
-      body: JSON.stringify({ confirmText })
+      headers: adminHeaders()
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      showMessage(data.message || "Could not delete users.");
-      return;
-    }
-
-    showMessage(`Deleted ${data.deletedCount} users.`);
-    
-    // Using await ensures these finish updating before the code moves on
-    await loadAdminUsers();
-    await loadAdminDashboard();
-    
-  } catch (error) {
-    console.error("Admin delete error:", error);
-    showMessage("Could not connect to server.");
-  }
-}
 async function updateOrderStatus(orderId, status) {
   try {
     await fetch(`${API}/api/admin/orders/${orderId}/status`, {
