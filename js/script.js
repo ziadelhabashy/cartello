@@ -786,18 +786,22 @@ function goToCheckout() {
   const cart = getCart();
 
   if (Object.keys(cart).length === 0) {
-    alert("Your cart is empty!");
+    showMessage("Your cart is empty!");
     return;
   }
 
   const currentUser = localStorage.getItem("currentUser");
 
-  if (!currentUser) {
-    alert("Please login first to continue your order.");
-    localStorage.setItem("redirectAfterLogin", "checkout.html");
-    window.location.href = "login.html";
+ if (!currentUser) {
+    showMessage("Please login first to continue your order.");
+
+    setTimeout(() => {
+        localStorage.setItem("redirectAfterLogin", "checkout.html");
+        window.location.href = "login.html";
+    }, 2000);
+
     return;
-  }
+}
 
   window.location.href = "checkout.html";
 }
@@ -1123,7 +1127,7 @@ async function joinNow() {
   if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(name)) {
   showMessage("Full name must contain letters only.", "error");
   resetButton();
-  return;
+return;
 }
 
   if (!isValidEmail(email)) {
