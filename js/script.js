@@ -1233,6 +1233,15 @@ return;
 
 async function updateProfile() {
   const newName = document.getElementById("edit-full-name").value.trim();
+  if (newName.length < 3) {
+    showMessage("Name must be at least 3 characters.");
+    return;
+}
+
+if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
+    showMessage("Name can contain letters only.");
+    return;
+}
   const newEmail = document.getElementById("edit-email").value.trim();
   const newPhone = document.getElementById("edit-phone") ? document.getElementById("edit-phone").value.trim() : "";
 
