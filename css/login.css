@@ -328,18 +328,3 @@
     border: 1px solid #f5c6cb;
 }
 
-.message-box{
-    position: fixed;
-    top: 20px;
-    right: -400px;
-    background: #111;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    transition: .4s;
-    z-index: 9999;
-}
-
-.message-box.show{
-    right: 20px;
-}
