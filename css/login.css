@@ -351,3 +351,12 @@
     border: 1px solid #f3bcbc;
 }
 
+
+/* Forgot Password - Step 2 fields hidden by default */
+.forgot-code-section {
+  display: none;
+}
+
+.forgot-code-section.visible {
+  display: block;
+}

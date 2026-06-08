@@ -1132,8 +1132,12 @@ async function validateLogin() {
 }
 
 async function validateForgotPassword() {
-  const forgotInput = document.getElementById("forgot-email");
+  const forgotInput   = document.getElementById("forgot-email");
   const forgotMessage = document.getElementById("forgot-message");
+  const codeSection   = document.getElementById("forgot-code-section");
+  const codeInput     = document.getElementById("forgot-code");
+  const newPassInput  = document.getElementById("forgot-new-password");
+  const sendBtn       = document.querySelector("#forgot-view .prime-btn");
 
   if (!forgotInput || !forgotMessage) return;
 
@@ -1144,24 +1148,56 @@ async function validateForgotPassword() {
     forgotMessage.className = `form-message ${type}`;
   }
 
-  if (!email) {
-    showForgotMessage("Please enter your email address.", "error");
+  // ── STEP 2: code + new password already visible → do the reset ──
+  if (codeSection && codeSection.classList.contains("visible")) {
+    const code        = codeInput.value.trim();
+    const newPassword = newPassInput.value.trim();
+
+    if (!code) { showForgotMessage("Please enter the reset code.", "error"); return; }
+    if (!newPassword) { showForgotMessage("Please enter a new password.", "error"); return; }
+    if (newPassword.length < 6) { showForgotMessage("Password must be at least 6 characters.", "error"); return; }
+
+    try {
+      const resetResponse = await fetch(`${API}/api/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code, newPassword })
+      });
+
+      const resetData = await resetResponse.json();
+
+      if (!resetResponse.ok) {
+        showForgotMessage(resetData.message || "Could not reset password.", "error");
+        return;
+      }
+
+      showForgotMessage(resetData.message || "Password reset successfully!", "success");
+
+      // Reset form back to step 1
+      forgotInput.value = "";
+      codeInput.value = "";
+      newPassInput.value = "";
+      codeSection.classList.remove("visible");
+      sendBtn.textContent = "Send Reset Code";
+
+      setTimeout(() => { showForm("login-form"); }, 1500);
+
+    } catch (error) {
+      showForgotMessage("Could not connect to server.", "error");
+    }
     return;
   }
 
-  if (!isValidEmail(email)) {
-    showForgotMessage("Please enter a valid email address.", "error");
-    return;
-  }
+  // ── STEP 1: send the reset code ──
+  if (!email) { showForgotMessage("Please enter your email address.", "error"); return; }
+  if (!isValidEmail(email)) { showForgotMessage("Please enter a valid email address.", "error"); return; }
 
   try {
     showForgotMessage("Sending reset code...", "success");
 
     const response = await fetch(`${API}/api/forgot-password`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email })
     });
 
@@ -1174,34 +1210,9 @@ async function validateForgotPassword() {
 
     showForgotMessage(data.message || "Reset code sent to your email.", "success");
 
-    const code = prompt("Enter the reset code sent to your email:");
-    if (!code) return;
-
-    const newPassword = prompt("Enter your new password:");
-    if (!newPassword) return;
-
-    const resetResponse = await fetch(`${API}/api/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, code, newPassword })
-    });
-
-    const resetData = await resetResponse.json();
-
-    if (!resetResponse.ok) {
-      showForgotMessage(resetData.message || "Could not reset password.", "error");
-      return;
-    }
-
-    showForgotMessage(resetData.message || "Password reset successfully.", "success");
-
-    forgotInput.value = "";
-
-    setTimeout(() => {
-      showForm("login-form");
-    }, 1500);
+    // Reveal step 2 fields and change button label
+    codeSection.classList.add("visible");
+    sendBtn.textContent = "Reset Password";
 
   } catch (error) {
     showForgotMessage("Could not connect to server.", "error");
