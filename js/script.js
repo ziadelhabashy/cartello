@@ -855,7 +855,7 @@ async function placeOrder(event) {
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    alert("Please login first.");
+    showMessage("Please login first.");
     localStorage.setItem("redirectAfterLogin", "checkout.html");
     window.location.href = "login.html";
     return;
@@ -869,13 +869,13 @@ async function placeOrder(event) {
   const paymentMethod = document.getElementById("payment-method").value;
   const cart = getCart();
 
-  if (Object.keys(cart).length === 0) { alert("Your cart is empty."); return; }
-  if (name.length < 3) { alert("Please enter a valid full name."); return; }
-  if (!isValidEmail(email)) { alert("Please enter a valid email address."); return; }
-  if (!isValidPhone(phone)) { alert("Please enter a valid phone number."); return; }
-  if (!governorate) { alert("Please select your governorate."); return; }
-  if (address.length < 8) { alert("Please enter a complete address."); return; }
-  if (!paymentMethod) { alert("Please select a payment method."); return; }
+  if (Object.keys(cart).length === 0) { showMessage("Your cart is empty."); return; }
+  if (name.length < 3) { showMessage("Please enter a valid full name."); return; }
+  if (!isValidEmail(email)) { showMessage("Please enter a valid email address."); return; }
+  if (!isValidPhone(phone)) { showMessage("Please enter a valid phone number."); return; }
+  if (!governorate) { showMessage("Please select your governorate."); return; }
+  if (address.length < 8) { showMessage("Please enter a complete address."); return; }
+  if (!paymentMethod) { showMessage("Please select a payment method."); return; }
 
   try {
     const response = await fetch(`${API}/api/orders`, {
@@ -889,8 +889,8 @@ async function placeOrder(event) {
       })
     });
     if (response.ok) { showOrderModal(); }
-    else { alert("Failed to place order. Please try again."); }
-  } catch (error) { alert("Could not connect to server."); }
+    else { showMessage("Failed to place order. Please try again."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 
@@ -1016,14 +1016,14 @@ async function cancelOrder(orderId) {
     const data = await response.json();
 
     if (response.ok) {
-      alert("Order cancelled successfully.");
+      showMessage("Order cancelled successfully.");
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       loadUserOrders(currentUser.id);
     } else {
-      alert(data.message || "Could not cancel order.");
+      showMessage(data.message || "Could not cancel order.");
     }
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1096,12 +1096,12 @@ async function validateForgotPassword() {
   const email = forgotInput.value.trim();
 
   if (!email) {
-    alert("Please enter your email address.");
+    showMessage("Please enter your email address.");
     return;
   }
 
   if (!isValidEmail(email)) {
-    alert("Please enter a valid email address.");
+    showMessage("Please enter a valid email address.");
     return;
   }
 
@@ -1113,7 +1113,7 @@ async function validateForgotPassword() {
     });
 
     const data = await response.json();
-    alert(data.message);
+    showMessage(data.message);
 
     if (response.ok) {
       const code = prompt("Enter the reset code sent to your email:");
@@ -1129,7 +1129,7 @@ async function validateForgotPassword() {
       });
 
       const resetData = await resetResponse.json();
-      alert(resetData.message);
+      showMessage(resetData.message);
 
       if (resetResponse.ok) {
         forgotInput.value = "";
@@ -1137,7 +1137,7 @@ async function validateForgotPassword() {
       }
     }
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 async function joinNow() {
