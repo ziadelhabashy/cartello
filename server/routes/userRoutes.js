@@ -8,6 +8,8 @@ router.post('/signup',          userController.signup);
 router.post('/login',           userController.login);
 router.post('/change-password', userController.changePassword);
 router.post('/update-profile',  userController.updateProfile);
+router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password', userController.resetPassword);
 
 // Addresses
 router.get ('/addresses/:userId', userController.getAddresses);
