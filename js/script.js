@@ -1253,10 +1253,10 @@ if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
   const newEmail = document.getElementById("edit-email").value.trim();
   const newPhone = document.getElementById("edit-phone") ? document.getElementById("edit-phone").value.trim() : "";
 
-  if (!newName || !newEmail) { alert("Please fill in both Name and Email."); return; }
+  if (!newName || !newEmail) { showMessage("Please fill in both Name and Email."); return; }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { alert("Not logged in."); return; }
+  if (!currentUser) { showMessage("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/update-profile`, {
@@ -1265,14 +1265,14 @@ if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
       body: JSON.stringify({ id: currentUser.id, name: newName, email: newEmail, phone: newPhone })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     document.getElementById("sidebar-name").textContent = newName;
     document.getElementById("sidebar-email").textContent = newEmail;
     document.getElementById("sidebar-avatar").textContent = newName.substring(0, 2).toUpperCase();
-    alert("Profile updated successfully!");
-  } catch (error) { alert("Could not connect to server."); }
+    showMessage("Profile updated successfully!");
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 async function changePasswordAction() {
@@ -1281,18 +1281,18 @@ async function changePasswordAction() {
   const newPass = inputs[1].value;
 
   if (!currentPass || !newPass) {
-    alert("Please fill in all fields.");
+    showMessage("Please fill in all fields.");
     return;
   }
 
   if (newPass.length < 6) {
-    alert("Password must be at least 6 characters.");
+    showMessage("Password must be at least 6 characters.");
     return;
   }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    alert("You are not logged in.");
+    showMessage("You are not logged in.");
     return;
   }
 
@@ -1308,14 +1308,14 @@ async function changePasswordAction() {
     });
 
     const data = await response.json();
-    alert(data.message);
+    showMessage(data.message);
 
     if (response.ok) {
       inputs.forEach(input => input.value = "");
     }
 
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
