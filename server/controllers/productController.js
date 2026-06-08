@@ -1,5 +1,5 @@
-const fs      = require('fs');
-const path    = require('path');
+const fs = require('fs');
+const path = require('path');
 const Product = require('../models/Product');
 
 // GET /api/products
@@ -8,7 +8,7 @@ exports.getAllProducts = async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -18,7 +18,7 @@ exports.adminGetAllProducts = async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -31,12 +31,22 @@ exports.adminAddProduct = async (req, res) => {
     if (!name || !price || stock === undefined || !category) {
       return res.status(400).json({ message: 'Name, price, stock, and category are required.' });
     }
+    // check that price is a real number first
+    if (isNaN(price) || price < 0) {
+      return res.status(400).json({ message: 'Price must be a positive number.' });
+    }
+    if (isNaN(stock) || stock < 0) {
+      return res.status(400).json({ message: 'Stock must be a positive number.' });
+    }
 
+    if (rating && (rating < 0 || rating > 5)) {
+      return res.status(400).json({ message: 'Rating must be between 0 and 5.' });
+    }
     const newProduct = new Product({ name, price, stock, category, image, rating, description });
     await newProduct.save();
     res.status(201).json({ message: 'Product added!', product: newProduct });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
@@ -55,7 +65,7 @@ exports.adminUpdateProduct = async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found.' });
     res.json({ message: 'Product updated!', product });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
 
