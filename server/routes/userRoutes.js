@@ -11,7 +11,7 @@ router.post('/update-profile',  userController.updateProfile);
 router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);
 
-// Addresses
+
 router.get ('/addresses/:userId', userController.getAddresses);
 router.post('/add-address',       userController.addAddress);
 router.post('/remove-address',    userController.removeAddress);
