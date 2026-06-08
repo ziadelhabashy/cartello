@@ -54,7 +54,7 @@ const translations = {
     filterShoes: "Shoes",
     filterMakeup: "Makeup",
     filterBabyCare: "Baby Care",
-    // Product cards (JS-rendered)
+    // Product cards 
     addToCart: "Add to Cart",
     outOfStock: "Out of Stock",
     // Checkout page
@@ -140,7 +140,7 @@ const translations = {
     filterShoes: "أحذية",
     filterMakeup: "مكياج",
     filterBabyCare: "عناية بالأطفال",
-    // Product cards (JS-rendered)
+
     
     addToCart: "أضف للسلة",
     outOfStock: "نفد المخزون",
