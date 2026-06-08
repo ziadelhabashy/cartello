@@ -283,7 +283,10 @@ exports.removeAddress = async (req, res) => {
       { $pull: { addresses: { _id: addressId } } },
       { new: true }
     );
-
+   
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
     
 
     res.json({ message: 'Address removed!', addresses: user.addresses });
