@@ -950,13 +950,11 @@ function cancelUI(btn) {
   btn.dataset.confirming = "true";
   const originalText = btn.textContent;
   btn.textContent = "Sure? Yes";
-  btn.style.background = "#c62828";
-  btn.style.color = "white";
-  btn.style.border = "1px solid #c62828";
+  btn.classList.add("order-cancel-btn--confirming");
 
   const noBtn = document.createElement("button");
   noBtn.textContent = "No";
-  noBtn.style.cssText = "margin-left:6px; background:none; border:1px solid #ccc; color:#555; padding:4px 12px; border-radius:4px; cursor:pointer;";
+  noBtn.className = "confirm-no-btn";
   btn.after(noBtn);
 
   btn.onclick = function() {
@@ -964,14 +962,14 @@ function cancelUI(btn) {
     const status = card.querySelector(".status-chip");
     card.style.opacity = "0.5";
     status.textContent = "Cancelled";
-    status.style = "background:#ffebee; color:#c62828;";
+    status.className = "status-chip status-cancelled";
     noBtn.remove();
     btn.remove();
   };
 
   noBtn.onclick = function() {
     btn.textContent = originalText;
-    btn.style.cssText = "margin-top:8px; background:none; border:1px solid red; color:red; padding:4px 12px; border-radius:4px; cursor:pointer;";
+    btn.classList.remove("order-cancel-btn--confirming");
     delete btn.dataset.confirming;
     btn.onclick = function() { cancelUI(btn); };
     noBtn.remove();
@@ -1007,7 +1005,7 @@ async function loadUserOrders(userId) {
     orders.forEach(order => {
       const date = new Date(order.createdAt).toLocaleDateString('en-EG');
       const cancelBtn = order.status === 'Pending'
-        ? `<button onclick="cancelOrder('${order._id}')" style="margin-top:8px; background:none; border:1px solid red; color:red; padding:4px 12px; border-radius:4px; cursor:pointer">Cancel Order</button>`
+        ? `<button onclick="cancelOrder('${order._id}')" class="order-cancel-btn">Cancel Order</button>`
         : "";
 
       html += `
@@ -1036,13 +1034,11 @@ function cancelOrder(orderId) {
   btn.dataset.confirming = "true";
   const originalText = btn.textContent;
   btn.textContent = "Sure? Yes";
-  btn.style.background = "#c62828";
-  btn.style.color = "white";
-  btn.style.border = "1px solid #c62828";
+  btn.classList.add("order-cancel-btn--confirming");
 
   const noBtn = document.createElement("button");
   noBtn.textContent = "No";
-  noBtn.style.cssText = "margin-left:6px; background:none; border:1px solid #ccc; color:#555; padding:4px 12px; border-radius:4px; cursor:pointer;";
+  noBtn.className = "confirm-no-btn";
   btn.after(noBtn);
 
   btn.onclick = async function() {
@@ -1066,7 +1062,7 @@ function cancelOrder(orderId) {
 
   noBtn.onclick = function() {
     btn.textContent = originalText;
-    btn.style.cssText = "margin-top:8px; background:none; border:1px solid red; color:red; padding:4px 12px; border-radius:4px; cursor:pointer;";
+    btn.classList.remove("order-cancel-btn--confirming");
     delete btn.dataset.confirming;
     btn.onclick = function() { cancelOrder(orderId); };
     noBtn.remove();

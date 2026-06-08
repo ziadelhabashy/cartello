@@ -182,3 +182,37 @@ img {
     gap: 10px !important;
   }
 }
+
+/* Order Cancel Button */
+.order-cancel-btn {
+  margin-top: 8px;
+  background: none;
+  border: 1px solid red;
+  color: red;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.order-cancel-btn--confirming {
+  background: #c62828;
+  color: white;
+  border-color: #c62828;
+}
+
+/* Inline Confirm "No" Button */
+.confirm-no-btn {
+  margin-left: 6px;
+  background: none;
+  border: 1px solid #ccc;
+  color: #555;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Cancelled Status */
+.status-cancelled {
+  background: #ffebee;
+  color: #c62828;
+}
