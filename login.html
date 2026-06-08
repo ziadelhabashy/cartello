@@ -35,87 +35,86 @@
     <section id="auth-area" class="auth-wrapper">
         <div class="glass-card">
             <div id="login-form" class="auth-box active">
-                <h2>Welcome to Cartello</h2>
-                <p class="subtitle">Log in to your account</p>
-                <div class="input-field">
-                <label>Email</label>
-                <input type="email" id="login-email" placeholder="Email Address">
-            </div>
-                <div class="input-field">
-                <label>Password</label>
-                <input type="password" id="login-pass" placeholder="••••••••">
-            </div>
-                <div class="form-options">
-                <a href="#" onclick="showForm('forgot-view')">Forgot password?</a>
-            </div><br>
-<button class="prime-btn" type="button" onclick="validateLogin()">Sign In</button>
-                
-<p class="footer-link">New? <a href="#" onclick="showForm('register-view')">Create account</a></p>
-<p class="footer-link" style="margin-top:10px; text-align:center;">
-    <a href="#" onclick="showForm('admin-login-view')" style="color:#888; font-size:13px;">Admin login</a>
-</p>
+    <h2 data-i18n="welcomeTitle">Welcome to Cartello</h2>
+    <p class="subtitle" data-i18n="loginSubtitle">Log in to your account</p>
+    <div class="input-field">
+        <label data-i18n="email">Email</label>
+        <input type="email" id="login-email" placeholder="Email Address" data-i18n-placeholder="emailPlaceholder">
+    </div>
+    <div class="input-field">
+        <label data-i18n="password">Password</label>
+        <input type="password" id="login-pass" placeholder="••••••••" data-i18n-placeholder="passwordPlaceholder">  
+    </div>
+    <div class="form-options">
+        <a href="#" onclick="showForm('forgot-view')" data-i18n="forgotPassword">Forgot password?</a>
+    </div><br>
+    <button class="prime-btn" type="button" onclick="validateLogin()" data-i18n="signIn">Sign In</button>
+    <p class="footer-link"><span data-i18n="newUser">New?</span> <a href="#" onclick="showForm('register-view')" data-i18n="createAccount">Create account</a></p>
+    <p class="footer-link" style="margin-top:10px; text-align:center;">
+        <a href="#" onclick="showForm('admin-login-view')" style="color:#888; font-size:13px;" data-i18n="adminLogin">Admin login</a>
+    </p>
 </div>
 
     <div id="register-view" class="auth-box">
-    <h2>Create Account</h2>
+    <h2 data-i18n="createAccount">Create Account</h2>
 
     <div class="input-field">
-        <label>Full Name</label>
-        <input type="text" id="reg-name" placeholder="Full Name">
+        <label data-i18n="fullName">Full Name</label>
+        <input type="text" id="reg-name" placeholder="Full Name" data-i18n-placeholder="fullNamePlaceholder">
     </div>
 
     <div class="input-field">
-        <label>Email Address</label>
-        <input type="email" id="reg-email" placeholder="Email Address">
+        <label data-i18n="email">Email Address</label>
+        <input type="email" id="reg-email" placeholder="Email Address" data-i18n-placeholder="emailPlaceholder">
     </div>
 
     <div class="input-field">
-        <label>Phone Number</label>
-        <input type="text" id="reg-phone" placeholder="+20 1xx xxx xxxx">
+        <label data-i18n="phone">Phone Number</label>
+        <input type="text" id="reg-phone" placeholder="+20 1xx xxx xxxx" data-i18n-placeholder="phonePlaceholder">
     </div>
 
     <div class="input-field">
-        <label>Password</label>
-        <input type="password" id="reg-pass" placeholder="••••••••">
+        <label data-i18n="password">Password</label>
+        <input type="password" id="reg-pass" placeholder="••••••••" data-i18n-placeholder="passwordPlaceholder">
     </div>
 
     <div class="input-field">
-        <label>Confirm Password</label>
-        <input type="password" id="reg-confirm" placeholder="••••••••">
+        <label data-i18n="confirmPassword">Confirm Password</label>
+        <input type="password" id="reg-confirm" placeholder="••••••••" data-i18n-placeholder="confirmPasswordPlaceholder">
     </div>
 
     <div id="signup-message" class="signup-message"></div>
 
-    <button id="signup-btn" type="button" class="prime-btn" onclick="joinNow()">
+    <button id="signup-btn" type="button" class="prime-btn" onclick="joinNow()" data-i18n="createAccount">
         Create Account
     </button>
 
     <p class="footer-link">
-        Already have an account?
-        <a href="#" onclick="showForm('login-form')">Sign In</a>
+        <span data-i18n="alreadyHaveAccount">Already have an account?</span>
+        <a href="#" onclick="showForm('login-form')" data-i18n="signIn">Sign In</a>
     </p>
 </div>
 
 <div id="admin-login-view" class="auth-box">
-    <h2>Admin Login</h2>
-    <p class="subtitle">Restricted access — staff only</p>
+    <h2 data-i18n="adminLoginTitle">Admin Login</h2>
+    <p class="subtitle" data-i18n="adminLoginSubtitle">Restricted access — staff only</p>
 
     <div class="input-field">
-        <label>Admin Email</label>
-        <input type="email" id="admin-email" placeholder="Email Address">
+        <label data-i18n="email">Admin Email</label>
+        <input type="email" id="admin-email" placeholder="Email Address" data-i18n-placeholder="emailPlaceholder">
     </div>
 
     <div class="input-field">
-        <label>Password</label>
-        <input type="password" id="admin-pass" placeholder="••••••••">
+        <label data-i18n="password">Password</label>
+        <input type="password" id="admin-pass" placeholder="••••••••" data-i18n-placeholder="passwordPlaceholder">
     </div>
 
-    <button class="prime-btn" onclick="adminLogin()">
+    <button class="prime-btn" onclick="adminLogin()" data-i18n="accessDashboard">
         Access Dashboard
     </button>
 
     <p class="footer-link" style="margin-top:12px;">
-        <a href="#" onclick="showForm('login-form')">← Back to Login</a>
+        <a href="#" onclick="showForm('login-form')" data-i18n="backToLogin">← Back to Login</a>
     </p>
 </div>
 
