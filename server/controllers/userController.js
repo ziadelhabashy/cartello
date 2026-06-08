@@ -31,6 +31,7 @@ exports.signup = async (req, res) => {
       phone,
       password: hashedPassword
     });
+    
     await newUser.save();
     res.status(201).json({
       message: 'Account created successfully!',
