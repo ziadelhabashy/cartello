@@ -911,6 +911,9 @@ function getShippingPrice() {
 function showMessage(message){
     const box = document.getElementById("messageBox");
 
+    if (!box) return;
+
+
     box.textContent = message;
     box.classList.add("show");
 
