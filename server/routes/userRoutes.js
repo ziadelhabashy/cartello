@@ -1,6 +1,7 @@
 const express        = require('express');
 const router         = express.Router();
 const userController = require('../controllers/userController');
+const isAdmin = require('../middleware/isAdmin');
 
 // Auth
 router.post('/signup',          userController.signup);
@@ -16,8 +17,8 @@ router.post('/remove-address',    userController.removeAddress);
 
 // Admin
 router.post('/admin/login', userController.adminLogin);
-router.get('/admin/users', userController.adminGetAllUsers);
-router.delete('/admin/users/:id', userController.adminDeleteUser);
+router.get('/admin/users',isAdmin, userController.adminGetAllUsers);
+router.delete('/admin/users/:id',isAdmin, userController.adminDeleteUser);
 
 router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);

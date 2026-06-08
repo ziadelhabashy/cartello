@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const jwt    = require('jsonwebtoken');
+const User   = require('../models/User');
 
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -89,7 +90,13 @@ exports.adminLogin = async (req, res) => {
     email === process.env.ADMIN_EMAIL &&
     password === process.env.ADMIN_PASSWORD
   ) {
-    res.json({ message: 'Admin login successful!', isAdmin: true });
+    const token = jwt.sign(
+      { isAdmin: true, email },
+      process.env.JWT_SECRET,
+      { expiresIn: '8h' }
+    );
+
+    res.json({ message: 'Admin login successful!', isAdmin: true, token });
   } else {
     res.status(401).json({ message: 'Invalid admin credentials.' });
   }

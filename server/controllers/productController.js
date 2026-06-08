@@ -1,3 +1,5 @@
+const fs      = require('fs');
+const path    = require('path');
 const Product = require('../models/Product');
 
 // GET /api/products
@@ -62,8 +64,17 @@ exports.adminDeleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found.' });
+
+    // Delete the image file from disk
+    if (product.image) {
+      const filePath = path.join(__dirname, '..', product.image);
+      fs.unlink(filePath, err => {
+        if (err) console.error('Image delete failed:', err);
+      });
+    }
+
     res.json({ message: 'Product deleted!' });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
