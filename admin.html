@@ -87,7 +87,7 @@
         <option value="Baby Care">Baby Care</option>
       </select>
       <input id="new-product-image" class="search-input" type="file" accept="image/*">
-      <input id="new-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
+      <input id="new-product-rating" class="search-input" type="number" step="0.1" min="0" max="5" placeholder="Rating (0-5)">
     </div>
     <textarea id="new-product-description" class="search-input admin-form-textarea" placeholder="Description"></textarea>
     <button onclick="addNewProduct()" class="search-button admin-form-submit">+ Add Product</button>
@@ -115,7 +115,7 @@
         <option value="Baby Care">Baby Care</option>
       </select>
       <input id="edit-product-image" class="search-input" type="file" accept="image/*">
-      <input id="edit-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
+      <input id="edit-product-rating" class="search-input" type="number" step="0.1" min="0" max="5" placeholder="Rating (0-5)">
     </div>
     <textarea id="edit-product-description" class="search-input admin-form-textarea" placeholder="Description"></textarea>
     <button onclick="saveEditProduct()" class="search-button admin-form-submit">💾 Save Changes</button>

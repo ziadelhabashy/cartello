@@ -1572,15 +1572,36 @@ async function loadAdminUsers() {
   }
 }
 
-async function deleteProduct(productId) {
-  if (!confirm("Are you sure you want to delete this product?")) return;
+function deleteProduct(productId) {
+  // Find the delete button that was clicked and replace it with inline confirmation
+  const deleteBtn = event.target;
+  const td = deleteBtn.closest('td');
+  const editBtn = td.querySelector('.admin-action-btn--edit');
+  if (editBtn) editBtn.style.display = 'none';
+  deleteBtn.style.display = 'none';
+
+  const confirmBar = document.createElement('span');
+  confirmBar.className = 'admin-delete-confirm';
+  confirmBar.innerHTML = `Sure? <button class="admin-delete-yes" onclick="confirmDeleteProduct('${productId}')">Yes</button> <button class="admin-delete-no" onclick="cancelDeleteProduct(this)">No</button>`;
+  td.appendChild(confirmBar);
+}
+
+async function confirmDeleteProduct(productId) {
   try {
     await fetch(`${API}/api/admin/products/${productId}`, {
       method: 'DELETE',
       headers: adminHeaders()
     });
+    showMessage("Product deleted!");
     loadAdminProducts();
   } catch (error) { showMessage("Could not delete product."); }
+}
+
+function cancelDeleteProduct(btn) {
+  const td = btn.closest('td');
+  td.querySelector('.admin-delete-confirm').remove();
+  td.querySelector('.admin-action-btn--edit').style.display = '';
+  td.querySelector('.admin-action-btn--delete').style.display = '';
 }
 async function addNewProduct() {
   const name        = document.getElementById("new-product-name").value.trim();
