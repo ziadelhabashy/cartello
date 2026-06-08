@@ -200,7 +200,23 @@
                 <h3>Addresses</h3>
                 <div id="address-list">
                 </div>
-                <button class="add-address-card" onclick="addNewAddressPrompt()">+ New</button>
+                <button class="add-address-card" onclick="toggleAddressForm()">+ New</button>
+
+                <div id="add-address-form" class="add-address-form">
+                    <div class="input-field">
+                        <label>Title (e.g. Home, Work)</label>
+                        <input type="text" id="address-title" placeholder="Home">
+                    </div>
+                    <div class="input-field">
+                        <label>Details</label>
+                        <input type="text" id="address-detail" placeholder="Street, City, Area">
+                    </div>
+                    <div id="address-message" class="form-message"></div>
+                    <div class="add-address-actions">
+                        <button class="save-btn" onclick="saveNewAddress()">Save Address</button>
+                        <button class="cancel-address-btn" onclick="toggleAddressForm()">Cancel</button>
+                    </div>
+                </div>
             </div>
                 <div id="tab-security" class="tab-pane">
                 <h3>Security Settings</h3>

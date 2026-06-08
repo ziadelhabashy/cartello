@@ -1397,10 +1397,32 @@ async function changePasswordAction() {
   }
 }
 
-async function addNewAddressPrompt() {
-  const title = prompt("Address Title (e.g. Home, Work):");
-  const detail = prompt("Address Details (Street, City, Area):");
-  if (!title || !detail) return;
+function toggleAddressForm() {
+  const form = document.getElementById("add-address-form");
+  const msgEl = document.getElementById("address-message");
+  if (!form) return;
+  form.classList.toggle("visible");
+  // clear fields and message when closing
+  if (!form.classList.contains("visible")) {
+    document.getElementById("address-title").value = "";
+    document.getElementById("address-detail").value = "";
+    if (msgEl) { msgEl.textContent = ""; msgEl.className = "form-message"; }
+  }
+}
+
+async function saveNewAddress() {
+  const title  = document.getElementById("address-title").value.trim();
+  const detail = document.getElementById("address-detail").value.trim();
+  const msgEl  = document.getElementById("address-message");
+
+  function showAddressMsg(text, type) {
+    if (!msgEl) return;
+    msgEl.textContent = text;
+    msgEl.className = `form-message ${type}`;
+  }
+
+  if (!title)  { showAddressMsg("Please enter an address title.", "error"); return; }
+  if (!detail) { showAddressMsg("Please enter the address details.", "error"); return; }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) { showMessage("Not logged in."); return; }
@@ -1412,7 +1434,8 @@ async function addNewAddressPrompt() {
       body: JSON.stringify({ userId: currentUser.id, title, detail })
     });
     const data = await response.json();
-    if (!response.ok) { showMessage(data.message); return; }
+    if (!response.ok) { showAddressMsg(data.message || "Could not save address.", "error"); return; }
+    toggleAddressForm();
     loadUserAddresses(currentUser.id);
   } catch (error) { showMessage("Could not connect to server."); }
 }
