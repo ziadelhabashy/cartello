@@ -110,7 +110,11 @@
 }
 
 #auth-area a {
+  color:#000;
   text-decoration: none !important;
+}
+#auth-area a:hover{
+  color:#333;
 }
 
 /* Dashboard Layout */
