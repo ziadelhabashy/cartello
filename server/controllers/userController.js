@@ -5,7 +5,7 @@ const User   = require('../models/User');
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// POST /api/signup
+
 exports.signup = async (req, res) => {
   try {
     const { name, email, phone, password } = req.body;
@@ -48,7 +48,7 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// POST /api/login
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -82,7 +82,6 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// POST /api/admin/login
 exports.adminLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -102,7 +101,6 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
-// POST /api/change-password
 exports.changePassword = async (req, res) => {
   try {
     const { email, currentPassword, newPassword } = req.body;
@@ -202,7 +200,7 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-// POST /api/update-profile
+
 exports.updateProfile = async (req, res) => {
   try {
     const { id, name, email, phone } = req.body;
@@ -240,7 +238,7 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// GET /api/admin/users
+
 exports.adminGetAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');
@@ -250,7 +248,7 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// POST /api/add-address
+
 exports.addAddress = async (req, res) => {
   try {
     const { userId, title, detail } = req.body;
@@ -275,7 +273,6 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// POST /api/remove-address
 exports.removeAddress = async (req, res) => {
   try {
     const { userId, addressId } = req.body;
@@ -300,7 +297,6 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// GET /api/addresses/:userId
 exports.getAddresses = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -315,7 +311,6 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-// DELETE /api/admin/users/:id
 exports.adminDeleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
