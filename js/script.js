@@ -662,6 +662,7 @@ const product = products.find(p => p._id.toString() === productId.toString());
       return; 
     }
   }
+
  
 
 cartData[productId.toString()] += delta;  
@@ -860,7 +861,7 @@ async function placeOrder(event) {
     window.location.href = "login.html";
     return;
   }
-
+  //collect data
   const name = document.getElementById("customer-name").value.trim();
   const email = document.getElementById("customer-email").value.trim();
   const phone = document.getElementById("customer-phone").value.trim();
