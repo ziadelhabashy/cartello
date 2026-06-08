@@ -50,6 +50,10 @@ const translations = {
     filterAccessories: "Accessories",
     filterGrocery: "Grocery",
     filterSkinCare: "Skin Care",
+    filterClothing: "Clothing",
+    filterShoes: "Shoes",
+    filterMakeup: "Makeup",
+    filterBabyCare: "Baby Care",
     // Product cards (JS-rendered)
     addToCart: "Add to Cart",
     outOfStock: "Out of Stock",
@@ -132,6 +136,10 @@ const translations = {
     filterAccessories: "إكسسوارات",
     filterGrocery: "بقالة",
     filterSkinCare: "العناية بالبشرة",
+    filterClothing: "ملابس",
+    filterShoes: "أحذية",
+    filterMakeup: "مكياج",
+    filterBabyCare: "عناية بالأطفال",
     // Product cards (JS-rendered)
     
     addToCart: "أضف للسلة",
@@ -1488,6 +1496,10 @@ async function loadAdminProducts() {
   <option value="Accessories">Accessories</option>
   <option value="Grocery">Grocery</option>
   <option value="Skin Care">Skin Care</option>
+  <option value="Clothing">Clothing</option>
+  <option value="Shoes">Shoes</option>
+  <option value="Makeup">Makeup</option>
+  <option value="Baby Care">Baby Care</option>
 </select>         <input id="new-product-image" class="search-input" type="file" accept="image/*">
           <input id="new-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
         </div>
