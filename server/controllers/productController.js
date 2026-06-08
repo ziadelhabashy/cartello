@@ -52,7 +52,7 @@ exports.adminAddProduct = async (req, res) => {
   }
 };
 
-
+// PUT /api/admin/products/:id
 exports.adminUpdateProduct = async (req, res) => {
   try {
     const { name, price, stock, category, rating, description } = req.body;
