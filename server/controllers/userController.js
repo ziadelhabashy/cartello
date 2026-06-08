@@ -256,13 +256,7 @@ exports.addAddress = async (req, res) => {
     if (!userId || !title || !detail) {
       return res.status(400).json({ message: 'userId, title, and detail are required.' });
     }
-    if (title.length > 30) {
-  return res.status(400).json({ message: 'Address title must be 30 characters or less.' });
-}
-
-if (detail.length < 8) {
-  return res.status(400).json({ message: 'Address detail must be at least 8 characters.' });
-}
+ 
 
     const user = await User.findByIdAndUpdate(
       userId,
