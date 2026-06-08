@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. GLOBAL VARIABLES & MOCK DATABASE
+// 1. GLOBAL VARIABLES 
 // ==========================================================================
 const API = 'https://cartello.me';
 let cartData = JSON.parse(localStorage.getItem("cart")) || {};
@@ -71,6 +71,10 @@ const translations = {
     orderSummary: "Order Summary",
     orderSuccess: "Order Placed Successfully",
     orderSuccessText: "Your order has been confirmed and will be processed soon.",
+    
+     emptyCart: "Your cart is empty",
+    emptyCartText: "Add items to get started",
+    goShopping: "Go Shopping",
     // Login page
     welcomeTitle: "Welcome to Cartello",
     loginSubtitle: "Log in to your account",
@@ -79,6 +83,19 @@ const translations = {
     newUser: "New?",
     createAccount: "Create account",
     adminLogin: "Admin login",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Your full name",
+    phonePlaceholder: "+20 1xx xxx xxxx",
+    confirmPassword: "Confirm Password",
+    confirmPasswordPlaceholder: "Confirm your password",
+    alreadyHaveAccount: "Already have an account?",
+    //admin
+    
+    adminLoginTitle: "Admin Login",
+    adminLoginSubtitle: "Restricted access — staff only",
+    accessDashboard: "Access Dashboard",
+    backToLogin: "← Back to Login",
+    passwordPlaceholder: "••••••••",
     langButton: "عربي"
   },
   ar: {
@@ -116,6 +133,7 @@ const translations = {
     filterGrocery: "بقالة",
     filterSkinCare: "العناية بالبشرة",
     // Product cards (JS-rendered)
+    
     addToCart: "أضف للسلة",
     outOfStock: "نفد المخزون",
     // Checkout page
@@ -144,6 +162,22 @@ const translations = {
     newUser: "جديد؟",
     createAccount: "إنشاء حساب",
     adminLogin: "دخول المسؤول",
+    fullName: "الاسم الكامل",
+    fullNamePlaceholder: "اسمك الكامل",
+    phone: "رقم الهاتف",
+    phonePlaceholder: "+20 1xx xxx xxxx",
+    confirmPassword: "تأكيد كلمة المرور",
+    confirmPasswordPlaceholder: "أعد إدخال كلمة المرور",
+    alreadyHaveAccount: "لديك حساب بالفعل؟",
+    emptyCart: "سلتك فارغة",
+    emptyCartText: "أضف منتجات للبدء",
+    goShopping: "تسوق الآن",
+    //admin 
+    adminLoginTitle: "دخول المسؤول",
+    adminLoginSubtitle: "وصول مقيد — للموظفين فقط",
+    accessDashboard: "دخول لوحة التحكم",
+    backToLogin: "→ العودة لتسجيل الدخول",
+    passwordPlaceholder: "••••••••",
     langButton: "English"
   }
 };
@@ -172,6 +206,8 @@ function applyLanguage() {
   document.querySelectorAll(".lang-toggle").forEach(btn => {
     btn.textContent = dict.langButton;
   });
+
+  updateNavForUser(); // ← ADD THIS LINE
 }
 
 function toggleLanguage() {
@@ -260,7 +296,7 @@ function updateNavForUser() {
   navLinks.forEach(link => {
     if (link.getAttribute('href') === 'login.html') {
       link.style.visibility = "visible";
-      link.textContent = currentUser ? "Profile" : "Login";
+      link.textContent = currentUser ? t('profile') : t('login');
     }
   });
 }
@@ -514,9 +550,9 @@ function renderCart() {
   if (Object.keys(cart).length === 0) {
     cartContainer.innerHTML = `
       <div class="empty-cart">
-        <h2>Your cart is empty</h2>
-        <p>Add items to get started</p>
-        <button id="go-shopping" onclick="goToShop()">Go Shopping</button>
+        <h2>${t('emptyCart')}</h2>
+        <p>${t('emptyCartText')}</p>
+        <button id="go-shopping" onclick="goToShop()">${t('goShopping')}</button>
         <img class="empcart" src="https://thumbs.dreamstime.com/b/realistic-empty-supermarket-shopping-cart-vector-illustration-isolated-white-background-realistic-empty-supermarket-shopping-118192710.jpg" alt="empty cart">
       </div>
     `;
@@ -528,7 +564,7 @@ function renderCart() {
 
   for (let id in cart) {
     const item = products.find(p => p._id.toString() === id);
-  const qty = cart[id];
+    const qty = cart[id];
     if (!item) continue;
 
     const itemTotal = item.price * qty;
@@ -538,14 +574,14 @@ function renderCart() {
         <img src="${item.image}" class="cart-img" alt="${item.name}">
         <div class="cart-info">
           <h3>${item.name}</h3>
-          <p>Price: EGP ${item.price.toFixed(2)}</p>
+          <p>${t('price')}: EGP ${item.price.toFixed(2)}</p>
           <div class="cart-controls">
             <button onclick="changeCartQty('${id}', -1)">-</button>
             <span>${qty}</span>
             <button onclick="changeCartQty('${id}', 1)">+</button>
           </div>
-          <p>Total: EGP ${itemTotal.toFixed(2)}</p>
-          <button class="remove-btn" onclick="removeItem('${id}')">Remove</button>
+          <p>${t('total')}: EGP ${itemTotal.toFixed(2)}</p>
+          <button class="remove-btn" onclick="removeItem('${id}')">${t('remove')}</button>
         </div>
       </div>
     `;
@@ -553,13 +589,13 @@ function renderCart() {
 
   cartContainer.innerHTML += `
     <div class="cart-summary">
-      <h2>Total: EGP ${total.toFixed(2)}</h2>
+      <h2>${t('total')}: EGP ${total.toFixed(2)}</h2>
       <button class="checkout-btn" onclick="goToCheckout()">
-        Continue to Checkout →
+        ${t('continueToCheckout')} →
       </button> 
     </div>
   `;
-}
+} 
 
 function syncProductCardState(productId) {
   const container = document.getElementById("qty-container-" + productId);
