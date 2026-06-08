@@ -1660,13 +1660,38 @@ async function addNewProduct() {
   }
 }
 
-async function deleteUser(userId) {
-  if (!confirm("Are you sure you want to delete this user?")) return;
+async function deleteAllUsers() {
+  const confirmText = prompt('Type DELETE ALL USERS to confirm:');
+
+  if (confirmText !== 'DELETE ALL USERS') {
+    showMessage("Delete all users cancelled.");
+    return;
+  }
+
   try {
-    await fetch(`${API}/api/admin/users/${userId}`, {
+    const response = await fetch(`${API}/api/admin/users`, {
       method: 'DELETE',
-      headers: adminHeaders()
+      headers: {
+        'Content-Type': 'application/json',
+        ...adminHeaders()
+      },
+      body: JSON.stringify({ confirmText })
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showMessage(data.message || "Could not delete users.");
+      return;
+    }
+
+    showMessage(`Deleted ${data.deletedCount} users.`);
+    loadAdminUsers();
+    loadAdminDashboard();
+  } catch (error) {
+    showMessage("Could not connect to server.");
+  }
+}
     loadAdminUsers();
   } catch (error) {
     showMessage("Could not delete user.");
