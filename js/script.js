@@ -946,14 +946,36 @@ function updateShipping() {
 }
 
 function cancelUI(btn) {
-  if (confirm("Cancel this order?")) {
+  if (btn.dataset.confirming) return;
+  btn.dataset.confirming = "true";
+  const originalText = btn.textContent;
+  btn.textContent = "Sure? Yes";
+  btn.style.background = "#c62828";
+  btn.style.color = "white";
+  btn.style.border = "1px solid #c62828";
+
+  const noBtn = document.createElement("button");
+  noBtn.textContent = "No";
+  noBtn.style.cssText = "margin-left:6px; background:none; border:1px solid #ccc; color:#555; padding:4px 12px; border-radius:4px; cursor:pointer;";
+  btn.after(noBtn);
+
+  btn.onclick = function() {
     const card = btn.closest(".order-card");
     const status = card.querySelector(".status-chip");
     card.style.opacity = "0.5";
     status.textContent = "Cancelled";
     status.style = "background:#ffebee; color:#c62828;";
+    noBtn.remove();
     btn.remove();
-  }
+  };
+
+  noBtn.onclick = function() {
+    btn.textContent = originalText;
+    btn.style.cssText = "margin-top:8px; background:none; border:1px solid red; color:red; padding:4px 12px; border-radius:4px; cursor:pointer;";
+    delete btn.dataset.confirming;
+    btn.onclick = function() { cancelUI(btn); };
+    noBtn.remove();
+  };
 }
 
 function showOrderModal() {
@@ -1008,27 +1030,47 @@ async function loadUserOrders(userId) {
     ordersTab.innerHTML = "<h3>Orders</h3><p>Could not load orders.</p>";
   }
 }
-async function cancelOrder(orderId) {
-  if (!confirm("Are you sure you want to cancel this order?")) return;
+function cancelOrder(orderId) {
+  const btn = event.target;
+  if (btn.dataset.confirming) return;
+  btn.dataset.confirming = "true";
+  const originalText = btn.textContent;
+  btn.textContent = "Sure? Yes";
+  btn.style.background = "#c62828";
+  btn.style.color = "white";
+  btn.style.border = "1px solid #c62828";
 
-  try {
-    const response = await fetch(`${API}/api/orders/${orderId}/cancel`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
-    });
+  const noBtn = document.createElement("button");
+  noBtn.textContent = "No";
+  noBtn.style.cssText = "margin-left:6px; background:none; border:1px solid #ccc; color:#555; padding:4px 12px; border-radius:4px; cursor:pointer;";
+  btn.after(noBtn);
 
-    const data = await response.json();
-
-    if (response.ok) {
-      showMessage("Order cancelled successfully.");
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      loadUserOrders(currentUser.id);
-    } else {
-      showMessage(data.message || "Could not cancel order.");
+  btn.onclick = async function() {
+    try {
+      const response = await fetch(`${API}/api/orders/${orderId}/cancel`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        showMessage("Order cancelled successfully.");
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        loadUserOrders(currentUser.id);
+      } else {
+        showMessage(data.message || "Could not cancel order.");
+      }
+    } catch (error) {
+      showMessage("Could not connect to server.");
     }
-  } catch (error) {
-    showMessage("Could not connect to server.");
-  }
+  };
+
+  noBtn.onclick = function() {
+    btn.textContent = originalText;
+    btn.style.cssText = "margin-top:8px; background:none; border:1px solid red; color:red; padding:4px 12px; border-radius:4px; cursor:pointer;";
+    delete btn.dataset.confirming;
+    btn.onclick = function() { cancelOrder(orderId); };
+    noBtn.remove();
+  };
 }
 
 // ==========================================================================
@@ -1660,17 +1702,34 @@ async function addNewProduct() {
   }
 }
 
-async function deleteUser(userId) {
-  if (!confirm("Are you sure you want to delete this user?")) return;
+function deleteUser(userId) {
+  const deleteBtn = event.target;
+  const td = deleteBtn.closest('td');
+  deleteBtn.style.display = 'none';
+
+  const confirmBar = document.createElement('span');
+  confirmBar.className = 'admin-delete-confirm';
+  confirmBar.innerHTML = `Sure? <button class="admin-delete-yes" onclick="confirmDeleteUser('${userId}')">Yes</button> <button class="admin-delete-no" onclick="cancelDeleteUser(this)">No</button>`;
+  td.appendChild(confirmBar);
+}
+
+async function confirmDeleteUser(userId) {
   try {
     await fetch(`${API}/api/admin/users/${userId}`, {
       method: 'DELETE',
       headers: adminHeaders()
     });
+    showMessage("User deleted!");
     loadAdminUsers();
   } catch (error) {
     showMessage("Could not delete user.");
   }
+}
+
+function cancelDeleteUser(btn) {
+  const td = btn.closest('td');
+  td.querySelector('.admin-delete-confirm').remove();
+  td.querySelector('button[style]').style.display = '';
 }
 async function updateOrderStatus(orderId, status) {
   try {
