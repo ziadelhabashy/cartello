@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Product = require('../models/Product');
 
-
+//Get all product
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
