@@ -12,7 +12,7 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
-// GET /api/admin/products
+
 exports.adminGetAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
