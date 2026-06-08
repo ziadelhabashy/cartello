@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
-
 const orderSchema = new mongoose.Schema({
-  userId: { type: String, default: null },
+  userId: {
+     type: String,
+     default: null
+     },
   customer: {
     name:        String,
     email:       String,
@@ -21,8 +23,13 @@ const orderSchema = new mongoose.Schema({
   shipping:      Number,
   total:         Number,
   paymentMethod: String,
-  status:    { type: String, default: 'Pending' },
-  createdAt: { type: Date, default: Date.now }
+  status:    { 
+    type: String,
+    default: 'Pending' 
+  },
+  createdAt: {  
+    type: Date,
+    default: Date.now 
+  }
 });
-
 module.exports = mongoose.model('Order', orderSchema);

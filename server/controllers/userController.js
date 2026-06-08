@@ -31,9 +31,7 @@ exports.signup = async (req, res) => {
       phone,
       password: hashedPassword
     });
-
     await newUser.save();
-
     res.status(201).json({
       message: 'Account created successfully!',
       user: {
@@ -47,7 +45,6 @@ exports.signup = async (req, res) => {
 res.status(500).json({ message: 'Server Error' });
   }
 };
-
 
 exports.login = async (req, res) => {
   try {
@@ -237,7 +234,6 @@ exports.updateProfile = async (req, res) => {
 res.status(500).json({ message: 'Server Error' });
   }
 };
-
 
 exports.adminGetAllUsers = async (req, res) => {
   try {
