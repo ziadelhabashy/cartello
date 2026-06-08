@@ -284,9 +284,7 @@ exports.removeAddress = async (req, res) => {
       { new: true }
     );
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
+    
 
     res.json({ message: 'Address removed!', addresses: user.addresses });
   } catch (error) {
