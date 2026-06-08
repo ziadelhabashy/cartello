@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. GLOBAL VARIABLES & MOCK DATABASE
+// 1. GLOBAL VARIABLES 
 // ==========================================================================
 const API = 'https://cartello.me';
 let cartData = JSON.parse(localStorage.getItem("cart")) || {};
@@ -50,6 +50,10 @@ const translations = {
     filterAccessories: "Accessories",
     filterGrocery: "Grocery",
     filterSkinCare: "Skin Care",
+    filterClothing: "Clothing",
+    filterShoes: "Shoes",
+    filterMakeup: "Makeup",
+    filterBabyCare: "Baby Care",
     // Product cards (JS-rendered)
     addToCart: "Add to Cart",
     outOfStock: "Out of Stock",
@@ -71,6 +75,10 @@ const translations = {
     orderSummary: "Order Summary",
     orderSuccess: "Order Placed Successfully",
     orderSuccessText: "Your order has been confirmed and will be processed soon.",
+    
+     emptyCart: "Your cart is empty",
+    emptyCartText: "Add items to get started",
+    goShopping: "Go Shopping",
     // Login page
     welcomeTitle: "Welcome to Cartello",
     loginSubtitle: "Log in to your account",
@@ -79,6 +87,19 @@ const translations = {
     newUser: "New?",
     createAccount: "Create account",
     adminLogin: "Admin login",
+    fullName: "Full Name",
+    fullNamePlaceholder: "Your full name",
+    phonePlaceholder: "+20 1xx xxx xxxx",
+    confirmPassword: "Confirm Password",
+    confirmPasswordPlaceholder: "Confirm your password",
+    alreadyHaveAccount: "Already have an account?",
+    //admin
+    
+    adminLoginTitle: "Admin Login",
+    adminLoginSubtitle: "Restricted access — staff only",
+    accessDashboard: "Access Dashboard",
+    backToLogin: "← Back to Login",
+    passwordPlaceholder: "••••••••",
     langButton: "عربي"
   },
   ar: {
@@ -115,7 +136,12 @@ const translations = {
     filterAccessories: "إكسسوارات",
     filterGrocery: "بقالة",
     filterSkinCare: "العناية بالبشرة",
+    filterClothing: "ملابس",
+    filterShoes: "أحذية",
+    filterMakeup: "مكياج",
+    filterBabyCare: "عناية بالأطفال",
     // Product cards (JS-rendered)
+    
     addToCart: "أضف للسلة",
     outOfStock: "نفد المخزون",
     // Checkout page
@@ -144,6 +170,22 @@ const translations = {
     newUser: "جديد؟",
     createAccount: "إنشاء حساب",
     adminLogin: "دخول المسؤول",
+    fullName: "الاسم الكامل",
+    fullNamePlaceholder: "اسمك الكامل",
+    phone: "رقم الهاتف",
+    phonePlaceholder: "+20 1xx xxx xxxx",
+    confirmPassword: "تأكيد كلمة المرور",
+    confirmPasswordPlaceholder: "أعد إدخال كلمة المرور",
+    alreadyHaveAccount: "لديك حساب بالفعل؟",
+    emptyCart: "سلتك فارغة",
+    emptyCartText: "أضف منتجات للبدء",
+    goShopping: "تسوق الآن",
+    //admin 
+    adminLoginTitle: "دخول المسؤول",
+    adminLoginSubtitle: "وصول مقيد — للموظفين فقط",
+    accessDashboard: "دخول لوحة التحكم",
+    backToLogin: "→ العودة لتسجيل الدخول",
+    passwordPlaceholder: "••••••••",
     langButton: "English"
   }
 };
@@ -172,6 +214,8 @@ function applyLanguage() {
   document.querySelectorAll(".lang-toggle").forEach(btn => {
     btn.textContent = dict.langButton;
   });
+
+  updateNavForUser(); // ← ADD THIS LINE
 }
 
 function toggleLanguage() {
@@ -260,7 +304,7 @@ function updateNavForUser() {
   navLinks.forEach(link => {
     if (link.getAttribute('href') === 'login.html') {
       link.style.visibility = "visible";
-      link.textContent = currentUser ? "Profile" : "Login";
+      link.textContent = currentUser ? t('profile') : t('login');
     }
   });
 }
@@ -514,9 +558,9 @@ function renderCart() {
   if (Object.keys(cart).length === 0) {
     cartContainer.innerHTML = `
       <div class="empty-cart">
-        <h2>Your cart is empty</h2>
-        <p>Add items to get started</p>
-        <button id="go-shopping" onclick="goToShop()">Go Shopping</button>
+        <h2>${t('emptyCart')}</h2>
+        <p>${t('emptyCartText')}</p>
+        <button id="go-shopping" onclick="goToShop()">${t('goShopping')}</button>
         <img class="empcart" src="https://thumbs.dreamstime.com/b/realistic-empty-supermarket-shopping-cart-vector-illustration-isolated-white-background-realistic-empty-supermarket-shopping-118192710.jpg" alt="empty cart">
       </div>
     `;
@@ -528,7 +572,7 @@ function renderCart() {
 
   for (let id in cart) {
     const item = products.find(p => p._id.toString() === id);
-  const qty = cart[id];
+    const qty = cart[id];
     if (!item) continue;
 
     const itemTotal = item.price * qty;
@@ -538,14 +582,14 @@ function renderCart() {
         <img src="${item.image}" class="cart-img" alt="${item.name}">
         <div class="cart-info">
           <h3>${item.name}</h3>
-          <p>Price: EGP ${item.price.toFixed(2)}</p>
+          <p>${t('price')}: EGP ${item.price.toFixed(2)}</p>
           <div class="cart-controls">
             <button onclick="changeCartQty('${id}', -1)">-</button>
             <span>${qty}</span>
             <button onclick="changeCartQty('${id}', 1)">+</button>
           </div>
-          <p>Total: EGP ${itemTotal.toFixed(2)}</p>
-          <button class="remove-btn" onclick="removeItem('${id}')">Remove</button>
+          <p>${t('total')}: EGP ${itemTotal.toFixed(2)}</p>
+          <button class="remove-btn" onclick="removeItem('${id}')">${t('remove')}</button>
         </div>
       </div>
     `;
@@ -553,13 +597,13 @@ function renderCart() {
 
   cartContainer.innerHTML += `
     <div class="cart-summary">
-      <h2>Total: EGP ${total.toFixed(2)}</h2>
+      <h2>${t('total')}: EGP ${total.toFixed(2)}</h2>
       <button class="checkout-btn" onclick="goToCheckout()">
-        Continue to Checkout →
+        ${t('continueToCheckout')} →
       </button> 
     </div>
   `;
-}
+} 
 
 function syncProductCardState(productId) {
   const container = document.getElementById("qty-container-" + productId);
@@ -786,18 +830,22 @@ function goToCheckout() {
   const cart = getCart();
 
   if (Object.keys(cart).length === 0) {
-    alert("Your cart is empty!");
+    showMessage("Your cart is empty!");
     return;
   }
 
   const currentUser = localStorage.getItem("currentUser");
 
-  if (!currentUser) {
-    alert("Please login first to continue your order.");
-    localStorage.setItem("redirectAfterLogin", "checkout.html");
-    window.location.href = "login.html";
+ if (!currentUser) {
+    showMessage("Please login first to continue your order.");
+
+    setTimeout(() => {
+        localStorage.setItem("redirectAfterLogin", "checkout.html");
+        window.location.href = "login.html";
+    }, 2000);
+
     return;
-  }
+}
 
   window.location.href = "checkout.html";
 }
@@ -807,7 +855,7 @@ async function placeOrder(event) {
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    alert("Please login first.");
+    showMessage("Please login first.");
     localStorage.setItem("redirectAfterLogin", "checkout.html");
     window.location.href = "login.html";
     return;
@@ -821,13 +869,13 @@ async function placeOrder(event) {
   const paymentMethod = document.getElementById("payment-method").value;
   const cart = getCart();
 
-  if (Object.keys(cart).length === 0) { alert("Your cart is empty."); return; }
-  if (name.length < 3) { alert("Please enter a valid full name."); return; }
-  if (!isValidEmail(email)) { alert("Please enter a valid email address."); return; }
-  if (!isValidPhone(phone)) { alert("Please enter a valid phone number."); return; }
-  if (!governorate) { alert("Please select your governorate."); return; }
-  if (address.length < 8) { alert("Please enter a complete address."); return; }
-  if (!paymentMethod) { alert("Please select a payment method."); return; }
+  if (Object.keys(cart).length === 0) { showMessage("Your cart is empty."); return; }
+  if (name.length < 3) { showMessage("Please enter a valid full name."); return; }
+  if (!isValidEmail(email)) { showMessage("Please enter a valid email address."); return; }
+  if (!isValidPhone(phone)) { showMessage("Please enter a valid phone number."); return; }
+  if (!governorate) { showMessage("Please select your governorate."); return; }
+  if (address.length < 8) { showMessage("Please enter a complete address."); return; }
+  if (!paymentMethod) { showMessage("Please select a payment method."); return; }
 
   try {
     const response = await fetch(`${API}/api/orders`, {
@@ -841,8 +889,8 @@ async function placeOrder(event) {
       })
     });
     if (response.ok) { showOrderModal(); }
-    else { alert("Failed to place order. Please try again."); }
-  } catch (error) { alert("Could not connect to server."); }
+    else { showMessage("Failed to place order. Please try again."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 
@@ -862,6 +910,9 @@ function getShippingPrice() {
 
 function showMessage(message){
     const box = document.getElementById("messageBox");
+
+    if (!box) return;
+
 
     box.textContent = message;
     box.classList.add("show");
@@ -968,14 +1019,14 @@ async function cancelOrder(orderId) {
     const data = await response.json();
 
     if (response.ok) {
-      alert("Order cancelled successfully.");
+      showMessage("Order cancelled successfully.");
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       loadUserOrders(currentUser.id);
     } else {
-      alert(data.message || "Could not cancel order.");
+      showMessage(data.message || "Could not cancel order.");
     }
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1023,7 +1074,7 @@ async function validateLogin() {
   const email = document.getElementById("login-email").value.trim();
   const password = document.getElementById("login-pass").value.trim();
 
-  if (!email || !password) { alert("Please enter both email and password."); return; }
+  if (!email || !password) { showMessage("Please enter both email and password."); return; }
 
   try {
     const response = await fetch(`${API}/api/login`, {
@@ -1032,13 +1083,13 @@ async function validateLogin() {
       body: JSON.stringify({ email, password })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     const redirectPage = localStorage.getItem("redirectAfterLogin");
     if (redirectPage) { localStorage.removeItem("redirectAfterLogin"); window.location.href = redirectPage; return; }
     mockLogin();
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 async function validateForgotPassword() {
@@ -1120,6 +1171,11 @@ async function joinNow() {
     resetButton();
     return;
   }
+  if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(name)) {
+  showMessage("Full name must contain letters only.", "error");
+  resetButton();
+return;
+}
 
   if (!isValidEmail(email)) {
     showMessage("Please enter a valid email address.", "error");
@@ -1191,12 +1247,12 @@ async function updateProfile() {
   if (newName.length < 3) {
     showMessage("Name must be at least 3 characters.");
     return;
-  }
+}
 
-  if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
+if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
     showMessage("Name can contain letters only.");
     return;
-  }
+}
   const newEmail = document.getElementById("edit-email").value.trim();
   const newPhone = document.getElementById("edit-phone") ? document.getElementById("edit-phone").value.trim() : "";
 
@@ -1526,7 +1582,6 @@ async function deleteProduct(productId) {
     loadAdminProducts();
   } catch (error) { showMessage("Could not delete product."); }
 }
-
 async function addNewProduct() {
   const name        = document.getElementById("new-product-name").value.trim();
   const price       = parseFloat(document.getElementById("new-product-price").value);
@@ -1606,20 +1661,17 @@ async function updateOrderStatus(orderId, status) {
 }
 
 async function editProduct(productId) {
-  // Fetch the current product data to pre-fill the form
   try {
     const res = await fetch(`${API}/api/admin/products`, { headers: adminHeaders() });
     const products = await res.json();
     const product = products.find(p => p._id === productId);
     if (!product) { showMessage('Product not found.'); return; }
 
-    // Show the edit section and hide the add section
     const editSection = document.getElementById('admin-edit-product-section');
     const addSection = document.getElementById('admin-add-product-section');
     if (addSection) addSection.style.display = 'none';
     if (editSection) editSection.style.display = 'block';
 
-    // Pre-fill the form
     document.getElementById('edit-product-id').value = productId;
     document.getElementById('edit-product-name').value = product.name || '';
     document.getElementById('edit-product-price').value = product.price || '';
@@ -1628,7 +1680,6 @@ async function editProduct(productId) {
     document.getElementById('edit-product-rating').value = product.rating || '';
     document.getElementById('edit-product-description').value = product.description || '';
 
-    // Scroll to the edit form
     editSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (error) {
     showMessage('Could not load product data.');
