@@ -224,7 +224,6 @@ function toggleLanguage() {
   applyLanguage();
 }
 
-// Helper: get translated string for use inside JS-rendered HTML
 function t(key) {
   const dict = translations[getLanguage()];
   return (dict && dict[key]) ? dict[key] : key;
