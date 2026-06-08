@@ -344,5 +344,10 @@
     color: #146c2e;
     border: 1px solid #bfe8cc;
 }
-
+.form-message.error {
+    display: block;
+    background: #fdeaea;
+    color: #9f1c1c;
+    border: 1px solid #f3bcbc;
+}
 
