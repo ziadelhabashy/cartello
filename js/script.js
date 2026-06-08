@@ -1120,6 +1120,11 @@ async function joinNow() {
     resetButton();
     return;
   }
+  if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(name)) {
+  showMessage("Full name must contain letters only.", "error");
+  resetButton();
+  return;
+}
 
   if (!isValidEmail(email)) {
     showMessage("Please enter a valid email address.", "error");
