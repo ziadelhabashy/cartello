@@ -148,26 +148,6 @@
   color: red;
 }
 
-/* Hide spinner arrows on price and stock inputs */
-#new-product-price,
-#new-product-stock,
-#edit-product-price,
-#edit-product-stock {
-  -moz-appearance: textfield;
-}
-
-#new-product-price::-webkit-outer-spin-button,
-#new-product-price::-webkit-inner-spin-button,
-#new-product-stock::-webkit-outer-spin-button,
-#new-product-stock::-webkit-inner-spin-button,
-#edit-product-price::-webkit-outer-spin-button,
-#edit-product-price::-webkit-inner-spin-button,
-#edit-product-stock::-webkit-outer-spin-button,
-#edit-product-stock::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 /* Delete Confirmation Bar */
 .admin-delete-confirm {
   display: inline-flex;
