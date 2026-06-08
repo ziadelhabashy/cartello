@@ -16,7 +16,7 @@ Cartello is a full-stack e-commerce web application that provides a modern onlin
 - MongoDB Atlas integration (cloud database)
 - Admin dashboard for product and order management
 - Persistent cart using localStorage
-- Deployed (Render + GitHub Pages)
+- Deployed (Render + namecheap)
 
 ---
 
@@ -138,35 +138,22 @@ Use Live Server or open index.html in browser
 ## 🔐 Admin Access
 
 Go to `login.html` → click **Admin login**
-- Email: `admin@cartello.com`
-- Password: `admin123`
-
 ---
 
 ## 👥 Team
 
 | Name | Role |
 |------|------|
-| Ziad | Team Lead — setup, DB schemas, API routes |
-| Youssef Ahmed | Auth system, password management |
-| Youssef Wael | Orders, stock management |
-| Rahaf | Frontend — address system, checkout, user dashboard |
-| Malak | Frontend — admin panel, cart, product management |
+| Ziad | Team Lead —
+| Youssef Ahmed |
+| Youssef Wael |
+| Rahaf | 
+| Malak | 
 
 ---
-
-## 👥 Team Contribution
-
-| Name | Responsibility |
-|------|----------------|
-| Ziad | Team Lead — architecture, database, API design |
-| Youssef Ahmed | Authentication system & password management |
-| Youssef Wael | Orders system & stock management |
-| Rahaf | Checkout system & user dashboard |
-| Malak | Admin panel & product management |
 
 ---
 
 ## 🌐 Live Demo
 
-- **Live Demo:** https://cartello-jx78.onrender.com
+- **Live Demo:** https://cartello.me
