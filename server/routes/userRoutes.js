@@ -7,7 +7,7 @@ const isAdmin = require('../middleware/isAdmin');
 router.post('/signup',          userController.signup);
 router.post('/login',           userController.login);
 router.post('/change-password', userController.changePassword);
-router.get('/profile/:id', userController.getProfile);
+router.post('/update-profile',  userController.updateProfile);
 
 // Addresses
 router.get ('/addresses/:userId', userController.getAddresses);
