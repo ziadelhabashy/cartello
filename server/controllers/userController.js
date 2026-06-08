@@ -256,7 +256,6 @@ exports.addAddress = async (req, res) => {
     if (!userId || !title || !detail) {
       return res.status(400).json({ message: 'userId, title, and detail are required.' });
     }
- 
 
     const user = await User.findByIdAndUpdate(
       userId,

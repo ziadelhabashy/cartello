@@ -1381,28 +1381,8 @@ async function removeAddress(addressId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: currentUser.id, addressId })
     });
-
-  try {
-    const response = await fetch(`${API}/api/remove-address`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: currentUser.id, addressId })
-    });
-    
-    const data = await response.json();
-    
-    if (!response.ok) {
-      showMessage(data.message || "Could not remove address.");
-      return;
-    }
-    
-    showMessage("Address removed.");
-    await loadUserAddresses(currentUser.id); // Added 'await' here to ensure it resolves properly
-    
-  } catch (error) {
-    console.error("Fetch error:", error); // Helpful for debugging
-    showMessage("Could not connect to server.");
-  }
+    loadUserAddresses(currentUser.id);
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 // ==========================================================================
@@ -1687,6 +1667,11 @@ async function deleteUser(userId) {
       method: 'DELETE',
       headers: adminHeaders()
     });
+    loadAdminUsers();
+  } catch (error) {
+    showMessage("Could not delete user.");
+  }
+}
 async function updateOrderStatus(orderId, status) {
   try {
     await fetch(`${API}/api/admin/orders/${orderId}/status`, {
