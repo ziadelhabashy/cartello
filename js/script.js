@@ -1063,7 +1063,7 @@ async function validateLogin() {
   const email = document.getElementById("login-email").value.trim();
   const password = document.getElementById("login-pass").value.trim();
 
-  if (!email || !password) { alert("Please enter both email and password."); return; }
+  if (!email || !password) { showMessage("Please enter both email and password."); return; }
 
   try {
     const response = await fetch(`${API}/api/login`, {
@@ -1072,13 +1072,13 @@ async function validateLogin() {
       body: JSON.stringify({ email, password })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     const redirectPage = localStorage.getItem("redirectAfterLogin");
     if (redirectPage) { localStorage.removeItem("redirectAfterLogin"); window.location.href = redirectPage; return; }
     mockLogin();
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 async function validateForgotPassword() {
