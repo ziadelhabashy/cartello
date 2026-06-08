@@ -39,9 +39,11 @@ exports.adminAddProduct = async (req, res) => {
       return res.status(400).json({ message: 'Stock must be a positive number.' });
     }
 
+    // check rating is between 0 and 5
     if (rating && (rating < 0 || rating > 5)) {
       return res.status(400).json({ message: 'Rating must be between 0 and 5.' });
     }
+
     const newProduct = new Product({ name, price, stock, category, image, rating, description });
     await newProduct.save();
     res.status(201).json({ message: 'Product added!', product: newProduct });
@@ -55,6 +57,22 @@ exports.adminUpdateProduct = async (req, res) => {
   try {
     const { name, price, stock, category, rating, description } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+
+    if (!name || !price || stock === undefined || !category) {
+      return res.status(400).json({ message: 'Name, price, stock, and category are required.' });
+    }
+
+    if (isNaN(price) || price < 0) {
+      return res.status(400).json({ message: 'Price must be a positive number.' });
+    }
+
+    if (isNaN(stock) || stock < 0) {
+      return res.status(400).json({ message: 'Stock must be a positive number.' });
+    }
+
+    if (rating && (rating < 0 || rating > 5)) {
+      return res.status(400).json({ message: 'Rating must be between 0 and 5.' });
+    }
 
     const product = await Product.findByIdAndUpdate(
       req.params.id,

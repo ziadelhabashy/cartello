@@ -1,5 +1,5 @@
 // ==========================================================================
-// 1. GLOBAL VARIABLES 
+// 1. GLOBAL VARIABLES & MOCK DATABASE
 // ==========================================================================
 const API = 'https://cartello.me';
 let cartData = JSON.parse(localStorage.getItem("cart")) || {};
@@ -50,10 +50,6 @@ const translations = {
     filterAccessories: "Accessories",
     filterGrocery: "Grocery",
     filterSkinCare: "Skin Care",
-    filterClothing: "Clothing",
-    filterShoes: "Shoes",
-    filterMakeup: "Makeup",
-    filterBabyCare: "Baby Care",
     // Product cards (JS-rendered)
     addToCart: "Add to Cart",
     outOfStock: "Out of Stock",
@@ -75,10 +71,6 @@ const translations = {
     orderSummary: "Order Summary",
     orderSuccess: "Order Placed Successfully",
     orderSuccessText: "Your order has been confirmed and will be processed soon.",
-    
-     emptyCart: "Your cart is empty",
-    emptyCartText: "Add items to get started",
-    goShopping: "Go Shopping",
     // Login page
     welcomeTitle: "Welcome to Cartello",
     loginSubtitle: "Log in to your account",
@@ -87,19 +79,6 @@ const translations = {
     newUser: "New?",
     createAccount: "Create account",
     adminLogin: "Admin login",
-    fullName: "Full Name",
-    fullNamePlaceholder: "Your full name",
-    phonePlaceholder: "+20 1xx xxx xxxx",
-    confirmPassword: "Confirm Password",
-    confirmPasswordPlaceholder: "Confirm your password",
-    alreadyHaveAccount: "Already have an account?",
-    //admin
-    
-    adminLoginTitle: "Admin Login",
-    adminLoginSubtitle: "Restricted access — staff only",
-    accessDashboard: "Access Dashboard",
-    backToLogin: "← Back to Login",
-    passwordPlaceholder: "••••••••",
     langButton: "عربي"
   },
   ar: {
@@ -136,12 +115,7 @@ const translations = {
     filterAccessories: "إكسسوارات",
     filterGrocery: "بقالة",
     filterSkinCare: "العناية بالبشرة",
-    filterClothing: "ملابس",
-    filterShoes: "أحذية",
-    filterMakeup: "مكياج",
-    filterBabyCare: "عناية بالأطفال",
     // Product cards (JS-rendered)
-    
     addToCart: "أضف للسلة",
     outOfStock: "نفد المخزون",
     // Checkout page
@@ -170,22 +144,6 @@ const translations = {
     newUser: "جديد؟",
     createAccount: "إنشاء حساب",
     adminLogin: "دخول المسؤول",
-    fullName: "الاسم الكامل",
-    fullNamePlaceholder: "اسمك الكامل",
-    phone: "رقم الهاتف",
-    phonePlaceholder: "+20 1xx xxx xxxx",
-    confirmPassword: "تأكيد كلمة المرور",
-    confirmPasswordPlaceholder: "أعد إدخال كلمة المرور",
-    alreadyHaveAccount: "لديك حساب بالفعل؟",
-    emptyCart: "سلتك فارغة",
-    emptyCartText: "أضف منتجات للبدء",
-    goShopping: "تسوق الآن",
-    //admin 
-    adminLoginTitle: "دخول المسؤول",
-    adminLoginSubtitle: "وصول مقيد — للموظفين فقط",
-    accessDashboard: "دخول لوحة التحكم",
-    backToLogin: "→ العودة لتسجيل الدخول",
-    passwordPlaceholder: "••••••••",
     langButton: "English"
   }
 };
@@ -214,8 +172,6 @@ function applyLanguage() {
   document.querySelectorAll(".lang-toggle").forEach(btn => {
     btn.textContent = dict.langButton;
   });
-
-  updateNavForUser(); // ← ADD THIS LINE
 }
 
 function toggleLanguage() {
@@ -304,7 +260,7 @@ function updateNavForUser() {
   navLinks.forEach(link => {
     if (link.getAttribute('href') === 'login.html') {
       link.style.visibility = "visible";
-      link.textContent = currentUser ? t('profile') : t('login');
+      link.textContent = currentUser ? "Profile" : "Login";
     }
   });
 }
@@ -558,9 +514,9 @@ function renderCart() {
   if (Object.keys(cart).length === 0) {
     cartContainer.innerHTML = `
       <div class="empty-cart">
-        <h2>${t('emptyCart')}</h2>
-        <p>${t('emptyCartText')}</p>
-        <button id="go-shopping" onclick="goToShop()">${t('goShopping')}</button>
+        <h2>Your cart is empty</h2>
+        <p>Add items to get started</p>
+        <button id="go-shopping" onclick="goToShop()">Go Shopping</button>
         <img class="empcart" src="https://thumbs.dreamstime.com/b/realistic-empty-supermarket-shopping-cart-vector-illustration-isolated-white-background-realistic-empty-supermarket-shopping-118192710.jpg" alt="empty cart">
       </div>
     `;
@@ -572,7 +528,7 @@ function renderCart() {
 
   for (let id in cart) {
     const item = products.find(p => p._id.toString() === id);
-    const qty = cart[id];
+  const qty = cart[id];
     if (!item) continue;
 
     const itemTotal = item.price * qty;
@@ -582,14 +538,14 @@ function renderCart() {
         <img src="${item.image}" class="cart-img" alt="${item.name}">
         <div class="cart-info">
           <h3>${item.name}</h3>
-          <p>${t('price')}: EGP ${item.price.toFixed(2)}</p>
+          <p>Price: EGP ${item.price.toFixed(2)}</p>
           <div class="cart-controls">
             <button onclick="changeCartQty('${id}', -1)">-</button>
             <span>${qty}</span>
             <button onclick="changeCartQty('${id}', 1)">+</button>
           </div>
-          <p>${t('total')}: EGP ${itemTotal.toFixed(2)}</p>
-          <button class="remove-btn" onclick="removeItem('${id}')">${t('remove')}</button>
+          <p>Total: EGP ${itemTotal.toFixed(2)}</p>
+          <button class="remove-btn" onclick="removeItem('${id}')">Remove</button>
         </div>
       </div>
     `;
@@ -597,13 +553,13 @@ function renderCart() {
 
   cartContainer.innerHTML += `
     <div class="cart-summary">
-      <h2>${t('total')}: EGP ${total.toFixed(2)}</h2>
+      <h2>Total: EGP ${total.toFixed(2)}</h2>
       <button class="checkout-btn" onclick="goToCheckout()">
-        ${t('continueToCheckout')} →
+        Continue to Checkout →
       </button> 
     </div>
   `;
-} 
+}
 
 function syncProductCardState(productId) {
   const container = document.getElementById("qty-container-" + productId);
@@ -830,22 +786,18 @@ function goToCheckout() {
   const cart = getCart();
 
   if (Object.keys(cart).length === 0) {
-    showMessage("Your cart is empty!");
+    alert("Your cart is empty!");
     return;
   }
 
   const currentUser = localStorage.getItem("currentUser");
 
- if (!currentUser) {
-    showMessage("Please login first to continue your order.");
-
-    setTimeout(() => {
-        localStorage.setItem("redirectAfterLogin", "checkout.html");
-        window.location.href = "login.html";
-    }, 2000);
-
+  if (!currentUser) {
+    alert("Please login first to continue your order.");
+    localStorage.setItem("redirectAfterLogin", "checkout.html");
+    window.location.href = "login.html";
     return;
-}
+  }
 
   window.location.href = "checkout.html";
 }
@@ -855,7 +807,7 @@ async function placeOrder(event) {
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    showMessage("Please login first.");
+    alert("Please login first.");
     localStorage.setItem("redirectAfterLogin", "checkout.html");
     window.location.href = "login.html";
     return;
@@ -869,13 +821,13 @@ async function placeOrder(event) {
   const paymentMethod = document.getElementById("payment-method").value;
   const cart = getCart();
 
-  if (Object.keys(cart).length === 0) { showMessage("Your cart is empty."); return; }
-  if (name.length < 3) { showMessage("Please enter a valid full name."); return; }
-  if (!isValidEmail(email)) { showMessage("Please enter a valid email address."); return; }
-  if (!isValidPhone(phone)) { showMessage("Please enter a valid phone number."); return; }
-  if (!governorate) { showMessage("Please select your governorate."); return; }
-  if (address.length < 8) { showMessage("Please enter a complete address."); return; }
-  if (!paymentMethod) { showMessage("Please select a payment method."); return; }
+  if (Object.keys(cart).length === 0) { alert("Your cart is empty."); return; }
+  if (name.length < 3) { alert("Please enter a valid full name."); return; }
+  if (!isValidEmail(email)) { alert("Please enter a valid email address."); return; }
+  if (!isValidPhone(phone)) { alert("Please enter a valid phone number."); return; }
+  if (!governorate) { alert("Please select your governorate."); return; }
+  if (address.length < 8) { alert("Please enter a complete address."); return; }
+  if (!paymentMethod) { alert("Please select a payment method."); return; }
 
   try {
     const response = await fetch(`${API}/api/orders`, {
@@ -889,8 +841,8 @@ async function placeOrder(event) {
       })
     });
     if (response.ok) { showOrderModal(); }
-    else { showMessage("Failed to place order. Please try again."); }
-  } catch (error) { showMessage("Could not connect to server."); }
+    else { alert("Failed to place order. Please try again."); }
+  } catch (error) { alert("Could not connect to server."); }
 }
 
 
@@ -910,9 +862,6 @@ function getShippingPrice() {
 
 function showMessage(message){
     const box = document.getElementById("messageBox");
-
-    if (!box) return;
-
 
     box.textContent = message;
     box.classList.add("show");
@@ -1019,14 +968,14 @@ async function cancelOrder(orderId) {
     const data = await response.json();
 
     if (response.ok) {
-      showMessage("Order cancelled successfully.");
+      alert("Order cancelled successfully.");
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       loadUserOrders(currentUser.id);
     } else {
-      showMessage(data.message || "Could not cancel order.");
+      alert(data.message || "Could not cancel order.");
     }
   } catch (error) {
-    showMessage("Could not connect to server.");
+    alert("Could not connect to server.");
   }
 }
 
@@ -1074,7 +1023,7 @@ async function validateLogin() {
   const email = document.getElementById("login-email").value.trim();
   const password = document.getElementById("login-pass").value.trim();
 
-  if (!email || !password) { showMessage("Please enter both email and password."); return; }
+  if (!email || !password) { alert("Please enter both email and password."); return; }
 
   try {
     const response = await fetch(`${API}/api/login`, {
@@ -1083,13 +1032,13 @@ async function validateLogin() {
       body: JSON.stringify({ email, password })
     });
     const data = await response.json();
-    if (!response.ok) { showMessage(data.message); return; }
+    if (!response.ok) { alert(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     const redirectPage = localStorage.getItem("redirectAfterLogin");
     if (redirectPage) { localStorage.removeItem("redirectAfterLogin"); window.location.href = redirectPage; return; }
     mockLogin();
-  } catch (error) { showMessage("Could not connect to server."); }
+  } catch (error) { alert("Could not connect to server."); }
 }
 
 async function validateForgotPassword() {
@@ -1099,12 +1048,12 @@ async function validateForgotPassword() {
   const email = forgotInput.value.trim();
 
   if (!email) {
-    showMessage("Please enter your email address.");
+    alert("Please enter your email address.");
     return;
   }
 
   if (!isValidEmail(email)) {
-    showMessage("Please enter a valid email address.");
+    alert("Please enter a valid email address.");
     return;
   }
 
@@ -1116,7 +1065,7 @@ async function validateForgotPassword() {
     });
 
     const data = await response.json();
-    showMessage(data.message);
+    alert(data.message);
 
     if (response.ok) {
       const code = prompt("Enter the reset code sent to your email:");
@@ -1132,7 +1081,7 @@ async function validateForgotPassword() {
       });
 
       const resetData = await resetResponse.json();
-      showMessage(resetData.message);
+      alert(resetData.message);
 
       if (resetResponse.ok) {
         forgotInput.value = "";
@@ -1140,7 +1089,7 @@ async function validateForgotPassword() {
       }
     }
   } catch (error) {
-    showMessage("Could not connect to server.");
+    alert("Could not connect to server.");
   }
 }
 async function joinNow() {
@@ -1171,11 +1120,6 @@ async function joinNow() {
     resetButton();
     return;
   }
-  if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(name)) {
-  showMessage("Full name must contain letters only.", "error");
-  resetButton();
-return;
-}
 
   if (!isValidEmail(email)) {
     showMessage("Please enter a valid email address.", "error");
@@ -1244,22 +1188,13 @@ return;
 
 async function updateProfile() {
   const newName = document.getElementById("edit-full-name").value.trim();
-  if (newName.length < 3) {
-    showMessage("Name must be at least 3 characters.");
-    return;
-}
-
-if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
-    showMessage("Name can contain letters only.");
-    return;
-}
   const newEmail = document.getElementById("edit-email").value.trim();
   const newPhone = document.getElementById("edit-phone") ? document.getElementById("edit-phone").value.trim() : "";
 
-  if (!newName || !newEmail) { showMessage("Please fill in both Name and Email."); return; }
+  if (!newName || !newEmail) { alert("Please fill in both Name and Email."); return; }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { showMessage("Not logged in."); return; }
+  if (!currentUser) { alert("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/update-profile`, {
@@ -1268,14 +1203,14 @@ if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
       body: JSON.stringify({ id: currentUser.id, name: newName, email: newEmail, phone: newPhone })
     });
     const data = await response.json();
-    if (!response.ok) { showMessage(data.message); return; }
+    if (!response.ok) { alert(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     document.getElementById("sidebar-name").textContent = newName;
     document.getElementById("sidebar-email").textContent = newEmail;
     document.getElementById("sidebar-avatar").textContent = newName.substring(0, 2).toUpperCase();
-    showMessage("Profile updated successfully!");
-  } catch (error) { showMessage("Could not connect to server."); }
+    alert("Profile updated successfully!");
+  } catch (error) { alert("Could not connect to server."); }
 }
 
 async function changePasswordAction() {
@@ -1284,18 +1219,18 @@ async function changePasswordAction() {
   const newPass = inputs[1].value;
 
   if (!currentPass || !newPass) {
-    showMessage("Please fill in all fields.");
+    alert("Please fill in all fields.");
     return;
   }
 
   if (newPass.length < 6) {
-    showMessage("Password must be at least 6 characters.");
+    alert("Password must be at least 6 characters.");
     return;
   }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    showMessage("You are not logged in.");
+    alert("You are not logged in.");
     return;
   }
 
@@ -1311,14 +1246,14 @@ async function changePasswordAction() {
     });
 
     const data = await response.json();
-    showMessage(data.message);
+    alert(data.message);
 
     if (response.ok) {
       inputs.forEach(input => input.value = "");
     }
 
   } catch (error) {
-    showMessage("Could not connect to server.");
+    alert("Could not connect to server.");
   }
 }
 
@@ -1328,7 +1263,7 @@ async function addNewAddressPrompt() {
   if (!title || !detail) return;
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { showMessage("Not logged in."); return; }
+  if (!currentUser) { alert("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/add-address`, {
@@ -1337,9 +1272,9 @@ async function addNewAddressPrompt() {
       body: JSON.stringify({ userId: currentUser.id, title, detail })
     });
     const data = await response.json();
-    if (!response.ok) { showMessage(data.message); return; }
+    if (!response.ok) { alert(data.message); return; }
     loadUserAddresses(currentUser.id);
-  } catch (error) { showMessage("Could not connect to server."); }
+  } catch (error) { alert("Could not connect to server."); }
 }
 async function loadUserAddresses(userId) {
   const addressList = document.getElementById("address-list");
@@ -1381,7 +1316,7 @@ async function removeAddress(addressId) {
       body: JSON.stringify({ userId: currentUser.id, addressId })
     });
     loadUserAddresses(currentUser.id);
-  } catch (error) { showMessage("Could not connect to server."); }
+  } catch (error) { alert("Could not connect to server."); }
 }
 
 // ==========================================================================
@@ -1399,13 +1334,13 @@ async function adminLogin() {
       body: JSON.stringify({ email, password: pass })
     });
     const data = await res.json();
-    if (!res.ok) { showMessage(data.message); return; }
+    if (!res.ok) { alert(data.message); return; }
 
     localStorage.setItem("adminSession", "true");
     localStorage.setItem("adminToken", data.token);
     window.location.href = "admin.html";
   } catch (error) {
-    showMessage("Could not connect to server.");
+    alert("Could not connect to server.");
   }
 }
 
@@ -1487,43 +1422,18 @@ async function loadAdminProducts() {
         <td>${p.stock}</td>
         <td>${p.category}</td>
         <td>
-          <button onclick="editProduct('${p._id}')" style="color:#1a73e8; background:none; border:none; cursor:pointer; margin-right:8px">✏️ Edit</button>
-          <button onclick="deleteProduct('${p._id}')" style="color:red; background:none; border:none; cursor:pointer">🗑 Delete</button>
+          <button onclick="editProduct('${p._id}')" class="admin-action-btn admin-action-btn--edit">✏️ Edit</button>
+          <button onclick="deleteProduct('${p._id}')" class="admin-action-btn admin-action-btn--delete">🗑 Delete</button>
         </td>
       </tr>
     `).join("");
 
-    contentArea.innerHTML = `
-      <h1>📦 Product Management</h1>
+    const template = document.getElementById("products-tab-template");
+    const clone = template.content.cloneNode(true);
+    clone.getElementById("products-table-body").innerHTML = rows;
 
-      <div style="background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:20px; margin-top:20px; margin-bottom:24px;">
-        <h3 style="margin-bottom:16px;">Add New Product</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <input id="new-product-name" class="search-input" placeholder="Product Name">
-          <input id="new-product-price" class="search-input" type="number" placeholder="Price (EGP)">
-          <input id="new-product-stock" class="search-input" type="number" placeholder="Stock">
-  <select id="new-product-category" class="search-input">
-  <option value="">Select Category</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Accessories">Accessories</option>
-  <option value="Grocery">Grocery</option>
-  <option value="Skin Care">Skin Care</option>
-  <option value="Clothing">Clothing</option>
-  <option value="Shoes">Shoes</option>
-  <option value="Makeup">Makeup</option>
-  <option value="Baby Care">Baby Care</option>
-</select>         <input id="new-product-image" class="search-input" type="file" accept="image/*">
-          <input id="new-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
-        </div>
-        <textarea id="new-product-description" class="search-input" placeholder="Description" style="width:100%; margin-top:12px; height:80px;"></textarea>
-        <button onclick="addNewProduct()" class="search-button" style="margin-top:12px;">+ Add Product</button>
-      </div>
-
-      <table class="admin-table" style="margin-top:20px; width:100%; border-collapse:collapse">
-        <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Action</th></tr>
-        ${rows}
-      </table>
-    `;
+    contentArea.innerHTML = "";
+    contentArea.appendChild(clone);
   } catch (error) {
     contentArea.innerHTML = "<h1>📦 Products</h1><p>Could not load products.</p>";
   }
@@ -1605,8 +1515,9 @@ async function deleteProduct(productId) {
       headers: adminHeaders()
     });
     loadAdminProducts();
-  } catch (error) { showMessage("Could not delete product."); }
+  } catch (error) { alert("Could not delete product."); }
 }
+
 async function addNewProduct() {
   const name        = document.getElementById("new-product-name").value.trim();
   const price       = parseFloat(document.getElementById("new-product-price").value);
@@ -1616,8 +1527,23 @@ async function addNewProduct() {
   const rating      = parseFloat(document.getElementById("new-product-rating").value) || 0;
   const description = document.getElementById("new-product-description").value.trim();
 
-  if (!name || !price || !stock || !category) {
-    showMessage("Please fill in Name, Price, Stock and Category at minimum.");
+  if (!name || isNaN(price) || isNaN(stock) || !category) {
+    showMessage('Please fill in Name, Price, Stock and Category at minimum.');
+    return;
+  }
+
+  if (price < 0) {
+    showMessage('Price must be a positive number.');
+    return;
+  }
+
+  if (stock < 0) {
+    showMessage('Stock must be a positive number.');
+    return;
+  }
+
+  if (rating && (rating < 0 || rating > 5)) {
+    showMessage('Rating must be between 0 and 5.');
     return;
   }
 
@@ -1634,14 +1560,17 @@ async function addNewProduct() {
     const res = await fetch(`${API}/api/admin/products`, {
       method: 'POST',
       headers: adminHeaders(),
-      body: formData  // No Content-Type header — browser sets it automatically for FormData
+      body: formData
     });
     const data = await res.json();
-    if (!res.ok) { showMessage(data.message); return; }
-    showMessage("Product added successfully!");
-    loadAdminProducts();
+    if (!res.ok) {
+      showMessage(data.message || 'Failed to add product.');
+      return;
+    }
+    showMessage('Product added successfully!');
+    setTimeout(() => loadAdminProducts(), 1500);
   } catch (error) {
-    showMessage("Could not connect to server.");
+    showMessage('Could not connect to server.');
   }
 }
 
@@ -1654,7 +1583,7 @@ async function deleteUser(userId) {
     });
     loadAdminUsers();
   } catch (error) {
-    showMessage("Could not delete user.");
+    alert("Could not delete user.");
   }
 }
 async function updateOrderStatus(orderId, status) {
@@ -1664,36 +1593,100 @@ async function updateOrderStatus(orderId, status) {
       headers: { 'Content-Type': 'application/json', ...adminHeaders() },
       body: JSON.stringify({ status })
     });
-  } catch (error) { showMessage("Could not update order status."); }
+  } catch (error) { alert("Could not update order status."); }
 }
 
 async function editProduct(productId) {
-  const name = prompt('Product Name:');
-  const price = prompt('Price (EGP):');
-  const stock = prompt('Stock:');
-  const category = prompt('Category (Electronics, Accessories, Grocery, Skin Care):');
+  // Fetch the current product data to pre-fill the form
+  try {
+    const res = await fetch(`${API}/api/admin/products`, { headers: adminHeaders() });
+    const products = await res.json();
+    const product = products.find(p => p._id === productId);
+    if (!product) { showMessage('Product not found.'); return; }
 
-  if (!name || !price || !stock || !category) return;
+    // Show the edit section and hide the add section
+    const editSection = document.getElementById('admin-edit-product-section');
+    const addSection = document.getElementById('admin-add-product-section');
+    if (addSection) addSection.style.display = 'none';
+    if (editSection) editSection.style.display = 'block';
+
+    // Pre-fill the form
+    document.getElementById('edit-product-id').value = productId;
+    document.getElementById('edit-product-name').value = product.name || '';
+    document.getElementById('edit-product-price').value = product.price || '';
+    document.getElementById('edit-product-stock').value = product.stock ?? '';
+    document.getElementById('edit-product-category').value = product.category || '';
+    document.getElementById('edit-product-rating').value = product.rating || '';
+    document.getElementById('edit-product-description').value = product.description || '';
+
+    // Scroll to the edit form
+    editSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (error) {
+    showMessage('Could not load product data.');
+  }
+}
+
+function cancelEditProduct() {
+  const editSection = document.getElementById('admin-edit-product-section');
+  const addSection = document.getElementById('admin-add-product-section');
+  if (editSection) editSection.style.display = 'none';
+  if (addSection) addSection.style.display = 'block';
+}
+
+async function saveEditProduct() {
+  const productId   = document.getElementById('edit-product-id').value;
+  const name        = document.getElementById('edit-product-name').value.trim();
+  const price       = parseFloat(document.getElementById('edit-product-price').value);
+  const stock       = parseInt(document.getElementById('edit-product-stock').value);
+  const category    = document.getElementById('edit-product-category').value.trim();
+  const imageFile   = document.getElementById('edit-product-image').files[0];
+  const rating      = parseFloat(document.getElementById('edit-product-rating').value) || 0;
+  const description = document.getElementById('edit-product-description').value.trim();
+
+  if (!name || isNaN(price) || isNaN(stock) || !category) {
+    showMessage('Please fill in Name, Price, Stock and Category at minimum.');
+    return;
+  }
+
+  if (price < 0) {
+    showMessage('Price must be a positive number.');
+    return;
+  }
+
+  if (stock < 0) {
+    showMessage('Stock must be a positive number.');
+    return;
+  }
+
+  if (rating && (rating < 0 || rating > 5)) {
+    showMessage('Rating must be between 0 and 5.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('name',        name);
+  formData.append('price',       price);
+  formData.append('stock',       stock);
+  formData.append('category',    category);
+  formData.append('rating',      rating);
+  formData.append('description', description);
+  if (imageFile) formData.append('image', imageFile);
 
   try {
     const res = await fetch(`${API}/api/admin/products/${productId}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...adminHeaders()
-      },
-      body: JSON.stringify({ name, price: parseFloat(price), stock: parseInt(stock), category })
+      headers: adminHeaders(),
+      body: formData
     });
-
     const data = await res.json();
 
     if (!res.ok) {
-      showMessage(data.message);
+      showMessage(data.message || 'Failed to update product.');
       return;
     }
 
     showMessage('Product updated successfully!');
-    loadAdminProducts();
+    setTimeout(() => loadAdminProducts(), 1500);
   } catch (error) {
     showMessage('Could not connect to server.');
   }
