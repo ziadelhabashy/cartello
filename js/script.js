@@ -1131,57 +1131,7 @@ async function validateLogin() {
   } catch (error) { showMessage("Could not connect to server."); }
 }
 
-async function validateForgotPassword() {
-  const forgotInput = document.querySelector("#forgot-view input[type='email']");
-  if (!forgotInput) return;
 
-  const email = forgotInput.value.trim();
-
-  if (!email) {
-    showMessage("Please enter your email address.");
-    return;
-  }
-
-  if (!isValidEmail(email)) {
-    showMessage("Please enter a valid email address.");
-    return;
-  }
-
-  try {
-    const response = await fetch(`${API}/api/forgot-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
-
-    const data = await response.json();
-    showMessage(data.message);
-
-    if (response.ok) {
-      const code = prompt("Enter the reset code sent to your email:");
-      if (!code) return;
-
-      const newPassword = prompt("Enter your new password:");
-      if (!newPassword) return;
-
-      const resetResponse = await fetch(`${API}/api/reset-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code, newPassword })
-      });
-
-      const resetData = await resetResponse.json();
-      showMessage(resetData.message);
-
-      if (resetResponse.ok) {
-        forgotInput.value = "";
-        showForm("login-form");
-      }
-    }
-  } catch (error) {
-    showMessage("Could not connect to server.");
-  }
-}
 async function joinNow() {
   const name = document.getElementById("reg-name").value.trim();
   const email = document.getElementById("reg-email").value.trim();
