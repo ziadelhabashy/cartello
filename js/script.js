@@ -215,7 +215,7 @@ function applyLanguage() {
     btn.textContent = dict.langButton;
   });
 
-  updateNavForUser(); // ← ADD THIS LINE
+  updateNavForUser(); 
 }
 
 function toggleLanguage() {
