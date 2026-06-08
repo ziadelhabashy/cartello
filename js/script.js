@@ -1435,6 +1435,7 @@ async function saveNewAddress() {
     });
     const data = await response.json();
     if (!response.ok) { showAddressMsg(data.message || "Could not save address.", "error"); return; }
+    showMessage("Address added successfully!");
     toggleAddressForm();
     loadUserAddresses(currentUser.id);
   } catch (error) { showMessage("Could not connect to server."); }
