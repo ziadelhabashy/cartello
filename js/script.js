@@ -1048,12 +1048,12 @@ async function validateForgotPassword() {
   const email = forgotInput.value.trim();
 
   if (!email) {
-    alert("Please enter your email address.");
+    showMessage("Please enter your email address.");
     return;
   }
 
   if (!isValidEmail(email)) {
-    alert("Please enter a valid email address.");
+    showMessage("Please enter a valid email address.");
     return;
   }
 
@@ -1065,7 +1065,7 @@ async function validateForgotPassword() {
     });
 
     const data = await response.json();
-    alert(data.message);
+    showMessage(data.message);
 
     if (response.ok) {
       const code = prompt("Enter the reset code sent to your email:");
@@ -1081,7 +1081,7 @@ async function validateForgotPassword() {
       });
 
       const resetData = await resetResponse.json();
-      alert(resetData.message);
+      showMessage(resetData.message);
 
       if (resetResponse.ok) {
         forgotInput.value = "";
@@ -1089,7 +1089,7 @@ async function validateForgotPassword() {
       }
     }
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 async function joinNow() {
@@ -1188,13 +1188,22 @@ async function joinNow() {
 
 async function updateProfile() {
   const newName = document.getElementById("edit-full-name").value.trim();
+  if (newName.length < 3) {
+    showMessage("Name must be at least 3 characters.");
+    return;
+  }
+
+  if (!/^[a-zA-Z\u0600-\u06FF\s]+$/.test(newName)) {
+    showMessage("Name can contain letters only.");
+    return;
+  }
   const newEmail = document.getElementById("edit-email").value.trim();
   const newPhone = document.getElementById("edit-phone") ? document.getElementById("edit-phone").value.trim() : "";
 
-  if (!newName || !newEmail) { alert("Please fill in both Name and Email."); return; }
+  if (!newName || !newEmail) { showMessage("Please fill in both Name and Email."); return; }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { alert("Not logged in."); return; }
+  if (!currentUser) { showMessage("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/update-profile`, {
@@ -1203,14 +1212,14 @@ async function updateProfile() {
       body: JSON.stringify({ id: currentUser.id, name: newName, email: newEmail, phone: newPhone })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("currentUser", JSON.stringify(data.user));
     document.getElementById("sidebar-name").textContent = newName;
     document.getElementById("sidebar-email").textContent = newEmail;
     document.getElementById("sidebar-avatar").textContent = newName.substring(0, 2).toUpperCase();
-    alert("Profile updated successfully!");
-  } catch (error) { alert("Could not connect to server."); }
+    showMessage("Profile updated successfully!");
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 async function changePasswordAction() {
@@ -1219,18 +1228,18 @@ async function changePasswordAction() {
   const newPass = inputs[1].value;
 
   if (!currentPass || !newPass) {
-    alert("Please fill in all fields.");
+    showMessage("Please fill in all fields.");
     return;
   }
 
   if (newPass.length < 6) {
-    alert("Password must be at least 6 characters.");
+    showMessage("Password must be at least 6 characters.");
     return;
   }
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    alert("You are not logged in.");
+    showMessage("You are not logged in.");
     return;
   }
 
@@ -1246,14 +1255,14 @@ async function changePasswordAction() {
     });
 
     const data = await response.json();
-    alert(data.message);
+    showMessage(data.message);
 
     if (response.ok) {
       inputs.forEach(input => input.value = "");
     }
 
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1263,7 +1272,7 @@ async function addNewAddressPrompt() {
   if (!title || !detail) return;
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { alert("Not logged in."); return; }
+  if (!currentUser) { showMessage("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/add-address`, {
@@ -1272,9 +1281,9 @@ async function addNewAddressPrompt() {
       body: JSON.stringify({ userId: currentUser.id, title, detail })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
     loadUserAddresses(currentUser.id);
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 async function loadUserAddresses(userId) {
   const addressList = document.getElementById("address-list");
@@ -1316,7 +1325,7 @@ async function removeAddress(addressId) {
       body: JSON.stringify({ userId: currentUser.id, addressId })
     });
     loadUserAddresses(currentUser.id);
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 // ==========================================================================
@@ -1334,13 +1343,13 @@ async function adminLogin() {
       body: JSON.stringify({ email, password: pass })
     });
     const data = await res.json();
-    if (!res.ok) { alert(data.message); return; }
+    if (!res.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("adminSession", "true");
     localStorage.setItem("adminToken", data.token);
     window.location.href = "admin.html";
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1515,7 +1524,7 @@ async function deleteProduct(productId) {
       headers: adminHeaders()
     });
     loadAdminProducts();
-  } catch (error) { alert("Could not delete product."); }
+  } catch (error) { showMessage("Could not delete product."); }
 }
 
 async function addNewProduct() {
@@ -1583,7 +1592,7 @@ async function deleteUser(userId) {
     });
     loadAdminUsers();
   } catch (error) {
-    alert("Could not delete user.");
+    showMessage("Could not delete user.");
   }
 }
 async function updateOrderStatus(orderId, status) {
@@ -1593,7 +1602,7 @@ async function updateOrderStatus(orderId, status) {
       headers: { 'Content-Type': 'application/json', ...adminHeaders() },
       body: JSON.stringify({ status })
     });
-  } catch (error) { alert("Could not update order status."); }
+  } catch (error) { showMessage("Could not update order status."); }
 }
 
 async function editProduct(productId) {
