@@ -1373,11 +1373,14 @@ async function loadUserAddresses(userId) {
 
 async function removeAddress(addressId) {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) return;
 
-  if (!currentUser) {
-    showMessage("Not logged in.");
-    return;
-  }
+  try {
+    await fetch(`${API}/api/remove-address`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: currentUser.id, addressId })
+    });
 
   try {
     const response = await fetch(`${API}/api/remove-address`, {
