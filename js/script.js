@@ -1385,19 +1385,21 @@ async function removeAddress(addressId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: currentUser.id, addressId })
     });
+    
     const data = await response.json();
+    
     if (!response.ok) {
       showMessage(data.message || "Could not remove address.");
       return;
     }
+    
     showMessage("Address removed.");
-    loadUserAddresses(currentUser.id);
+    await loadUserAddresses(currentUser.id); // Added 'await' here to ensure it resolves properly
+    
   } catch (error) {
+    console.error("Fetch error:", error); // Helpful for debugging
     showMessage("Could not connect to server.");
   }
-}
-    loadUserAddresses(currentUser.id);
-  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 // ==========================================================================
@@ -1701,15 +1703,14 @@ async function deleteAllUsers() {
     }
 
     showMessage(`Deleted ${data.deletedCount} users.`);
-    loadAdminUsers();
-    loadAdminDashboard();
+    
+    // Using await ensures these finish updating before the code moves on
+    await loadAdminUsers();
+    await loadAdminDashboard();
+    
   } catch (error) {
+    console.error("Admin delete error:", error);
     showMessage("Could not connect to server.");
-  }
-}
-    loadAdminUsers();
-  } catch (error) {
-    showMessage("Could not delete user.");
   }
 }
 async function updateOrderStatus(orderId, status) {
