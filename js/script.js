@@ -1325,7 +1325,7 @@ async function addNewAddressPrompt() {
   if (!title || !detail) return;
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) { alert("Not logged in."); return; }
+  if (!currentUser) { showMessage("Not logged in."); return; }
 
   try {
     const response = await fetch(`${API}/api/add-address`, {
@@ -1334,9 +1334,9 @@ async function addNewAddressPrompt() {
       body: JSON.stringify({ userId: currentUser.id, title, detail })
     });
     const data = await response.json();
-    if (!response.ok) { alert(data.message); return; }
+    if (!response.ok) { showMessage(data.message); return; }
     loadUserAddresses(currentUser.id);
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 async function loadUserAddresses(userId) {
   const addressList = document.getElementById("address-list");
@@ -1378,7 +1378,7 @@ async function removeAddress(addressId) {
       body: JSON.stringify({ userId: currentUser.id, addressId })
     });
     loadUserAddresses(currentUser.id);
-  } catch (error) { alert("Could not connect to server."); }
+  } catch (error) { showMessage("Could not connect to server."); }
 }
 
 // ==========================================================================
@@ -1396,13 +1396,13 @@ async function adminLogin() {
       body: JSON.stringify({ email, password: pass })
     });
     const data = await res.json();
-    if (!res.ok) { alert(data.message); return; }
+    if (!res.ok) { showMessage(data.message); return; }
 
     localStorage.setItem("adminSession", "true");
     localStorage.setItem("adminToken", data.token);
     window.location.href = "admin.html";
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1602,7 +1602,7 @@ async function deleteProduct(productId) {
       headers: adminHeaders()
     });
     loadAdminProducts();
-  } catch (error) { alert("Could not delete product."); }
+  } catch (error) { showMessage("Could not delete product."); }
 }
 async function addNewProduct() {
   const name        = document.getElementById("new-product-name").value.trim();
@@ -1614,7 +1614,7 @@ async function addNewProduct() {
   const description = document.getElementById("new-product-description").value.trim();
 
   if (!name || !price || !stock || !category) {
-    alert("Please fill in Name, Price, Stock and Category at minimum.");
+    showMessage("Please fill in Name, Price, Stock and Category at minimum.");
     return;
   }
 
@@ -1634,11 +1634,11 @@ async function addNewProduct() {
       body: formData  // No Content-Type header — browser sets it automatically for FormData
     });
     const data = await res.json();
-    if (!res.ok) { alert(data.message); return; }
-    alert("Product added successfully!");
+    if (!res.ok) { showMessage(data.message); return; }
+    showMessage("Product added successfully!");
     loadAdminProducts();
   } catch (error) {
-    alert("Could not connect to server.");
+    showMessage("Could not connect to server.");
   }
 }
 
@@ -1651,7 +1651,7 @@ async function deleteUser(userId) {
     });
     loadAdminUsers();
   } catch (error) {
-    alert("Could not delete user.");
+    showMessage("Could not delete user.");
   }
 }
 async function updateOrderStatus(orderId, status) {
@@ -1661,7 +1661,7 @@ async function updateOrderStatus(orderId, status) {
       headers: { 'Content-Type': 'application/json', ...adminHeaders() },
       body: JSON.stringify({ status })
     });
-  } catch (error) { alert("Could not update order status."); }
+  } catch (error) { showMessage("Could not update order status."); }
 }
 
 async function editProduct(productId) {
@@ -1685,14 +1685,14 @@ async function editProduct(productId) {
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message);
+      showMessage(data.message);
       return;
     }
 
-    alert('Product updated successfully!');
+    showMessage('Product updated successfully!');
     loadAdminProducts();
   } catch (error) {
-    alert('Could not connect to server.');
+    showMessage('Could not connect to server.');
   }
 }
 
