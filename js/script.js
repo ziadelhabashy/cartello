@@ -1488,43 +1488,18 @@ async function loadAdminProducts() {
         <td>${p.stock}</td>
         <td>${p.category}</td>
         <td>
-          <button onclick="editProduct('${p._id}')" style="color:#1a73e8; background:none; border:none; cursor:pointer; margin-right:8px">✏️ Edit</button>
-          <button onclick="deleteProduct('${p._id}')" style="color:red; background:none; border:none; cursor:pointer">🗑 Delete</button>
+          <button onclick="editProduct('${p._id}')" class="admin-action-btn admin-action-btn--edit">✏️ Edit</button>
+          <button onclick="deleteProduct('${p._id}')" class="admin-action-btn admin-action-btn--delete">🗑 Delete</button>
         </td>
       </tr>
     `).join("");
 
-    contentArea.innerHTML = `
-      <h1>📦 Product Management</h1>
+    const template = document.getElementById("products-tab-template");
+    const clone = template.content.cloneNode(true);
+    clone.getElementById("products-table-body").innerHTML = rows;
 
-      <div style="background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:20px; margin-top:20px; margin-bottom:24px;">
-        <h3 style="margin-bottom:16px;">Add New Product</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <input id="new-product-name" class="search-input" placeholder="Product Name">
-          <input id="new-product-price" class="search-input" type="number" placeholder="Price (EGP)">
-          <input id="new-product-stock" class="search-input" type="number" placeholder="Stock">
-  <select id="new-product-category" class="search-input">
-  <option value="">Select Category</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Accessories">Accessories</option>
-  <option value="Grocery">Grocery</option>
-  <option value="Skin Care">Skin Care</option>
-  <option value="Clothing">Clothing</option>
-  <option value="Shoes">Shoes</option>
-  <option value="Makeup">Makeup</option>
-  <option value="Baby Care">Baby Care</option>
-</select>         <input id="new-product-image" class="search-input" type="file" accept="image/*">
-          <input id="new-product-rating" class="search-input" type="number" step="0.1" placeholder="Rating (0-5)">
-        </div>
-        <textarea id="new-product-description" class="search-input" placeholder="Description" style="width:100%; margin-top:12px; height:80px;"></textarea>
-        <button onclick="addNewProduct()" class="search-button" style="margin-top:12px;">+ Add Product</button>
-      </div>
-
-      <table class="admin-table" style="margin-top:20px; width:100%; border-collapse:collapse">
-        <tr><th>ID</th><th>Name</th><th>Price</th><th>Stock</th><th>Category</th><th>Action</th></tr>
-        ${rows}
-      </table>
-    `;
+    contentArea.innerHTML = "";
+    contentArea.appendChild(clone);
   } catch (error) {
     contentArea.innerHTML = "<h1>📦 Products</h1><p>Could not load products.</p>";
   }
@@ -1598,15 +1573,36 @@ async function loadAdminUsers() {
   }
 }
 
-async function deleteProduct(productId) {
-  if (!confirm("Are you sure you want to delete this product?")) return;
+function deleteProduct(productId) {
+  // Find the delete button that was clicked and replace it with inline confirmation
+  const deleteBtn = event.target;
+  const td = deleteBtn.closest('td');
+  const editBtn = td.querySelector('.admin-action-btn--edit');
+  if (editBtn) editBtn.style.display = 'none';
+  deleteBtn.style.display = 'none';
+
+  const confirmBar = document.createElement('span');
+  confirmBar.className = 'admin-delete-confirm';
+  confirmBar.innerHTML = `Sure? <button class="admin-delete-yes" onclick="confirmDeleteProduct('${productId}')">Yes</button> <button class="admin-delete-no" onclick="cancelDeleteProduct(this)">No</button>`;
+  td.appendChild(confirmBar);
+}
+
+async function confirmDeleteProduct(productId) {
   try {
     await fetch(`${API}/api/admin/products/${productId}`, {
       method: 'DELETE',
       headers: adminHeaders()
     });
+    showMessage("Product deleted!");
     loadAdminProducts();
   } catch (error) { showMessage("Could not delete product."); }
+}
+
+function cancelDeleteProduct(btn) {
+  const td = btn.closest('td');
+  td.querySelector('.admin-delete-confirm').remove();
+  td.querySelector('.admin-action-btn--edit').style.display = '';
+  td.querySelector('.admin-action-btn--delete').style.display = '';
 }
 async function addNewProduct() {
   const name        = document.getElementById("new-product-name").value.trim();
@@ -1617,8 +1613,23 @@ async function addNewProduct() {
   const rating      = parseFloat(document.getElementById("new-product-rating").value) || 0;
   const description = document.getElementById("new-product-description").value.trim();
 
-  if (!name || !price || !stock || !category) {
-    showMessage("Please fill in Name, Price, Stock and Category at minimum.");
+  if (!name || isNaN(price) || isNaN(stock) || !category) {
+    showMessage('Please fill in Name, Price, Stock and Category at minimum.');
+    return;
+  }
+
+  if (price < 0) {
+    showMessage('Price must be a positive number.');
+    return;
+  }
+
+  if (stock < 0) {
+    showMessage('Stock must be a positive number.');
+    return;
+  }
+
+  if (rating && (rating < 0 || rating > 5)) {
+    showMessage('Rating must be between 0 and 5.');
     return;
   }
 
@@ -1635,14 +1646,17 @@ async function addNewProduct() {
     const res = await fetch(`${API}/api/admin/products`, {
       method: 'POST',
       headers: adminHeaders(),
-      body: formData  // No Content-Type header — browser sets it automatically for FormData
+      body: formData
     });
     const data = await res.json();
-    if (!res.ok) { showMessage(data.message); return; }
-    showMessage("Product added successfully!");
-    loadAdminProducts();
+    if (!res.ok) {
+      showMessage(data.message || 'Failed to add product.');
+      return;
+    }
+    showMessage('Product added successfully!');
+    setTimeout(() => loadAdminProducts(), 1500);
   } catch (error) {
-    showMessage("Could not connect to server.");
+    showMessage('Could not connect to server.');
   }
 }
 
@@ -1669,32 +1683,92 @@ async function updateOrderStatus(orderId, status) {
 }
 
 async function editProduct(productId) {
-  const name = prompt('Product Name:');
-  const price = prompt('Price (EGP):');
-  const stock = prompt('Stock:');
-  const category = prompt('Category (Electronics, Accessories, Grocery, Skin Care):');
+  try {
+    const res = await fetch(`${API}/api/admin/products`, { headers: adminHeaders() });
+    const products = await res.json();
+    const product = products.find(p => p._id === productId);
+    if (!product) { showMessage('Product not found.'); return; }
 
-  if (!name || !price || !stock || !category) return;
+    const editSection = document.getElementById('admin-edit-product-section');
+    const addSection = document.getElementById('admin-add-product-section');
+    if (addSection) addSection.style.display = 'none';
+    if (editSection) editSection.style.display = 'block';
+
+    document.getElementById('edit-product-id').value = productId;
+    document.getElementById('edit-product-name').value = product.name || '';
+    document.getElementById('edit-product-price').value = product.price || '';
+    document.getElementById('edit-product-stock').value = product.stock ?? '';
+    document.getElementById('edit-product-category').value = product.category || '';
+    document.getElementById('edit-product-rating').value = product.rating || '';
+    document.getElementById('edit-product-description').value = product.description || '';
+
+    editSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (error) {
+    showMessage('Could not load product data.');
+  }
+}
+
+function cancelEditProduct() {
+  const editSection = document.getElementById('admin-edit-product-section');
+  const addSection = document.getElementById('admin-add-product-section');
+  if (editSection) editSection.style.display = 'none';
+  if (addSection) addSection.style.display = 'block';
+}
+
+async function saveEditProduct() {
+  const productId   = document.getElementById('edit-product-id').value;
+  const name        = document.getElementById('edit-product-name').value.trim();
+  const price       = parseFloat(document.getElementById('edit-product-price').value);
+  const stock       = parseInt(document.getElementById('edit-product-stock').value);
+  const category    = document.getElementById('edit-product-category').value.trim();
+  const imageFile   = document.getElementById('edit-product-image').files[0];
+  const rating      = parseFloat(document.getElementById('edit-product-rating').value) || 0;
+  const description = document.getElementById('edit-product-description').value.trim();
+
+  if (!name || isNaN(price) || isNaN(stock) || !category) {
+    showMessage('Please fill in Name, Price, Stock and Category at minimum.');
+    return;
+  }
+
+  if (price < 0) {
+    showMessage('Price must be a positive number.');
+    return;
+  }
+
+  if (stock < 0) {
+    showMessage('Stock must be a positive number.');
+    return;
+  }
+
+  if (rating && (rating < 0 || rating > 5)) {
+    showMessage('Rating must be between 0 and 5.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('name',        name);
+  formData.append('price',       price);
+  formData.append('stock',       stock);
+  formData.append('category',    category);
+  formData.append('rating',      rating);
+  formData.append('description', description);
+  if (imageFile) formData.append('image', imageFile);
 
   try {
     const res = await fetch(`${API}/api/admin/products/${productId}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...adminHeaders()
-      },
-      body: JSON.stringify({ name, price: parseFloat(price), stock: parseInt(stock), category })
+      headers: adminHeaders(),
+      body: formData
     });
-
     const data = await res.json();
 
     if (!res.ok) {
-      showMessage(data.message);
+      showMessage(data.message || 'Failed to update product.');
       return;
     }
 
     showMessage('Product updated successfully!');
-    loadAdminProducts();
+    setTimeout(() => loadAdminProducts(), 1500);
   } catch (error) {
     showMessage('Could not connect to server.');
   }
