@@ -311,16 +311,23 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
-exports.adminDeleteUser = async (req, res) => {
+exports.adminDeleteAllUsers = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const { confirmText } = req.body;
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
+    if (confirmText !== 'DELETE ALL USERS') {
+      return res.status(400).json({
+        message: 'Confirmation text is incorrect.'
+      });
     }
 
-    res.json({ message: 'User deleted!' });
+    const result = await User.deleteMany({});
+
+    res.json({
+      message: 'All users deleted successfully.',
+      deletedCount: result.deletedCount
+    });
   } catch (error) {
-res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Server Error' });
   }
 };
