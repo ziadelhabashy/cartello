@@ -1131,7 +1131,82 @@ async function validateLogin() {
   } catch (error) { showMessage("Could not connect to server."); }
 }
 
+async function validateForgotPassword() {
+  const forgotInput = document.getElementById("forgot-email");
+  const forgotMessage = document.getElementById("forgot-message");
 
+  if (!forgotInput || !forgotMessage) return;
+
+  const email = forgotInput.value.trim();
+
+  function showForgotMessage(text, type) {
+    forgotMessage.textContent = text;
+    forgotMessage.className = `form-message ${type}`;
+  }
+
+  if (!email) {
+    showForgotMessage("Please enter your email address.", "error");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    showForgotMessage("Please enter a valid email address.", "error");
+    return;
+  }
+
+  try {
+    showForgotMessage("Sending reset code...", "success");
+
+    const response = await fetch(`${API}/api/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      showForgotMessage(data.message || "Could not send reset code.", "error");
+      return;
+    }
+
+    showForgotMessage(data.message || "Reset code sent to your email.", "success");
+
+    const code = prompt("Enter the reset code sent to your email:");
+    if (!code) return;
+
+    const newPassword = prompt("Enter your new password:");
+    if (!newPassword) return;
+
+    const resetResponse = await fetch(`${API}/api/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, code, newPassword })
+    });
+
+    const resetData = await resetResponse.json();
+
+    if (!resetResponse.ok) {
+      showForgotMessage(resetData.message || "Could not reset password.", "error");
+      return;
+    }
+
+    showForgotMessage(resetData.message || "Password reset successfully.", "success");
+
+    forgotInput.value = "";
+
+    setTimeout(() => {
+      showForm("login-form");
+    }, 1500);
+
+  } catch (error) {
+    showForgotMessage("Could not connect to server.", "error");
+  }
+}
 async function joinNow() {
   const name = document.getElementById("reg-name").value.trim();
   const email = document.getElementById("reg-email").value.trim();
