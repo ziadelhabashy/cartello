@@ -21,5 +21,4 @@ router.post('/admin/login', userController.adminLogin);
 router.get('/admin/users',isAdmin, userController.adminGetAllUsers);
 router.delete('/admin/users/:id',isAdmin, userController.adminDeleteUser);
 
-
 module.exports = router;
