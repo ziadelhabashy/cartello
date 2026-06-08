@@ -247,7 +247,7 @@ window.onload = async function () {
   }
 }
 
-  // Auto-login if user session exists
+  // Auto login if user session exists
   if (document.getElementById("auth-area")) {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     if (currentUser) {
@@ -763,7 +763,7 @@ if (currentUser) {
   const nameField = document.getElementById("customer-name");
   const emailField = document.getElementById("customer-email");
   const phoneField = document.getElementById("customer-phone");
-  const addressField = document.getElementById("customer-address"); // ← must be INSIDE here
+  const addressField = document.getElementById("customer-address"); 
 
   if (nameField && !nameField.value) nameField.value = currentUser.name || "";
   if (emailField && !emailField.value) emailField.value = currentUser.email || "";
@@ -1147,7 +1147,6 @@ async function validateForgotPassword() {
     forgotMessage.className = `form-message ${type}`;
   }
 
-  // ── STEP 2: code + new password already visible → do the reset ──
   if (codeSection && codeSection.classList.contains("visible")) {
     const code        = codeInput.value.trim();
     const newPassword = newPassInput.value.trim();
@@ -1172,7 +1171,6 @@ async function validateForgotPassword() {
 
       showForgotMessage(resetData.message || "Password reset successfully!", "success");
 
-      // Reset form back to step 1
       forgotInput.value = "";
       codeInput.value = "";
       newPassInput.value = "";
@@ -1187,7 +1185,6 @@ async function validateForgotPassword() {
     return;
   }
 
-  // ── STEP 1: send the reset code ──
   if (!email) { showForgotMessage("Please enter your email address.", "error"); return; }
   if (!isValidEmail(email)) { showForgotMessage("Please enter a valid email address.", "error"); return; }
 
@@ -1209,7 +1206,6 @@ async function validateForgotPassword() {
 
     showForgotMessage(data.message || "Reset code sent to your email.", "success");
 
-    // Reveal step 2 fields and change button label
     codeSection.classList.add("visible");
     sendBtn.textContent = "Reset Password";
 
@@ -1401,7 +1397,7 @@ function toggleAddressForm() {
   const msgEl = document.getElementById("address-message");
   if (!form) return;
   form.classList.toggle("visible");
-  // clear fields and message when closing
+
   if (!form.classList.contains("visible")) {
     document.getElementById("address-title").value = "";
     document.getElementById("address-detail").value = "";
@@ -1671,7 +1667,7 @@ async function loadAdminUsers() {
 }
 
 function deleteProduct(productId) {
-  // Find the delete button that was clicked and replace it with inline confirmation
+
   const deleteBtn = event.target;
   const td = deleteBtn.closest('td');
   const editBtn = td.querySelector('.admin-action-btn--edit');
