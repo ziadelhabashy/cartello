@@ -309,6 +309,7 @@ res.status(500).json({ message: 'Server Error' });
   }
 };
 
+
 exports.adminDeleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -317,6 +318,7 @@ exports.adminDeleteUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found.' });
     }
 
+    
     res.json({ message: 'User deleted!' });
   } catch (error) {
 res.status(500).json({ message: 'Server Error' });
