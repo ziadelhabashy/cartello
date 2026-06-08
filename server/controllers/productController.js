@@ -22,7 +22,7 @@ exports.adminGetAllProducts = async (req, res) => {
   }
 };
 
-
+// POST /api/admin/products
 exports.adminAddProduct = async (req, res) => {
   try {
     const { name, price, stock, category, rating, description } = req.body;
