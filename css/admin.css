@@ -76,3 +76,74 @@
   background: #fff3e0;
   color: #ff9800;
 }
+
+/* Product Form Sections */
+.admin-form-section {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.admin-form-section--add {
+  background: #f9f9f9;
+  margin-top: 20px;
+}
+
+.admin-form-section--edit {
+  background: #fff8e1;
+  border-color: #ffe082;
+  display: none;
+}
+
+.admin-form-section h3 {
+  margin-bottom: 16px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-form-textarea {
+  width: 100%;
+  margin-top: 12px;
+  height: 80px;
+}
+
+.admin-form-submit {
+  margin-top: 12px;
+}
+
+/* Edit Form Header */
+.admin-edit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.admin-cancel-btn {
+  background: none;
+  border: 1px solid #999;
+  padding: 4px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Table Action Buttons */
+.admin-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-action-btn--edit {
+  color: #1a73e8;
+  margin-right: 8px;
+}
+
+.admin-action-btn--delete {
+  color: red;
+}
