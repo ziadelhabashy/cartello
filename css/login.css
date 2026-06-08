@@ -327,4 +327,22 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
+.form-message {
+    display: none;
+    margin: 14px 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+}
+
+.form-message.success {
+    display: block;
+    background: #e7f7ed;
+    color: #146c2e;
+    border: 1px solid #bfe8cc;
+}
+
 
