@@ -127,6 +127,44 @@
   </table>
 </template>
 
+<template id="orders-tab-template">
+  <h1>🛒 Order Management</h1>
+  <table class="admin-table">
+    <tr><th>Order ID</th><th>Customer</th><th>Governorate</th><th>Total</th><th>Status</th></tr>
+    <tbody id="orders-table-body"></tbody>
+  </table>
+</template>
+
+<template id="users-tab-template">
+  <h1>👥 User Management</h1>
+  <table class="admin-table">
+    <tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Action</th></tr>
+    <tbody id="users-table-body"></tbody>
+  </table>
+</template>
+
+<template id="dashboard-tab-template">
+  <h1>📊 Dashboard</h1>
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <h3>Total Sales</h3>
+      <p id="stat-total-sales" class="stat-value"></p>
+    </div>
+    <div class="stat-card">
+      <h3>Orders</h3>
+      <p id="stat-orders" class="stat-value"></p>
+    </div>
+    <div class="stat-card">
+      <h3>Customers</h3>
+      <p id="stat-customers" class="stat-value"></p>
+    </div>
+    <div class="stat-card">
+      <h3>Products</h3>
+      <p id="stat-products" class="stat-value"></p>
+    </div>
+  </div>
+</template>
+
 <div id="messageBox" class="message-box"></div>
 <script src="js/script.js"></script>
 </body>
